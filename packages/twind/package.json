@@ -28,10 +28,10 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
   },
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.3.4"
   },
   "dependencies": {
     "lodash": "^4.17.21",

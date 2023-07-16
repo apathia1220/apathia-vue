@@ -11,7 +11,6 @@
 
 <script lang="ts" setup>
 import {
-  withDefaults,
   watch,
   ref,
   onMounted,
@@ -23,15 +22,11 @@ import flatpickr from 'flatpickr'
 import ConfirmPlugin from './confirmPlugin'
 import { Mandarin } from 'flatpickr/./dist/l10n/zh'
 import RangeSelectPlugin from './rangeSelectPlugin'
-import type { DateFormatType, RangeItem, RangeConfig } from './types'
+import type { DateFormatType, RangeItem, DateProps, DateEmits } from './types'
 
-interface DateProps {
-  options?: flatpickr.Options.Options
-  modelValue: string | number
-  dateFormat?: DateFormatType
-  timestamp?: boolean
-  range?: RangeConfig
-}
+defineOptions({
+  name: 'Datepicker',
+})
 
 const EnableTimeRegExp = /H|h|G|k/
 const EnableSecondsRegExp = /S|s/
@@ -59,7 +54,7 @@ const props = withDefaults(defineProps<DateProps>(), {
   range: () => ({}),
 })
 
-const emit = defineEmits(['update:modelValue', 'change', 'rangeChange'])
+const emit = defineEmits<DateEmits>()
 let fpInstance: flatpickr.Instance | null = null
 const containerRef = ref<ComponentPublicInstance | null>(null)
 const inputValue = ref(props.modelValue)

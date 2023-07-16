@@ -66,16 +66,19 @@
       removeSelected
     };
   };
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = vue.defineComponent({
+    ...{
+      name: "Panel"
+    },
     __name: "Panel",
     props: {
-      modelValue: null,
-      data: null,
+      modelValue: {},
+      data: {},
       filterable: { type: Boolean },
       filterPlaceholder: { default: "\u8BF7\u8F93\u5165\u641C\u7D22\u5185\u5BB9" },
       defaultChecked: { default: () => [] },
       filterMethod: { type: Function, default: (searchWords, option) => option.label.includes(searchWords) },
-      title: null
+      title: {}
     },
     emits: ["update:modelValue"],
     setup(__props, { emit }) {
@@ -188,18 +191,18 @@
             }, null, 8, ["modelValue", "indeterminate"]),
             vue.createElementVNode("span", {
               class: vue.normalizeClass(vue.unref(styles).title)
-            }, vue.toDisplayString(__props.title), 3),
+            }, vue.toDisplayString(_ctx.title), 3),
             vue.createElementVNode("span", {
               class: vue.normalizeClass(vue.unref(styles).counter)
-            }, vue.toDisplayString(vue.unref(checkedLength)) + " / " + vue.toDisplayString(__props.data.length), 3)
+            }, vue.toDisplayString(checkedLength.value) + " / " + vue.toDisplayString(_ctx.data.length), 3)
           ], 2),
-          __props.filterable ? (vue.openBlock(), vue.createElementBlock("div", {
+          _ctx.filterable ? (vue.openBlock(), vue.createElementBlock("div", {
             key: 0,
             class: vue.normalizeClass(vue.unref(styles).filter)
           }, [
             vue.createVNode(vue.unref(apathia_input.Input), {
               "model-value": searchWords.value,
-              placeholder: __props.filterPlaceholder,
+              placeholder: _ctx.filterPlaceholder,
               suffix: "v-icon-search",
               "onUpdate:modelValue": vue.unref(onSearchInput)
             }, null, 8, ["model-value", "placeholder", "onUpdate:modelValue"])
@@ -213,7 +216,7 @@
             }, {
               default: vue.withCtx(() => [
                 vue.createElementVNode("div", null, [
-                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(filterList), (item, index) => {
+                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(filterList.value, (item, index) => {
                     return vue.openBlock(), vue.createElementBlock("div", {
                       key: index,
                       class: vue.normalizeClass(vue.unref(styles).item)
@@ -248,11 +251,14 @@
       };
     }
   });
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "Transfer"
+    },
     __name: "Transfer",
     props: {
-      modelValue: null,
-      data: null,
+      modelValue: {},
+      data: {},
       filterable: { type: Boolean },
       filterPlaceholder: { default: "\u8BF7\u8F93\u5165\u641C\u7D22\u5185\u5BB9" },
       filterMethod: { type: Function, default: (word, option) => option.label.indexOf(word) > -1 },
@@ -269,7 +275,7 @@
     emits: ["update:modelValue", "select", "remove"],
     setup(__props, { emit }) {
       const props = __props;
-      const getTranferStyles = () => ({
+      const getTransferStyles = () => ({
         transfer: apathia_twind.tw`${apathia_twind.apply`flex`}`,
         panel: apathia_twind.tw`${apathia_twind.apply`w-48`}`,
         buttonWrapper: apathia_twind.tw`${apathia_twind.apply`self-center text-center mx-4`}`,
@@ -297,7 +303,7 @@
         addSelected,
         removeSelected
       } = useTransfer(userProps, emit);
-      const styles = getTranferStyles();
+      const styles = getTransferStyles();
       return (_ctx, _cache) => {
         return vue.openBlock(), vue.createElementBlock("div", {
           class: vue.normalizeClass(vue.unref(styles).transfer)
@@ -307,11 +313,11 @@
             "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => vue.isRef(selectedSource) ? selectedSource.value = $event : null),
             class: vue.normalizeClass(vue.unref(styles).panel),
             data: vue.unref(source),
-            filterable: __props.filterable,
-            "filter-placeholder": __props.filterPlaceholder,
-            "filter-method": __props.filterMethod,
-            title: __props.titles[0],
-            "default-checked": __props.leftDefaultChecked
+            filterable: _ctx.filterable,
+            "filter-placeholder": _ctx.filterPlaceholder,
+            "filter-method": _ctx.filterMethod,
+            title: _ctx.titles[0],
+            "default-checked": _ctx.leftDefaultChecked
           }, {
             item: vue.withCtx(({ option, index }) => [
               vue.renderSlot(_ctx.$slots, "source-item", {
@@ -402,11 +408,11 @@
             "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => vue.isRef(selectedTarget) ? selectedTarget.value = $event : null),
             class: vue.normalizeClass(vue.unref(styles).panel),
             data: vue.unref(target),
-            filterable: __props.filterable,
-            "filter-placeholder": __props.filterPlaceholder,
-            "filter-method": __props.filterMethod,
-            title: __props.titles[1],
-            "default-checked": __props.rightDefaultChecked
+            filterable: _ctx.filterable,
+            "filter-placeholder": _ctx.filterPlaceholder,
+            "filter-method": _ctx.filterMethod,
+            title: _ctx.titles[1],
+            "default-checked": _ctx.rightDefaultChecked
           }, {
             item: vue.withCtx(({ option, index }) => [
               vue.renderSlot(_ctx.$slots, "source-item", {

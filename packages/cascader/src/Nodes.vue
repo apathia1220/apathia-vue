@@ -1,19 +1,29 @@
 <template>
-  <div ref="tagContainerRef" :class="{
-    [styles.container]: true,
-    [styles.active]: focus,
-  }" @click="handleClick">
+  <div
+    ref="tagContainerRef"
+    :class="{
+      [styles.container]: true,
+      [styles.active]: focus,
+    }"
+    @click="handleClick"
+  >
     <div :class="styles.wrap">
       <div ref="contentRef" :class="styles.nodes">
         <template v-if="nodes.length">
-          <div v-for="node in nodes" :key="node.fullkey" :class="styles.tag">
+          <div v-for="node in nodes" :key="node.fullKey" :class="styles.tag">
             <span>{{
               showAllLevels
-              ? node.fullname.join(separator)
-                          : node.fullname[node.fullname.length - 1]
+                ? node.fullName.join(separator)
+                : node.fullName[node.fullName.length - 1]
             }}</span>
             <span :class="styles.iconWrap">
-              <Icon :stroke-width="2" size="xs" fill="red" :class="styles.nodeRemove" @click.stop="removeOne(node)">
+              <Icon
+                :stroke-width="2"
+                size="xs"
+                fill="red"
+                :class="styles.nodeRemove"
+                @click.stop="removeOne(node)"
+              >
                 <Close />
               </Icon>
             </span>
@@ -24,37 +34,37 @@
         </div>
       </div>
 
-      <input v-show="search && showSearch" ref="iptRef" v-model="searchInput" :class="styles.search"
-        @input="onSearchInput" />
+      <input
+        v-show="search && showSearch"
+        ref="iptRef"
+        v-model="searchInput"
+        :class="styles.search"
+        @input="onSearchInput"
+      />
     </div>
 
-    <Icon v-if="clearable && nodes.length" size="12" :class="styles.clearIcon" @click.stop="clear">
+    <Icon
+      v-if="clearable && nodes.length"
+      size="12"
+      :class="styles.clearIcon"
+      @click.stop="clear"
+    >
       <Close />
     </Icon>
   </div>
 </template>
 
 <script setup lang="ts">
-import { withDefaults, ref } from "vue";
-import { Icon } from "@apathia/apathia.icon";
-import { useScrollX, onClickOutside } from "@apathia/apathia.hooks";
-import { style, css } from "@apathia/apathia.twind";
-import type { Node } from "./types";
-import { Close } from "@apathia/apathia.icon-svg";
+import { ref } from 'vue'
+import { Icon } from '@apathia/apathia.icon'
+import { useScrollX, onClickOutside } from '@apathia/apathia.hooks'
+import { style, css } from '@apathia/apathia.twind'
+import type { CascaderNode, NodeProps } from './types'
+import { Close } from '@apathia/apathia.icon-svg'
 
-// defineOptions({
-//   name: "Node",
-// });
-
-interface NodeProps {
-  nodes: Node[];
-  focus: boolean;
-  showAllLevels: boolean;
-  separator: string;
-  placeholder: string;
-  clearable: boolean;
-  search: boolean;
-}
+defineOptions({
+  name: 'CascaderNode',
+})
 
 const getNodeStyles = () => {
   return {
@@ -70,52 +80,52 @@ const getNodeStyles = () => {
     nodeRemove: style`p-1.5 text-content-accent hover:(text-content-primary) cursor-pointer`,
     clearIcon: style`absolute right-2 top-1/2 -translate-y-2/4 cursor-pointer ml-2 text-content-neutral hover:(text-content-primary)`,
     placeholder: style`text-content-secondary`,
-  };
-};
+  }
+}
 
 const props = withDefaults(defineProps<NodeProps>(), {
   nodes: () => [],
   focus: false,
   showAllLevels: false,
-  separator: "/",
-  placeholder: "",
+  separator: '/',
+  placeholder: '',
   clearable: false,
   // TODO: search?
   search: false,
-});
+})
 
-const emit = defineEmits(["clear", "remove", "update:focus", "search-change"]);
+const emit = defineEmits(['clear', 'remove', 'update:focus', 'search-change'])
 
-const styles = getNodeStyles();
+const styles = getNodeStyles()
 
-const searchInput = ref<string>("");
+const searchInput = ref<string>('')
 const onSearchInput = (e: Event) => {
-  emit("search-change", (e.target as HTMLInputElement).value);
-  console.log(e);
-};
+  emit('search-change', (e.target as HTMLInputElement).value)
+  console.log(e)
+}
 
-const showSearch = ref<boolean>(false);
+const showSearch = ref<boolean>(false)
 const clear = () => {
-  emit("clear");
-};
+  emit('clear')
+}
 
-const removeOne = (node: Node) => {
-  emit("remove", node);
-};
+const removeOne = (node: CascaderNode) => {
+  emit('remove', node)
+}
 
 const handleClick = () => {
-  showSearch.value = true;
-  emit("update:focus", !props.focus);
-};
+  showSearch.value = true
+  emit('update:focus', !props.focus)
+}
 
-const tagContainerRef = ref<HTMLDivElement | null>(null);
+const tagContainerRef = ref<HTMLDivElement | null>(null)
 
 onClickOutside(tagContainerRef, () => {
-  showSearch.value = false;
-  searchInput.value = "";
-  emit("search-change", "");
-  emit("update:focus", false);
-});
+  showSearch.value = false
+  searchInput.value = ''
+  emit('search-change', '')
+  emit('update:focus', false)
+})
 
-const { contentRef } = useScrollX(false);
+const { contentRef } = useScrollX(false)
 </script>

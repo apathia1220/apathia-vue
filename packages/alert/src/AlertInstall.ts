@@ -1,6 +1,6 @@
 import { App, inject } from 'vue'
-import { Alerter } from './AlertFn'
 import Alert from './AlertFn'
+import type { Alerter } from './types'
 
 const alertKey = 'apathia-toast'
 

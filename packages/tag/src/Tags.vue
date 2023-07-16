@@ -15,7 +15,7 @@
       <div v-if="isAdding" key="tag-inoupwrap" :class="styles.inputWrap">
         <Input
           v-model="tagText"
-          @keyup.enter="handleAppent"
+          @keyup.enter="handleAppend"
           @blur="toggleAdding(false)"
         />
       </div>
@@ -35,43 +35,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, ref, toRef, withDefaults } from 'vue'
+import { computed, provide, ref, toRef } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { BaseButton } from '@apathia/apathia.button'
 import { useToggle, useInjectProp } from '@apathia/apathia.hooks'
-import Tag from './Tag.vue'
-import type { TagItem } from './types'
 import { style } from '@apathia/apathia.twind'
+import Tag from './Tag.vue'
+import type { TagItem, TagsProps } from './types'
 
-// defineOptions({
-//   name: 'Tags',
-// })
+defineOptions({
+  name: 'Tags',
+})
 
 const getTagsStyle = () => {
-    const tagClass = style`duration-300 my-1`
-    const inputWrap = style`inline-block w-20 m-1`
-    const addBtn = style`w-20 text-xs`
-    const list = style`inline-block`
-  
-    return {
-      list,
-      addBtn,
-      tagClass,
-      inputWrap,
-    }
-}
+  const tagClass = style`duration-300 my-1`
+  const inputWrap = style`inline-block w-20 m-1`
+  const addBtn = style`w-20 text-xs`
+  const list = style`inline-block`
 
-interface TagsProps {
-  modelValue: TagItem[]
-  primary?: boolean
-  success?: boolean
-  danger?: boolean
-  warning?: boolean
-  hollow?: boolean
-  closable?: boolean
-  showTag?: (tag: TagItem) => string
-  handleTag?: (str: string) => TagItem
-  disabled?: boolean
+  return {
+    list,
+    addBtn,
+    tagClass,
+    inputWrap,
+  }
 }
 
 provide('WithinTags', true)
@@ -101,7 +88,7 @@ function handleStartAdd() {
   toggleAdding(true)
 }
 
-function handleAppent() {
+function handleAppend() {
   const tags = [props.handleTag(tagText.value), ...cloneDeep(props.modelValue)]
   emit('update:modelValue', tags)
   emit('change', tags)

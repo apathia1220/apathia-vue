@@ -56,83 +56,66 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, withDefaults } from 'vue'
+import { toRefs } from 'vue'
 import { noop } from '@apathia/apathia.shared'
 import { useScrollX } from '@apathia/apathia.hooks'
 import { Popper } from '@apathia/apathia.popper'
 import { apply, style, css } from '@apathia/apathia.twind'
-
-type NavNode = {
-  value: string | number
-  label: string
-  disabled?: boolean
-  iconClass?: string
-  children?: NavNode[]
-}
-
-type ThemeType = 'underline' | 'default'
-
-interface NavbarProps {
-  type?: ThemeType
-  modelValue?: string | number
-  list: NavNode[]
-  trigger?: string
-  disabledParent?: boolean
-}
+import type { NavNode, NavbarProps, ThemeType, NavbarEmits } from './types'
 
 function initStyle(type: ThemeType) {
-    const radius = css`
-      &:first-child {
-        border-radius: 4px 0 0 4px;
-      }
-      &:last-child {
-        border-radius: 0 4px 4px 0;
-      }
-    `
-    const Theme = {
-      default: {
-        nav: apply`bg-fill-light hover:(bg-fill-gray) ${apply`${radius}`}`,
-        activeNav: apply`bg-brand-primary text-content-white hover:(bg-brand-hover) ${apply`${radius}`}`,
-      },
-      underline: {
-        nav: apply`border-transparent border-b-2 mx-1 hover:(text-brand-hover)`,
-        activeNav: apply`text-brand-primary border-brand-primary border-b-2 hover:(text-brand-hover border-brand-hover)`,
-      },
+  const radius = css`
+    &:first-child {
+      border-radius: 4px 0 0 4px;
     }
-    const theme = Theme[type] || Theme.default
-  
-    const primaryLayout = apply`block text-center text-sm cursor-pointer px-4 py-1.5 transition duration-300`
-  
-    const wrapper = style`overflow-hidden`
-    const layoutContainer = style`flex items-center py-2 text-content-primary`
-    const layoutNav = style`${theme.nav} ${primaryLayout}`
-    const activeNav = style`${theme.activeNav}`
-    const icon = style`mr-1`
-  
-    const childNavClass = {
-      popper: style`p-0 rounded`,
-      nav: `${style`px-4 py-1.5`} ${layoutNav}`,
-      activeNav,
+    &:last-child {
+      border-radius: 0 4px 4px 0;
     }
-  
-    return {
-      wrapper,
-      layoutContainer,
-      layoutNav,
-      activeNav,
-      icon,
-      childNavClass,
-    }
+  `
+  const Theme = {
+    default: {
+      nav: apply`bg-fill-light hover:(bg-fill-gray) ${apply`${radius}`}`,
+      activeNav: apply`bg-brand-primary text-content-white hover:(bg-brand-hover) ${apply`${radius}`}`,
+    },
+    underline: {
+      nav: apply`border-transparent border-b-2 mx-1 hover:(text-brand-hover)`,
+      activeNav: apply`text-brand-primary border-brand-primary border-b-2 hover:(text-brand-hover border-brand-hover)`,
+    },
   }
+  const theme = Theme[type] || Theme.default
+
+  const primaryLayout = apply`block text-center text-sm cursor-pointer px-4 py-1.5 transition duration-300`
+
+  const wrapper = style`overflow-hidden`
+  const layoutContainer = style`flex items-center py-2 text-content-primary`
+  const layoutNav = style`${theme.nav} ${primaryLayout}`
+  const activeNav = style`${theme.activeNav}`
+  const icon = style`mr-1`
+
+  const childNavClass = {
+    popper: style`p-0 rounded`,
+    nav: `${style`px-4 py-1.5`} ${layoutNav}`,
+    activeNav,
+  }
+
+  return {
+    wrapper,
+    layoutContainer,
+    layoutNav,
+    activeNav,
+    icon,
+    childNavClass,
+  }
+}
 
 const props = withDefaults(defineProps<NavbarProps>(), {
   type: 'default',
   modelValue: '',
   trigger: 'hover',
-  disabledParent: true
+  disabledParent: true,
 })
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits<NavbarEmits>()
 
 function isParent(nodes: NavNode[], text: string | number) {
   return text && platMenu(nodes).some(n => n.value === text)
@@ -173,4 +156,3 @@ function parentBindClick(nav: NavNode) {
   }
 }
 </script>
-

@@ -27,10 +27,10 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "devDependencies": {
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
   },
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.3.4"
   },
   "dependencies": {
     "@apathia/apathia.button": "workspace:^1.2.7",

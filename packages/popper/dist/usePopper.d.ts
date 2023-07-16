@@ -1,36 +1,17 @@
 import { ComponentPublicInstance, Ref } from 'vue';
-import { Instance as PopperInstance, Placement } from '@popperjs/core';
-import type { RefType } from './util';
-interface Option {
-    placement: Placement;
-    skidding: number;
-    distance: number;
-    trigger: string;
-    delay: number;
-    disabled: boolean;
-    component?: ComponentPublicInstance;
-    showArrow?: boolean;
-    modelValue?: boolean;
-    target?: HTMLElement | RefType;
-    delayClose?: number;
-}
-interface EmitOption {
-    emitVisible: (val: boolean) => void;
-    emitHide: (val: boolean, instance: PopperInstance | null) => void;
-    emitShow: (val: boolean, instance: PopperInstance | null) => void;
-}
-export declare function usePopper(option: Option, emitOption: EmitOption): {
+import type { PopperProps, PopperEmitOption } from './types';
+export declare function usePopper(option: PopperProps, emitOption: PopperEmitOption): {
     getContentProps: () => {
-        ref: (el: HTMLElement) => void;
+        ref: (el: Element | ComponentPublicInstance | null) => void;
     };
     getArrowProps: () => {
-        ref: (el: HTMLElement) => void;
+        ref: (el: Element | ComponentPublicInstance | null) => void;
     };
     getTargetProps: () => {
-        ref: (el: HTMLElement) => void;
+        ref: (el: Element | ComponentPublicInstance | null) => void;
     };
     update: () => void;
-    instance: PopperInstance | null;
+    instance: import("@popperjs/core").Instance | null;
     initPopper: () => void;
     detachPopper: () => void;
     visibility: Ref<boolean>;
@@ -42,4 +23,3 @@ export declare function usePopper(option: Option, emitOption: EmitOption): {
     show: () => void;
     close: () => void;
 };
-export {};

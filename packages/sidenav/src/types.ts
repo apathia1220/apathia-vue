@@ -1,14 +1,26 @@
-export type SideNode = {
+export type SideNodeType = {
   text?: string
   icon?: string[]
-  children?: SideNode[]
+  children?: SideNodeType[]
   [k: string]: any
 }
 
-export interface SideNavProps {
-  menuList?: SideNode[]
-  activeKey?: string
-  mini?: boolean
-  search?: boolean
-  keyField?: keyof SideNode
+export type SideNavProps = {
+  menuList: SideNodeType[]
+  activeKey: string
+  mini: boolean
+  search: boolean
+  keyField: keyof SideNodeType
+}
+
+export type SideNodeProps = {
+  node: SideNodeType
+  mini: boolean
+  activeKey: string
+  selectHandler: Function
+  keyField: keyof SideNodeType
+}
+
+export type SideNodeEmits = {
+  select: [node: SideNodeType]
 }

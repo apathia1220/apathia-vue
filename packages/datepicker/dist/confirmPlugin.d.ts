@@ -1,12 +1,5 @@
 import flatpickr from 'flatpickr';
-declare type PluginConfig = {
-    clearIcon?: string;
-    confirmIcon?: string;
-    confirmText?: string;
-    clearText?: string;
-    showAlways?: boolean;
-    theme?: string;
-};
+import type { PluginConfig } from './types';
 declare function confirmDatePlugin(pluginConfig: PluginConfig): (fp: flatpickr.Instance) => {
     onChange?: ((_: any, dateStr: string) => true | void) | undefined;
     onKeyDown(_: any, __: any, ___: any, e: KeyboardEvent): void;

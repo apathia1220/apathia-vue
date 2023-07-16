@@ -15,7 +15,7 @@
           [styles.track]: true,
           [styles.trackX]: !vertical,
           [styles.trackY]: vertical,
-          [styles.trackHover]: draging,
+          [styles.trackHover]: dragging,
         }"
       ></div>
       <div
@@ -23,7 +23,7 @@
           [styles.steps]: true,
           [styles.stepsX]: !vertical,
           [styles.stepsY]: vertical,
-          [styles.stepsHover]: draging,
+          [styles.stepsHover]: dragging,
         }"
         :style="stepsStyle"
       ></div>
@@ -40,7 +40,7 @@
       <Popper
         v-if="showTooltip"
         ref="popperRef"
-        v-model="popperVisble"
+        v-model="popperVisible"
         dark
         :placement="vertical ? 'right' : 'bottom'"
         trigger="hover"
@@ -49,7 +49,7 @@
       >
         <div
           ref="buttonRef"
-          :class="[styles.button, draging ? styles.buttonHover : '']"
+          :class="[styles.button, dragging ? styles.buttonHover : '']"
           @mousedown="startDrag"
         ></div>
         <template #content>
@@ -61,54 +61,46 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, toRef, withDefaults } from 'vue'
+import { computed, onMounted, reactive, ref, toRef } from 'vue'
 import { Popper } from '@apathia/apathia.popper'
-import { useEventListener, useToggle, useInjectProp } from '@apathia/apathia.hooks'
+import {
+  useEventListener,
+  useToggle,
+  useInjectProp,
+} from '@apathia/apathia.hooks'
 import { style, css } from '@apathia/apathia.twind'
-import Stops from './Stop.vue'
-import type { Marker } from './types'
 import { VueInstance } from '@apathia/apathia.shared'
+import Stops from './Stop.vue'
+import type { SliderProps, SliderEmits } from './types'
 
-interface SliderProps {
-  modelValue: number
-  disabled?: boolean
-  min?: number
-  max?: number
-  step?: number
-  showSteps?: boolean
-  showTooltip?: boolean
-  formatTooltip?: Function
-  range?: boolean
-  valueRange?: number[]
-  marks?: Marker
-  vertical?: boolean
-  height?: number
-}
+defineOptions({
+  name: 'Slider',
+})
 
 const getSliderStyles = () => ({
-    sliderWrap: style`text-2xl`,
-    slider: style`group relative h-2 box-border inline-block`,
-    sliderX: style`py-2 w-full`,
-    sliderY: style`px-2`,
-    track: style`absolute bg-fill-gray rounded transition group-hover:bg-fill-secondary`,
-    trackX: style`h-1 w-full`,
-    trackY: style`w-1 h-full`,
-    trackHover: style`bg-fill-secondary`,
-    steps: style`relative rounded bg-brand-primary group-hover:bg-brand-active`,
-    stepsX: style`h-1`,
-    stepsY: style`w-1 absolute bottom-0`,
-    stepsHover: style`bg-brand-active`,
-    button: style`group-hover:border-brand-active border(2 solid brand-primary) h-4 w-4 bg-fill-white rounded-lg cursor-pointer ${css`
-      z-index: 1;
-    `}`,
-    popperWrap: style`absolute`,
-    buttonHover: style`border-brand-active`,
-    buttonX: style`-translate-x-1/2${css`
-      top: 2px;
-    `}`,
-    buttonY: style`translate-y-1/2${css`
-      left: 2px;
-    `}`,
+  sliderWrap: style`text-2xl`,
+  slider: style`group relative h-2 box-border inline-block`,
+  sliderX: style`py-2 w-full`,
+  sliderY: style`px-2`,
+  track: style`absolute bg-fill-gray rounded transition group-hover:bg-fill-secondary`,
+  trackX: style`h-1 w-full`,
+  trackY: style`w-1 h-full`,
+  trackHover: style`bg-fill-secondary`,
+  steps: style`relative rounded bg-brand-primary group-hover:bg-brand-active`,
+  stepsX: style`h-1`,
+  stepsY: style`w-1 absolute bottom-0`,
+  stepsHover: style`bg-brand-active`,
+  button: style`group-hover:border-brand-active border(2 solid brand-primary) h-4 w-4 bg-fill-white rounded-lg cursor-pointer ${css`
+    z-index: 1;
+  `}`,
+  popperWrap: style`absolute`,
+  buttonHover: style`border-brand-active`,
+  buttonX: style`-translate-x-1/2${css`
+    top: 2px;
+  `}`,
+  buttonY: style`translate-y-1/2${css`
+    left: 2px;
+  `}`,
 })
 
 const props = withDefaults(defineProps<SliderProps>(), {
@@ -118,22 +110,19 @@ const props = withDefaults(defineProps<SliderProps>(), {
   showTooltip: true,
   formatTooltip: (cur: number) => cur,
   marks: () => ({}),
-
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<SliderEmits>()
 
 const isTouchEvent = (e: Event): e is TouchEvent => e.type.startsWith('touch')
 
 const styles = getSliderStyles()
 
 const trackRef = ref<HTMLElement | null>(null)
-const moveRange = reactive<Record<'clientX' | 'clientY', [number, number]>>(
-  {
-    clientX: [0, 0],
-    clientY: [0, 0],
-  },
-)
+const moveRange = reactive<Record<'clientX' | 'clientY', [number, number]>>({
+  clientX: [0, 0],
+  clientY: [0, 0],
+})
 
 const disableDrag = useInjectProp('Form', false, toRef(props, 'disabled'))
 
@@ -141,7 +130,7 @@ const buttonRef = ref<HTMLElement | null>(null)
 const buttonSize = ref(0)
 
 const popperRef = ref<VueInstance | null>(null)
-const popperVisble = ref(false)
+const popperVisible = ref(false)
 
 onMounted(() => {
   if (trackRef.value) {
@@ -154,7 +143,7 @@ onMounted(() => {
   }
 })
 
-const [draging, , setDraging] = useToggle(false)
+const [dragging, , setDragging] = useToggle(false)
 const btnEndStyle = computed(() => {
   const value = `${
     ((props.modelValue - props.min) / props.max - props.min) * 100
@@ -177,7 +166,7 @@ const startDrag = (e: MouseEvent) => {
     return
   }
   e.preventDefault()
-  setDraging(true)
+  setDragging(true)
   stopFns.push(useEventListener(window, 'mousemove', handleDragging))
   stopFns.push(useEventListener(window, 'touchmove', handleDragging))
   stopFns.push(useEventListener(window, 'mouseup', stopDrag))
@@ -185,15 +174,12 @@ const startDrag = (e: MouseEvent) => {
   stopFns.push(useEventListener(window, 'contextmenu', stopDrag))
 }
 const stopDrag = () => {
-  setDraging(false)
+  setDragging(false)
   stopFns.forEach(fn => fn && fn())
-  popperVisble.value = false
+  popperVisible.value = false
 }
 
-const resolveValueInRange = (
-  targetPos: number,
-  posRange: [number, number],
-) => {
+const resolveValueInRange = (targetPos: number, posRange: [number, number]) => {
   // targetPos 一定在posRange中间
   const valueRange = [props.min, props.max]
   const step = props.step
@@ -249,7 +235,7 @@ const getFinalValue = (position: { clientX: number; clientY: number }) => {
   )
 }
 const handleDragging = (e: MouseEvent | TouchEvent) => {
-  if (draging.value) {
+  if (dragging.value) {
     handleTrackClick(e)
 
     if (
@@ -259,7 +245,7 @@ const handleDragging = (e: MouseEvent | TouchEvent) => {
     ) {
       popperRef.value && popperRef.value.update()
     }
-    popperVisble.value = true
+    popperVisible.value = true
   }
 }
 const handleTrackClick = (e: MouseEvent | TouchEvent) => {
@@ -294,4 +280,3 @@ const getClientPosition = (e: MouseEvent | TouchEvent) => {
   }
 }
 </script>
-

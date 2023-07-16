@@ -12,5 +12,5 @@ declare const _default: import("vue").DefineComponent<{
     };
 }>>, {
     duration: number;
-}>;
+}, {}>;
 export default _default;

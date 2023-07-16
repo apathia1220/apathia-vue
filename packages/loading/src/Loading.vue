@@ -15,23 +15,16 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { style } from '@apathia/apathia.twind'
 
-export default defineComponent({
+defineOptions({
   name: 'Loading',
-
-  setup() {
-    const styles = getStyles()
-
-    return {
-      styles,
-    }
-  },
 })
 
 const getStyles = () => ({
   spinnerItem: style`after:bg-brand-primary`,
 })
+
+const styles = getStyles()
 </script>

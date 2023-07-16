@@ -1,8 +1,8 @@
 import type { SetupContext, Ref } from 'vue';
-interface UserProps {
+declare type ButtonUserProps = {
     disabled: Ref<boolean>;
-}
-export default function useButton(userProps: UserProps, ctx: SetupContext): {
+};
+export default function useButton(userProps: ButtonUserProps, attrs: SetupContext['attrs']): {
     getButtonProps: () => {
         disabled: boolean;
         onclick: Function;

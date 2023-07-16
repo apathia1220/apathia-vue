@@ -2,7 +2,6 @@ import { debounce } from 'lodash'
 import {
   nextTick,
   Ref,
-  SetupContext,
   computed,
   reactive,
   ref,
@@ -10,15 +9,26 @@ import {
   unref,
   watch,
   onBeforeUnmount,
+  SetupContext,
+  ComponentPublicInstance,
 } from 'vue'
 import { onClickOutside, useResizeObserver } from '@apathia/apathia.hooks'
-import { SelectValueType, Direction, Option, UserProps } from './types'
+import {
+  SelectValueType,
+  Direction,
+  Option,
+  SelectUserProps,
+  SelectEmits,
+} from './types'
 
-export default function useSelect(userProps: UserProps, emit: any) {
+export default function useSelect(
+  userProps: SelectUserProps,
+  emit: SetupContext<SelectEmits>['emit'],
+) {
   const { disabled, modelValue, valueKey, filterable, emptyText, placeholder } =
     userProps
 
-  const rootEl = ref<HTMLElement | null>(null)  as Ref<HTMLElement | null>
+  const rootEl = ref<HTMLElement | null>(null) as Ref<HTMLElement | null>
   const inputEl = ref<HTMLInputElement | null>(null) as Ref<HTMLElement | null>
   const dropdownEl = ref<HTMLElement | null>(null) as Ref<HTMLElement | null>
 
@@ -427,8 +437,8 @@ export default function useSelect(userProps: UserProps, emit: any) {
 
   const getRootProps = () => ({
     disabled: !!disabled.value || isEmpty.value,
-    ref: (el: HTMLElement) => {
-      rootEl.value = el
+    ref: (el: Element | ComponentPublicInstance | null) => {
+      rootEl.value = el as HTMLElement
     },
     onClick: toggleDropdown,
     onKeydown: keyHandler,
@@ -441,8 +451,8 @@ export default function useSelect(userProps: UserProps, emit: any) {
     placeholder: finalPlaceholder.value,
     disabled: !!disabled.value,
     readonly: !filterable.value || !inputFocused.value,
-    ref: (el: HTMLInputElement) => {
-      inputEl.value = el
+    ref: (el: Element | ComponentPublicInstance | null) => {
+      inputEl.value = el as HTMLInputElement
     },
     onInput: (event: InputEvent) => {
       filterStr.value = (event.target as HTMLInputElement).value
@@ -460,8 +470,8 @@ export default function useSelect(userProps: UserProps, emit: any) {
     style: {
       width: `${minWidth.value}px`,
     },
-    ref: (el: HTMLElement) => {
-      dropdownEl.value = el
+    ref: (el: Element | ComponentPublicInstance | null) => {
+      dropdownEl.value = el as HTMLElement
     },
   })
 

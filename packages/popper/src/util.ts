@@ -1,9 +1,6 @@
-import { isRef, Ref, ComponentPublicInstance } from 'vue'
+import { isRef, Ref } from 'vue'
 import { apply, tw, css } from '@apathia/apathia.twind'
-
-export type RefType = Ref<HTMLElement | null>
-
-export type ElementType = RefType | ComponentPublicInstance | HTMLElement
+import type { RefType } from './types'
 
 export const isHTMLElement = (val: unknown): val is HTMLElement =>
   val instanceof HTMLElement
@@ -15,7 +12,7 @@ export const isRefBoolean = (val: unknown): val is Ref<boolean> =>
 
 export const getArrowStyle = (color: string, bgc: string, borderc: string) => {
   const getArrowBase = () => {
-    const popperArrowBofore = css`
+    const popperArrowBefore = css`
       width: 10px;
       height: 10px;
       &:before {
@@ -28,7 +25,7 @@ export const getArrowStyle = (color: string, bgc: string, borderc: string) => {
         height: 10px;
       }
     `
-    return apply`absolute z-0 ${popperArrowBofore}`
+    return apply`absolute z-0 ${popperArrowBefore}`
   }
   const arrowBase = tw(getArrowBase())
 
@@ -40,7 +37,7 @@ export const getArrowStyle = (color: string, bgc: string, borderc: string) => {
       right: 'left',
     }
     const placeArr = Object.keys(placeMap) as Array<keyof typeof placeMap>
-    const arrowPostion = placeArr.map(
+    const arrowPosition = placeArr.map(
       v =>
         css`
           &[data-popper-placement^=${v}] .${arrowBase} {
@@ -69,7 +66,7 @@ export const getArrowStyle = (color: string, bgc: string, borderc: string) => {
     )
 
     return apply`bg-${bgc} max-w-md box-border rounded border-solid border border-${borderc} 
-    p-3 z-50 text(${color} justify sm) shadow break-all ${arrowPostion} ${arrowBorder}`
+    p-3 z-50 text(${color} justify sm) shadow break-all ${arrowPosition} ${arrowBorder}`
   }
   const content = getContent()
 

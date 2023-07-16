@@ -1,9 +1,12 @@
 <template>
   <span :class="styles.arrowWrap">
-    <span :class="{
-      [styles.arrow]: true,
-      [styles.active]: active,
-    }" @click="sortChange">
+    <span
+      :class="{
+        [styles.arrow]: true,
+        [styles.active]: active,
+      }"
+      @click="sortChange"
+    >
       <Icon :size="14">
         <SortUp v-if="sort.order === 'asc'" />
         <SortDown v-else />
@@ -12,53 +15,33 @@
   </span>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, PropType } from "vue";
-import { style } from "@apathia/apathia.twind";
-import { Icon } from "@apathia/apathia.icon";
-import type { Sorter } from "./types";
-import { SortUp, SortDown } from "@apathia/apathia.icon-svg";
+<script setup lang="ts">
+import { computed } from 'vue'
+import { style } from '@apathia/apathia.twind'
+import { Icon } from '@apathia/apathia.icon'
+import { SortUp, SortDown } from '@apathia/apathia.icon-svg'
+import type { SortEmits, SortProps } from './types'
 
-export default defineComponent({
-  name: "GridSorter",
+defineOptions({
+  name: 'TableSorter',
+})
 
-  components: {
-    Icon,
-  },
+const props = defineProps<SortProps>()
 
-  props: {
-    sort: {
-      type: Object as PropType<Sorter>,
-      required: true,
-    },
-    prop: {
-      type: String as PropType<string>,
-      required: true,
-    },
-  },
+const emit = defineEmits<SortEmits>()
 
-  emits: ["sort-change"],
+const active = computed(() => props.prop === props.sort.prop)
 
-  setup(props, { emit }) {
-    const styles = getStyles();
-    const active = computed(() => props.prop === props.sort.prop);
-
-    function sortChange() {
-      const newOrder = active.value && props.sort.order === "desc" ? "asc" : "desc";
-      emit("sort-change", { prop: props.prop, order: newOrder });
-    }
-    return {
-      styles,
-      active,
-      sortChange,
-    };
-  },
-});
+function sortChange() {
+  const newOrder = active.value && props.sort.order === 'desc' ? 'asc' : 'desc'
+  emit('sort-change', { prop: props.prop, order: newOrder })
+}
 
 const getStyles = () => ({
   arrowWrap: style`inline-block pl-px align-middle`,
   arrow: style`text-content-neutral cursor-pointer`,
   arrowIcon: style`h-3.5 w-3.5 align-middle`,
   active: style`text-content-accent`,
-});
+})
+const styles = getStyles()
 </script>

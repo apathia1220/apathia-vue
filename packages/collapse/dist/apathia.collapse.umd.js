@@ -1,6 +1,6 @@
 (function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.icon"), require("@apathia/apathia.hooks"), require("@apathia/apathia.twind"), require("@apathia/apathia.shared")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.icon", "@apathia/apathia.hooks", "@apathia/apathia.twind", "@apathia/apathia.shared"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.collapse = {}, global.Vue, global.icon, global.hooks, global.twind, global.shared));
-})(this, function(exports2, vue, apathia_icon, apathia_hooks, apathia_twind, apathia_shared) {
+  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.icon"), require("@apathia/apathia.hooks"), require("@apathia/apathia.twind"), require("@apathia/apathia.shared"), require("@apathia/apathia.icon-svg")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.icon", "@apathia/apathia.hooks", "@apathia/apathia.twind", "@apathia/apathia.shared", "@apathia/apathia.icon-svg"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.collapse = {}, global.Vue, global.icon, global.hooks, global.twind, global.shared, global["icon-svg"]));
+})(this, function(exports2, vue, apathia_icon, apathia_hooks, apathia_twind, apathia_shared, apathia_iconSvg) {
   "use strict";
   function useTransition(props) {
     function onEnter(el) {
@@ -52,42 +52,20 @@
       return () => vue.h(vue.Transition, getTransitionProps(), slots);
     }
   });
-  var _export_sfc = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-      target[key] = val;
-    }
-    return target;
-  };
   const _sfc_main = vue.defineComponent({
-    name: "Collapse",
-    components: {
-      CollapseTransition,
-      Icon: apathia_icon.Icon
+    ...{
+      name: "Collapse"
     },
+    __name: "Collapse",
     props: {
-      expand: {
-        type: Boolean,
-        default: true
-      },
-      duration: {
-        type: Number,
-        default: 400
-      },
-      header: {
-        type: String,
-        default: "header"
-      },
-      showArrow: {
-        type: Boolean,
-        default: true
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      }
+      expand: { type: Boolean, default: true },
+      duration: { default: 400 },
+      header: { default: "header" },
+      showArrow: { type: Boolean, default: true },
+      disabled: { type: Boolean, default: false }
     },
-    setup(props) {
+    setup(__props) {
+      const props = __props;
       const [show, toggleShow, setShow] = apathia_hooks.useToggle(props.expand);
       const styles = initStyle();
       vue.watch(
@@ -99,71 +77,61 @@
           toggleShow();
         }
       };
-      return {
-        handleClick,
-        show,
-        toggleShow,
-        styles
+      function initStyle() {
+        const headerClass = apathia_twind.style`flex items-center h-10 leading-10 bg-fill-light rounded cursor-pointer`;
+        const rollClass = apathia_twind.style`rotate-90 translate-y-0.5 duration-300`;
+        const headerDisableClass = apathia_twind.style`cursor-not-allowed`;
+        const icon = apathia_twind.style`mx-2 transition`;
+        return {
+          headerClass,
+          rollClass,
+          headerDisableClass,
+          icon
+        };
+      }
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          vue.renderSlot(_ctx.$slots, "toggleHeader", {
+            show: vue.unref(show),
+            toggleShow: vue.unref(toggleShow)
+          }, () => [
+            vue.createElementVNode("div", {
+              class: vue.normalizeClass([vue.unref(styles).headerClass, _ctx.disabled ? vue.unref(styles).headerDisableClass : ""]),
+              onClick: handleClick
+            }, [
+              _ctx.showArrow ? (vue.openBlock(), vue.createElementBlock("span", {
+                key: 0,
+                style: vue.normalizeStyle({ transform: `rotate(${vue.unref(show) ? 90 : 0}deg)` })
+              }, [
+                vue.createVNode(vue.unref(apathia_icon.Icon), {
+                  class: vue.normalizeClass(vue.unref(styles).icon)
+                }, {
+                  default: vue.withCtx(() => [
+                    vue.createVNode(vue.unref(apathia_iconSvg.ArrowRight))
+                  ]),
+                  _: 1
+                }, 8, ["class"])
+              ], 4)) : vue.createCommentVNode("", true),
+              vue.renderSlot(_ctx.$slots, "header", {}, () => [
+                vue.createElementVNode("div", null, vue.toDisplayString(_ctx.header), 1)
+              ])
+            ], 2)
+          ]),
+          vue.createVNode(vue.unref(CollapseTransition), { duration: _ctx.duration }, {
+            default: vue.withCtx(() => [
+              vue.withDirectives(vue.createElementVNode("div", null, [
+                vue.renderSlot(_ctx.$slots, "default")
+              ], 512), [
+                [vue.vShow, vue.unref(show)]
+              ])
+            ]),
+            _: 3
+          }, 8, ["duration"])
+        ], 64);
       };
     }
   });
-  function initStyle() {
-    const headerClass = apathia_twind.style`flex items-center h-10 leading-10 bg-fill-light rounded cursor-pointer`;
-    const rollClass = apathia_twind.style`rotate-90 translate-y-0.5 duration-300`;
-    const headerDisableClass = apathia_twind.style`cursor-not-allowed`;
-    const icon = apathia_twind.style`mx-2 transition`;
-    return {
-      headerClass,
-      rollClass,
-      headerDisableClass,
-      icon
-    };
-  }
-  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_ArrowRight = vue.resolveComponent("ArrowRight");
-    const _component_Icon = vue.resolveComponent("Icon");
-    const _component_CollapseTransition = vue.resolveComponent("CollapseTransition");
-    return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
-      vue.renderSlot(_ctx.$slots, "toggleHeader", {
-        show: _ctx.show,
-        toggleShow: _ctx.toggleShow
-      }, () => [
-        vue.createElementVNode("div", {
-          class: vue.normalizeClass([_ctx.styles.headerClass, _ctx.disabled ? _ctx.styles.headerDisableClass : ""]),
-          onClick: _cache[0] || (_cache[0] = (...args) => _ctx.handleClick && _ctx.handleClick(...args))
-        }, [
-          _ctx.showArrow ? (vue.openBlock(), vue.createElementBlock("span", {
-            key: 0,
-            style: vue.normalizeStyle({ transform: `rotate(${_ctx.show ? 90 : 0}deg)` })
-          }, [
-            vue.createVNode(_component_Icon, {
-              class: vue.normalizeClass(_ctx.styles.icon)
-            }, {
-              default: vue.withCtx(() => [
-                vue.createVNode(_component_ArrowRight)
-              ]),
-              _: 1
-            }, 8, ["class"])
-          ], 4)) : vue.createCommentVNode("", true),
-          vue.renderSlot(_ctx.$slots, "header", {}, () => [
-            vue.createElementVNode("div", null, vue.toDisplayString(_ctx.header), 1)
-          ])
-        ], 2)
-      ]),
-      vue.createVNode(_component_CollapseTransition, { duration: _ctx.duration }, {
-        default: vue.withCtx(() => [
-          vue.withDirectives(vue.createElementVNode("div", null, [
-            vue.renderSlot(_ctx.$slots, "default")
-          ], 512), [
-            [vue.vShow, _ctx.show]
-          ])
-        ]),
-        _: 3
-      }, 8, ["duration"])
-    ], 64);
-  }
-  var Collapse = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-  exports2.Collapse = Collapse;
+  exports2.Collapse = _sfc_main;
   exports2.CollapseTransition = CollapseTransition;
   Object.defineProperties(exports2, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
 });

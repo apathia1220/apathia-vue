@@ -1,6 +1,6 @@
 import flatpickr from 'flatpickr'
 import { tw, css, apply } from '@apathia/apathia.twind'
-import { RangeConfig, RangeChange } from './types'
+import type { RangeConfig, RangeChange } from './types'
 
 export default function (range: RangeConfig, change: RangeChange) {
   return function plugin(fp: flatpickr.Instance) {

@@ -42,31 +42,23 @@
 
 <script setup lang="ts">
 import ElementResizeDetectorMaker from 'element-resize-detector'
-import { 
-  ref, 
-  computed, 
-  watch, 
-  reactive, 
-  onMounted, 
-  nextTick, 
-  onBeforeUnmount, 
-  withDefaults
+import {
+  ref,
+  computed,
+  watch,
+  reactive,
+  onMounted,
+  nextTick,
+  onBeforeUnmount,
 } from 'vue'
 import { raf } from '@apathia/apathia.shared'
-import { style, apply, tw, css } from "@apathia/apathia.twind"
+import { style, apply, tw, css } from '@apathia/apathia.twind'
 import Scrollbar from './Scrollbar.vue'
+import type { ScrollContainerProps } from './types'
 
-type ContainerSize = 'thick' | 'normal' | 'thin' | number
-
-interface ScrollContainerProps {
-  size?: ContainerSize
-  tag?: string
-  scrollTop?: number
-  scrollLeft?: number
-  autoHide?: boolean
-  hideVertical?: boolean
-  hideHorizontal?: boolean
-}
+defineOptions({
+  name: 'ScrollContainer',
+})
 
 const SIDEBAR_SIDE_MAP = {
   thick: 20,
@@ -75,22 +67,22 @@ const SIDEBAR_SIDE_MAP = {
 }
 
 const getContainerStyles = () => {
-    const scrollbar = apply`absolute bottom-0 right-0`
-    return {
-      scrollContainer: style`relative h-full overflow-hidden${css`
-        &::-webkit-scrollbar {
-          -webkit-appearance: none;
-          width: 7px;
-        }
-      `}`,
-      scrollbarY: tw`${scrollbar}${apply`top-0`}`,
-      scrollbarX: tw`${scrollbar}${apply`left-0`}`,
-    }
+  const scrollbar = apply`absolute bottom-0 right-0`
+  return {
+    scrollContainer: style`relative h-full overflow-hidden${css`
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 7px;
+      }
+    `}`,
+    scrollbarY: tw`${scrollbar}${apply`top-0`}`,
+    scrollbarX: tw`${scrollbar}${apply`left-0`}`,
+  }
 }
 
 const props = withDefaults(defineProps<ScrollContainerProps>(), {
   size: 'normal',
-  tag: 'div'
+  tag: 'div',
 })
 
 const emit = defineEmits(['update:scrollTop', 'update:scrollLeft'])
@@ -364,4 +356,3 @@ defineExpose({
 
 const styles = getContainerStyles()
 </script>
-

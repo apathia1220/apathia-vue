@@ -17,7 +17,7 @@
     "vue-tsc": "^0.38.9"
   },
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.3.4"
   },
   "dependencies": {
     "@apathia/apathia": "workspace:^1.2.10",
@@ -25,6 +25,6 @@
     "lodash-es": "^4.17.21",
     "twind": "^0.16.19",
     "unplugin-vue-define-options": "^0.12.8",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
   }
 }

@@ -1,35 +1,35 @@
 (function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("@apathia/apathia.alert"), require("@apathia/apathia.button"), require("@apathia/apathia.input"), require("@apathia/apathia.icon"), require("@apathia/apathia.shared"), require("@apathia/apathia.hooks")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "@apathia/apathia.alert", "@apathia/apathia.button", "@apathia/apathia.input", "@apathia/apathia.icon", "@apathia/apathia.shared", "@apathia/apathia.hooks"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.upload = {}, global.Vue, global.twind, global.alert, global.button, global.input, global.icon, global.shared, global.hooks));
-})(this, function(exports2, vue, apathia_twind, apathia_alert, apathia_button, apathia_input, apathia_icon, apathia_shared, apathia_hooks) {
+  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("@apathia/apathia.alert"), require("@apathia/apathia.button"), require("@apathia/apathia.input"), require("@apathia/apathia.icon"), require("@apathia/apathia.shared"), require("@apathia/apathia.hooks"), require("@apathia/apathia.icon-svg")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "@apathia/apathia.alert", "@apathia/apathia.button", "@apathia/apathia.input", "@apathia/apathia.icon", "@apathia/apathia.shared", "@apathia/apathia.hooks", "@apathia/apathia.icon-svg"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.upload = {}, global.Vue, global.twind, global.alert, global.button, global.input, global.icon, global.shared, global.hooks, global["icon-svg"]));
+})(this, function(exports2, vue, apathia_twind, apathia_alert, apathia_button, apathia_input, apathia_icon, apathia_shared, apathia_hooks, apathia_iconSvg) {
   "use strict";
   function useDragDrop(el, disabled, processFiles) {
-    const draging = vue.ref(false);
+    const dragging = vue.ref(false);
     const dragenter = (e) => {
       e.preventDefault();
       if (disabled.value)
         return;
-      draging.value = true;
+      dragging.value = true;
     };
     const drop = (e) => {
       var _a;
       e.preventDefault();
       const fileList = (_a = e.dataTransfer) === null || _a === void 0 ? void 0 : _a.files;
       processFiles(fileList);
-      draging.value = false;
+      dragging.value = false;
     };
     const dragover = (e) => {
       e.preventDefault();
     };
     const dragleave = (e) => {
       e.preventDefault();
-      draging.value = false;
+      dragging.value = false;
     };
     apathia_hooks.useEventListener(el, "dragenter", dragenter);
     apathia_hooks.useEventListener(el, "drop", drop);
     apathia_hooks.useEventListener(el, "dragover", dragover);
     apathia_hooks.useEventListener(el, "dragleave", dragleave);
     return {
-      draging
+      dragging
     };
   }
   const KB = 1 << 10;
@@ -50,110 +50,53 @@
       return `${(nSize / GB).toFixed(digits)}GB`;
     return `${(nSize / TB).toFixed(2)}TB`;
   }
-  var _export_sfc = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-      target[key] = val;
-    }
-    return target;
-  };
+  const _hoisted_1 = ["draggable"];
+  const _hoisted_2 = ["multiple", "accept"];
   const _sfc_main = vue.defineComponent({
-    name: "Upload",
-    components: {
-      BaseButton: apathia_button.BaseButton,
-      Icon: apathia_icon.Icon,
-      Input: apathia_input.Input
+    ...{
+      name: "Upload"
     },
+    __name: "Upload",
     props: {
-      modelValue: {
-        type: [Array, String],
-        required: true
-      },
-      valid: {
-        type: Boolean,
-        default: false
-      },
-      draggable: {
-        type: Boolean,
-        default: false
-      },
-      headers: {
-        type: Object,
-        default: () => ({})
-      },
-      action: {
-        type: String,
-        required: true
-      },
-      name: {
-        type: String,
-        default: "file"
-      },
-      inputDisabled: {
-        type: Boolean,
-        default: false
-      },
-      noInput: {
-        type: Boolean,
-        default: false
-      },
-      buttonName: {
-        type: String,
-        default: "\u4E0A\u4F20"
-      },
-      withCredentials: {
-        type: Boolean,
-        default: false
-      },
-      multiple: {
-        type: Boolean
-      },
-      data: {
-        type: [Object, Function],
-        default: () => ({})
-      },
-      limit: {
-        type: Number,
-        default: 5
-      },
-      filesize: {
-        type: [String, Number]
-      },
-      accept: {
-        type: String,
-        default: "image/*"
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      onBeforeEachUpload: {
-        type: Function
-      },
-      onBeforeAllUpload: {
-        type: Function
-      },
-      onAfterEachUpload: {
-        type: Function
-      },
-      onError: {
-        type: Function
-      },
-      resolveUrl: {
-        type: Function,
-        default: (p) => p.data.location
-      },
-      checkUrl: {
-        type: Function,
-        default: (url) => !!url
-      },
-      https: {
-        type: Boolean,
-        default: false
-      }
+      modelValue: {},
+      valid: { type: Boolean, default: false },
+      draggable: { type: Boolean, default: false },
+      headers: { default: () => ({}) },
+      action: {},
+      name: { default: "file" },
+      inputDisabled: { type: Boolean, default: false },
+      noInput: { type: Boolean, default: false },
+      buttonName: { default: "\u4E0A\u4F20" },
+      withCredentials: { type: Boolean, default: false },
+      multiple: { type: Boolean },
+      data: { type: [Object, Function], default: () => ({}) },
+      limit: { default: 5 },
+      fileSize: {},
+      accept: { default: "image/*" },
+      disabled: { type: Boolean, default: false },
+      onBeforeEachUpload: {},
+      onBeforeAllUpload: {},
+      onAfterEachUpload: {},
+      onError: {},
+      resolveUrl: { type: Function, default: (p) => p.data.location },
+      checkUrl: {},
+      https: { type: Boolean, default: false }
     },
     emits: ["update:modelValue", "update:valid"],
-    setup(props, { emit }) {
+    setup(__props, { emit }) {
+      const props = __props;
+      const getStyles = () => ({
+        trigger: apathia_twind.style`flex items-start border-0`,
+        drag: apathia_twind.style`group flex justify-center text-content-primary py-4 flex-col items-center bg-fill-light 
+    border(2 dashed line-accent) rounded cursor-pointer hover:(border-brand-primary text-content-accent)
+    ${apathia_twind.css({ "min-height": "4rem", "min-width": "5rem" })}`,
+        dragging: apathia_twind.style`border(brand-primary) rounded-md text-brand-primary`,
+        disabled: apathia_twind.style`cursor-not-allowed hover:(border(& dashed brand-active) text-content-primary)`,
+        clickText: apathia_twind.style`text-brand-primary group-hover:(text-brand-active)`,
+        fileIcon: apathia_twind.style`block text-content-secondary group-hover:(text-content-accent) ${apathia_twind.css`
+    width: 1.5rem !important;
+  `}`
+      });
       const styles = getStyles();
       const formDisabled = vue.inject("FormDisabled", vue.ref(false));
       const containerRef = vue.ref(null);
@@ -184,20 +127,24 @@
         { immediate: true }
       );
       const disableUpload = vue.computed(() => {
-        const isBeyoundLimit = props.multiple ? props.modelValue.length >= props.limit : false;
-        return props.disabled || formDisabled.value || isBeyoundLimit;
+        const isBeyondLimit = props.multiple ? props.modelValue.length >= props.limit : false;
+        return props.disabled || formDisabled.value || isBeyondLimit;
       });
-      const { draging } = useDragDrop(containerRef, disableUpload, (files) => {
-        if (files) {
-          uploadFiles(files);
+      const { dragging } = useDragDrop(
+        containerRef,
+        disableUpload,
+        (files) => {
+          if (files) {
+            uploadFiles(files);
+          }
         }
-      });
+      );
       const containerClasses = vue.computed(() => ({
         [styles.trigger]: !props.draggable
       }));
       const dragContainerClasses = vue.computed(() => ({
         [styles.drag]: props.draggable,
-        [styles.draging]: props.draggable && draging.value,
+        [styles.dragging]: props.draggable && dragging.value,
         [styles.disabled]: props.draggable && disableUpload.value
       }));
       const uploadButtonStyles = vue.computed(() => ({
@@ -223,8 +170,8 @@
             console.error(processErr || new Error("[Upload] invalid file"));
             return;
           }
-          if (props.filesize && processedFile.size > props.filesize) {
-            const filesizeText = sizeFormat(props.filesize, 0);
+          if (props.fileSize && processedFile.size > props.fileSize) {
+            const filesizeText = sizeFormat(props.fileSize, 0);
             apathia_alert.toast.danger("\u9519\u8BEF", `\u6587\u4EF6\u5927\u5C0F\u4E0D\u80FD\u8D85\u8FC7${filesizeText}`);
             return;
           }
@@ -312,106 +259,77 @@
           return;
         }
       };
-      return {
-        containerRef,
-        inputRef,
-        disableUpload,
-        handleTriggerClick,
-        handleFileChange,
-        handleUrlInput,
-        styles,
-        uploadButtonStyles,
-        containerClasses,
-        dragContainerClasses
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          vue.createElementVNode("div", vue.mergeProps(_ctx.$attrs, {
+            ref_key: "containerRef",
+            ref: containerRef,
+            class: containerClasses.value,
+            draggable: _ctx.draggable
+          }), [
+            _ctx.draggable ? (vue.openBlock(), vue.createElementBlock("div", {
+              key: 0,
+              onClick: handleTriggerClick
+            }, [
+              vue.renderSlot(_ctx.$slots, "drag", {}, () => [
+                vue.createElementVNode("div", {
+                  class: vue.normalizeClass(dragContainerClasses.value)
+                }, [
+                  vue.createVNode(vue.unref(apathia_icon.Icon), { size: 50 }, {
+                    default: vue.withCtx(() => [
+                      vue.createVNode(vue.unref(apathia_iconSvg.UploadFilled))
+                    ]),
+                    _: 1
+                  }),
+                  vue.createElementVNode("p", null, [
+                    vue.createTextVNode(" \u5C06\u6587\u4EF6\u62D6\u5165\u6B64\u5904\u6216\u8005 "),
+                    vue.createElementVNode("span", {
+                      class: vue.normalizeClass(vue.unref(styles).clickText)
+                    }, "\u70B9\u51FB\u9009\u62E9", 2)
+                  ])
+                ], 2)
+              ])
+            ])) : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
+              !_ctx.multiple && !_ctx.noInput ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_input.Input), {
+                key: 0,
+                "model-value": _ctx.modelValue,
+                disabled: _ctx.inputDisabled || disableUpload.value,
+                style: { "display": "inline-block" },
+                clearable: "",
+                "onUpdate:modelValue": handleUrlInput
+              }, null, 8, ["model-value", "disabled"])) : vue.createCommentVNode("", true),
+              vue.createElementVNode("div", {
+                style: { "display": "inline-block" },
+                onClick: handleTriggerClick
+              }, [
+                vue.renderSlot(_ctx.$slots, "button", {}, () => [
+                  vue.createVNode(vue.unref(apathia_button.BaseButton), {
+                    primary: "",
+                    disabled: disableUpload.value,
+                    style: vue.normalizeStyle(uploadButtonStyles.value)
+                  }, {
+                    default: vue.withCtx(() => [
+                      vue.createTextVNode(vue.toDisplayString(_ctx.buttonName), 1)
+                    ]),
+                    _: 1
+                  }, 8, ["disabled", "style"])
+                ])
+              ])
+            ], 64))
+          ], 16, _hoisted_1),
+          vue.createElementVNode("input", {
+            ref_key: "inputRef",
+            ref: inputRef,
+            type: "file",
+            multiple: _ctx.multiple,
+            accept: _ctx.accept,
+            style: { "display": "none" },
+            onChange: handleFileChange
+          }, null, 40, _hoisted_2)
+        ], 64);
       };
     }
   });
-  const getStyles = () => ({
-    trigger: apathia_twind.style`flex items-start border-0`,
-    drag: apathia_twind.style`group flex justify-center text-content-primary py-4 flex-col items-center bg-fill-light 
-    border(2 dashed line-accent) rounded cursor-pointer hover:(border-brand-primary text-content-accent)
-    ${apathia_twind.css({ "min-height": "4rem", "min-width": "5rem" })}`,
-    draging: apathia_twind.style`border(brand-primary) rounded-md text-brand-primary`,
-    disabled: apathia_twind.style`cursor-not-allowd hover:(border(& dashed brand-active) text-content-primary)`,
-    clickText: apathia_twind.style`text-brand-primary group-hover:(text-brand-active)`,
-    fileIcon: apathia_twind.style`block text-content-secondary group-hover:(text-content-accent) ${apathia_twind.css`
-    width: 1.5rem !important;
-  `}`
-  });
-  const _hoisted_1 = ["draggable"];
-  const _hoisted_2 = ["multiple", "accept"];
-  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_UploadFilled = vue.resolveComponent("UploadFilled");
-    const _component_Icon = vue.resolveComponent("Icon");
-    const _component_Input = vue.resolveComponent("Input");
-    const _component_BaseButton = vue.resolveComponent("BaseButton");
-    return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
-      vue.createElementVNode("div", vue.mergeProps(_ctx.$attrs, {
-        ref: "containerRef",
-        class: _ctx.containerClasses,
-        draggable: _ctx.draggable
-      }), [
-        _ctx.draggable ? (vue.openBlock(), vue.createElementBlock("div", {
-          key: 0,
-          onClick: _cache[0] || (_cache[0] = (...args) => _ctx.handleTriggerClick && _ctx.handleTriggerClick(...args))
-        }, [
-          vue.renderSlot(_ctx.$slots, "drag", {}, () => [
-            vue.createElementVNode("div", {
-              class: vue.normalizeClass(_ctx.dragContainerClasses)
-            }, [
-              vue.createVNode(_component_Icon, { size: 50 }, {
-                default: vue.withCtx(() => [
-                  vue.createVNode(_component_UploadFilled)
-                ]),
-                _: 1
-              }),
-              vue.createElementVNode("p", null, [
-                vue.createTextVNode(" \u5C06\u6587\u4EF6\u62D6\u5165\u6B64\u5904\u6216\u8005 "),
-                vue.createElementVNode("span", {
-                  class: vue.normalizeClass(_ctx.styles.clickText)
-                }, "\u70B9\u51FB\u9009\u62E9", 2)
-              ])
-            ], 2)
-          ])
-        ])) : (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
-          !_ctx.multiple && !_ctx.noInput ? (vue.openBlock(), vue.createBlock(_component_Input, {
-            key: 0,
-            "model-value": _ctx.modelValue,
-            disabled: _ctx.inputDisabled || _ctx.disableUpload,
-            style: { "display": "inline-block" },
-            clearable: "",
-            "onUpdate:modelValue": _ctx.handleUrlInput
-          }, null, 8, ["model-value", "disabled", "onUpdate:modelValue"])) : vue.createCommentVNode("", true),
-          vue.createElementVNode("div", {
-            style: { "display": "inline-block" },
-            onClick: _cache[1] || (_cache[1] = (...args) => _ctx.handleTriggerClick && _ctx.handleTriggerClick(...args))
-          }, [
-            vue.renderSlot(_ctx.$slots, "button", {}, () => [
-              vue.createVNode(_component_BaseButton, {
-                primary: "",
-                disabled: _ctx.disableUpload,
-                style: vue.normalizeStyle(_ctx.uploadButtonStyles)
-              }, {
-                default: vue.withCtx(() => [
-                  vue.createTextVNode(vue.toDisplayString(_ctx.buttonName), 1)
-                ]),
-                _: 1
-              }, 8, ["disabled", "style"])
-            ])
-          ])
-        ], 64))
-      ], 16, _hoisted_1),
-      vue.createElementVNode("input", {
-        ref: "inputRef",
-        type: "file",
-        multiple: _ctx.multiple,
-        accept: _ctx.accept,
-        style: { "display": "none" },
-        onChange: _cache[2] || (_cache[2] = (...args) => _ctx.handleFileChange && _ctx.handleFileChange(...args))
-      }, null, 40, _hoisted_2)
-    ], 64);
-  }
-  var Upload = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-  exports2.Upload = Upload;
+  exports2.Upload = _sfc_main;
   Object.defineProperties(exports2, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
 });

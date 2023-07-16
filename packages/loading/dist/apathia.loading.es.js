@@ -1,64 +1,56 @@
-import { defineComponent, openBlock, createElementBlock, createElementVNode, normalizeClass } from "vue";
+import { defineComponent, openBlock, createElementBlock, createElementVNode, normalizeClass, unref } from "vue";
 import { style } from "@apathia/apathia.twind";
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
+const _hoisted_1 = { class: "lds-spinner" };
 const _sfc_main = defineComponent({
-  name: "Loading",
-  setup() {
+  ...{
+    name: "Loading"
+  },
+  __name: "Loading",
+  setup(__props) {
+    const getStyles = () => ({
+      spinnerItem: style`after:bg-brand-primary`
+    });
     const styles = getStyles();
-    return {
-      styles
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", _hoisted_1, [
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2),
+        createElementVNode("div", {
+          class: normalizeClass(unref(styles).spinnerItem)
+        }, null, 2)
+      ]);
     };
   }
 });
-const getStyles = () => ({
-  spinnerItem: style`after:bg-brand-primary`
-});
-const _hoisted_1 = { class: "lds-spinner" };
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1, [
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2),
-    createElementVNode("div", {
-      class: normalizeClass(_ctx.styles.spinnerItem)
-    }, null, 2)
-  ]);
-}
-var Loading = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-export { Loading };
+export { _sfc_main as Loading };

@@ -58,9 +58,9 @@ function mountContainerDom(name, callback) {
   }
 }
 function unrefElement(elRef) {
-  var _a, _b;
+  var _a;
   const plain = unref(elRef);
-  return (_b = (_a = plain) === null || _a === void 0 ? void 0 : _a.$el) !== null && _b !== void 0 ? _b : plain;
+  return (_a = plain === null || plain === void 0 ? void 0 : plain.$el) !== null && _a !== void 0 ? _a : plain;
 }
 function getError(method, url, xhr) {
   let msg;
@@ -324,49 +324,6 @@ function mergeWithDefault(defaultValue, source) {
     return acc;
   }, {});
 }
-function resizeImage(src, sizeStr) {
-  if (typeof src !== "string") {
-    throw new TypeError();
-  }
-  let size = sizeStr;
-  if (size === void 0) {
-    size = "160x100";
-  } else if (size === "0x0") {
-    return src;
-  }
-  const urls = src.split("?");
-  const reg = /(@\d+w_\d+h)|(_\d+x\d+)/;
-  const reStr = urls[0].match(reg);
-  if (reStr !== null) {
-    const index = urls[0].indexOf(reStr[0]);
-    urls[0] = urls[0].substring(0, index);
-  }
-  const [widthStr, heightStr] = sizeStr.split("x");
-  const width = +widthStr;
-  const height = +heightStr;
-  const suffix = `${width || height ? "@" : ""}${width ? `${width}w` : ""}${width && height ? "_" : ""}${height ? `${height}h` : ""}`;
-  const rules = {
-    cdn: /i[0-2]\.hdslb\.com\//,
-    bfs: /\/\/i\d\.hdslb\.com\/bfs\//,
-    uat: /\/\/uat-i\d\.hdslb\.com\/bfs\//,
-    group1: /\/\/i\d\.hdslb\.com\/group1\//
-  };
-  const feature = {
-    bfs: /_\d+x\d+\./,
-    other: /\/\d+_\d+\//
-  };
-  if (!rules.cdn.test(urls[0])) {
-    return src;
-  }
-  if (feature.bfs.test(urls[0]) || feature.other.test(urls[0])) {
-    return src;
-  }
-  if (rules.uat.test(urls[0]) || rules.bfs.test(urls[0]) || rules.group1.test(urls[0])) {
-    urls[0] += suffix + urls[0].slice(urls[0].lastIndexOf("."));
-    return urls.join("?");
-  }
-  return src;
-}
 function noop() {
 }
-export { autoPos, isFunction, isNumber, isObject, isPromise, isString, isSymbol, mergeWithDefault, mountComponent, mountContainerDom, noop, promiseWrapper, raf, request, resizeImage, unrefElement };
+export { autoPos, isFunction, isNumber, isObject, isPromise, isString, isSymbol, mergeWithDefault, mountComponent, mountContainerDom, noop, promiseWrapper, raf, request, unrefElement };

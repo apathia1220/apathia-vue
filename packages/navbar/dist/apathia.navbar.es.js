@@ -5,12 +5,12 @@ import { Popper } from "@apathia/apathia.popper";
 import { css, apply, style } from "@apathia/apathia.twind";
 const _hoisted_1 = ["onClick"];
 const _hoisted_2 = ["onClick"];
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
   __name: "Navbar",
   props: {
     type: { default: "default" },
     modelValue: { default: "" },
-    list: null,
+    list: {},
     trigger: { default: "hover" },
     disabledParent: { type: Boolean, default: true }
   },
@@ -19,13 +19,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     const props = __props;
     function initStyle(type) {
       const radius = css`
-      &:first-child {
-        border-radius: 4px 0 0 4px;
-      }
-      &:last-child {
-        border-radius: 0 4px 4px 0;
-      }
-    `;
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  `;
       const Theme = {
         default: {
           nav: apply`bg-fill-light hover:(bg-fill-gray) ${apply`${radius}`}`,
@@ -97,7 +97,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           ref: contentRef,
           class: normalizeClass(unref(styles).layoutContainer)
         }, [
-          (openBlock(true), createElementBlock(Fragment, null, renderList(__props.list, (nav) => {
+          (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.list, (nav) => {
             return openBlock(), createElementBlock("li", {
               key: nav.value,
               class: normalizeClass(`${unref(styles).layoutNav} ${isActive(nav) || isActiveParent(nav) ? unref(styles).activeNav : ""}`),

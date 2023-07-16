@@ -2,7 +2,10 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.button"), require("@apathia/apathia.popper"), require("@apathia/apathia.twind")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.button", "@apathia/apathia.popper", "@apathia/apathia.twind"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.dropdown = {}, global.Vue, global.button, global.popper, global.twind));
 })(this, function(exports2, vue, apathia_button, apathia_popper, apathia_twind) {
   "use strict";
-  const _sfc_main$2 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$2 = vue.defineComponent({
+    ...{
+      name: "Dropdown"
+    },
     __name: "Dropdown",
     props: {
       delay: { default: 300 },
@@ -53,14 +56,14 @@
         return vue.openBlock(), vue.createBlock(vue.unref(apathia_popper.Popper), {
           modelValue: visible.value,
           "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => visible.value = $event),
-          trigger: __props.trigger,
-          placement: __props.placement,
+          trigger: _ctx.trigger,
+          placement: _ctx.placement,
           "show-arrow": false,
           "popper-class": `${vue.unref(staticStyle).popper} ${divide.value ? vue.unref(staticStyle).divide : ""}`,
           distance: 5,
           "transition-class": vue.unref(transitionClass),
-          delay: __props.delay,
-          disabled: __props.disabled,
+          delay: _ctx.delay,
+          disabled: _ctx.disabled,
           onShow: show,
           onHide: hide
         }, {
@@ -73,7 +76,7 @@
                 class: vue.normalizeClass(vue.unref(staticStyle).baseButton)
               }, {
                 default: vue.withCtx(() => [
-                  vue.createTextVNode(vue.toDisplayString(__props.label) + " ", 1),
+                  vue.createTextVNode(vue.toDisplayString(_ctx.label) + " ", 1),
                   vue.createElementVNode("span", {
                     class: vue.normalizeClass(`v-icon v-icon-chevron-down ${vue.unref(staticStyle).iconClass}`)
                   }, null, 2)
@@ -87,7 +90,10 @@
       };
     }
   });
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = vue.defineComponent({
+    ...{
+      name: "DropdownItem"
+    },
     __name: "DropdownItem",
     props: {
       active: { type: Boolean, default: false },
@@ -112,8 +118,8 @@
         return vue.openBlock(), vue.createElementBlock("div", {
           class: vue.normalizeClass({
             [vue.unref(styles).menuItem]: true,
-            [vue.unref(styles).active]: !__props.disabled && __props.active,
-            [vue.unref(styles).disabled]: __props.disabled
+            [vue.unref(styles).active]: !_ctx.disabled && _ctx.active,
+            [vue.unref(styles).disabled]: _ctx.disabled
           }),
           onClick: clickCurItem
         }, [
@@ -122,7 +128,10 @@
       };
     }
   });
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "DropdownGroup"
+    },
     __name: "DropdownGroup",
     setup(__props) {
       const getDropdownGroupStyle = () => ({

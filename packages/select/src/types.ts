@@ -1,10 +1,20 @@
-import { Ref } from "vue"
+import type { ComputedRef, Ref } from 'vue'
 
-export type SelectValueType = number | string | boolean | Record<string, any> | null
+export type SelectValueType =
+  | number
+  | string
+  | boolean
+  | Record<string, any>
+  | null
 
 export enum Direction {
   UP = 'up',
   DOWN = 'down',
+}
+
+export type OptionProps = {
+  value: string | number | boolean | null
+  disabled: boolean
 }
 
 export type Option = {
@@ -36,11 +46,32 @@ export type OptionRegister = (
 
 export type OptionRemover = (uid: number) => void
 
-export interface UserProps {
+export interface SelectUserProps {
   modelValue: Ref<SelectValueType>
   filterable: Ref<boolean>
   valueKey: Ref<string>
-  disabled: Ref<boolean | undefined>
+  disabled: ComputedRef<boolean | ComputedRef<boolean> | undefined>
   emptyText: Ref<string>
   placeholder: Ref<string>
+}
+
+export type SelectProps = {
+  modelValue: SelectValueType
+  valueKey: string
+  placeholder: string
+  filterable: boolean
+  clearable: boolean
+  emptyText: string
+  disabled?: boolean
+  maxHeight: number | string
+  isLoading: boolean
+  placement: string
+}
+
+export type SelectEmits = {
+  'update:modelValue': [value: SelectValueType]
+  'native-change': [value: SelectValueType, label: string]
+  'query-change': [value: string]
+  change: [value: SelectValueType, label: string]
+  input: [value: SelectValueType, label: string]
 }

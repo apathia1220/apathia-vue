@@ -1,25 +1,8 @@
 import { TransitionGroup, defineComponent, ref, PropType, h } from 'vue'
 import { style, tw } from '@apathia/apathia.twind'
-import { RenderFn } from '@apathia/apathia.custom-render'
 import { mountComponent } from '@apathia/apathia.shared'
 import BaseAlert from './Alert.vue'
-
-export type AlertType = 'info' | 'warning' | 'danger' | 'success' | 'default'
-
-interface AlertProps {
-  type?: AlertType
-  duration?: number
-  title?: string
-  message?: string
-  showIcon?: boolean
-  showClose?: boolean
-  render?: RenderFn<{ close?: (...args: any) => any }>
-}
-
-interface AlertListProps {
-  props: AlertProps
-  id: string
-}
+import type { AlertProps, AlertListProps, Alerter } from './types'
 
 const AlertContainer = defineComponent({
   name: 'AlertContainer',
@@ -79,21 +62,6 @@ const remove = (id: string) => {
   alertList.value.splice(index, 1)
 }
 const getID = () => `${Date.now()}`
-
-const AlertType = ['info', 'warning', 'danger', 'success', 'default'] as const
-
-interface BaseAlerter {
-  (props: AlertProps): void
-  closeAll: () => void
-}
-
-export type Alerter = {
-  [K in typeof AlertType[number]]: (
-    title: string,
-    message?: string,
-    props?: Omit<AlertProps, 'type' | 'title' | 'message'>,
-  ) => void
-} & BaseAlerter
 
 const Alert = ((props: AlertProps) => {
   const id: string = getID()

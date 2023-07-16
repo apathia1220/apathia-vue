@@ -1,19 +1,21 @@
 import { ref, computed, onMounted } from 'vue'
 import { useToggle } from '@apathia/apathia.hooks'
-import type { SideNode as Node, SideNavProps } from './types'
+import type { SideNodeType, SideNavProps } from './types'
 
 export default function useSideNav(props: SideNavProps) {
-  const filteredMenu = ref<Node[]>([])
+  const filteredMenu = ref<SideNodeType[]>([])
   const scrollTop = ref(0)
-  const filterKeyMap = computed(() => createKeyMap(props.menuList as Node[]))
+  const filterKeyMap = computed(() =>
+    createKeyMap(props.menuList as SideNodeType[]),
+  )
 
-  filteredMenu.value = props.menuList as Node[]
+  filteredMenu.value = props.menuList as SideNodeType[]
 
   const [isHover, toggleHover] = useToggle(false)
   const showMini = computed(() => (props.mini ? !isHover.value : false))
 
-  function createKeyMap(menu: Node[], parentNode?: Node) {
-    let keyMap = {} as Record<string, Node>
+  function createKeyMap(menu: SideNodeType[], parentNode?: SideNodeType) {
+    let keyMap = {} as Record<string, SideNodeType>
 
     for (const node of menu) {
       keyMap[node.text || ''] = parentNode || node
@@ -39,7 +41,7 @@ export default function useSideNav(props: SideNavProps) {
     const { value } = event.target as HTMLInputElement
     filteredMenu.value =
       value === ''
-        ? (props.menuList as Node[])
+        ? (props.menuList as SideNodeType[])
         : filterMenu(filterKeyMap.value, value)
   }
 
@@ -69,7 +71,10 @@ export default function useSideNav(props: SideNavProps) {
   }
 }
 
-function filterMenu(keyMap: Record<string, Node>, keyword: string): Node[] {
+function filterMenu(
+  keyMap: Record<string, SideNodeType>,
+  keyword: string,
+): SideNodeType[] {
   const keyWordList = Object.keys(keyMap)
   return keyWordList.filter(x => x.includes(keyword)).map(y => keyMap[y])
 }

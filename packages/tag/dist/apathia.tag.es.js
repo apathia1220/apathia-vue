@@ -3,7 +3,10 @@ import { style } from "@apathia/apathia.twind";
 import { cloneDeep } from "lodash-es";
 import { BaseButton } from "@apathia/apathia.button";
 import { useToggle, useInjectProp } from "@apathia/apathia.hooks";
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "Tag"
+  },
   __name: "Tag",
   props: {
     text: { default: "" },
@@ -57,22 +60,22 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("li", {
         class: normalizeClass({
-          ...unref(themeClasses),
+          ...themeClasses.value,
           [unref(styles).size]: true,
           [unref(styles).layout]: true
         })
       }, [
-        __props.iconClass ? (openBlock(), createElementBlock("span", {
+        _ctx.iconClass ? (openBlock(), createElementBlock("span", {
           key: 0,
           class: normalizeClass({
-            [__props.iconClass]: true,
+            [_ctx.iconClass]: true,
             [unref(styles).icon]: true
           })
         }, null, 2)) : createCommentVNode("", true),
         renderSlot(_ctx.$slots, "default", {}, () => [
-          createTextVNode(toDisplayString(__props.text), 1)
+          createTextVNode(toDisplayString(_ctx.text), 1)
         ]),
-        __props.closable && !unref(formDisabled) && unref(withinTags) ? (openBlock(), createElementBlock("span", {
+        _ctx.closable && !unref(formDisabled) && unref(withinTags) ? (openBlock(), createElementBlock("span", {
           key: 1,
           class: normalizeClass(unref(styles).delIcon),
           onClick: handleClose
@@ -81,10 +84,13 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Tags"
+  },
   __name: "Tags",
   props: {
-    modelValue: null,
+    modelValue: {},
     primary: { type: Boolean },
     success: { type: Boolean },
     danger: { type: Boolean },
@@ -124,7 +130,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         return;
       toggleAdding(true);
     }
-    function handleAppent() {
+    function handleAppend() {
       const tags = [props.handleTag(tagText.value), ...cloneDeep(props.modelValue)];
       emit("update:modelValue", tags);
       emit("change", tags);
@@ -164,14 +170,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           class: normalizeClass(unref(styles).list)
         }, {
           default: withCtx(() => [
-            (openBlock(true), createElementBlock(Fragment, null, renderList(unref(tagList), (tag, index) => {
+            (openBlock(true), createElementBlock(Fragment, null, renderList(tagList.value, (tag, index) => {
               return openBlock(), createBlock(_sfc_main$1, mergeProps(tag.theme, {
                 key: tag.text,
                 class: tag.className,
                 "icon-class": tag.iconClass,
                 closable: tag.closable,
                 text: tag.text,
-                hollow: __props.hollow,
+                hollow: _ctx.hollow,
                 onClose: ($event) => handleClose(tag, index)
               }), null, 16, ["class", "icon-class", "closable", "text", "hollow", "onClose"]);
             }), 128)),
@@ -182,7 +188,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               createVNode(_component_Input, {
                 modelValue: tagText.value,
                 "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => tagText.value = $event),
-                onKeyup: withKeys(handleAppent, ["enter"]),
+                onKeyup: withKeys(handleAppend, ["enter"]),
                 onBlur: _cache[1] || (_cache[1] = ($event) => unref(toggleAdding)(false))
               }, null, 8, ["modelValue", "onKeyup"])
             ], 2)) : (openBlock(), createBlock(unref(BaseButton), {

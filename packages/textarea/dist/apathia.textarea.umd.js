@@ -3,10 +3,13 @@
 })(this, function(exports2, vue, apathia_hooks, apathia_twind) {
   "use strict";
   const _hoisted_1 = ["disabled"];
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "Textarea"
+    },
     __name: "Textarea",
     props: {
-      modelValue: null,
+      modelValue: {},
       disabled: { type: Boolean, default: void 0 }
     },
     emits: ["update:modelValue"],
@@ -39,11 +42,11 @@
       }));
       return (_ctx, _cache) => {
         return vue.withDirectives((vue.openBlock(), vue.createElementBlock("textarea", vue.mergeProps({
-          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => vue.isRef(inputValue) ? inputValue.value = $event : null),
+          "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => inputValue.value = $event),
           disabled: !!vue.unref(disableInput),
-          class: vue.unref(classes)
-        }, vue.unref(attrs)), null, 16, _hoisted_1)), [
-          [vue.vModelText, vue.unref(inputValue)]
+          class: classes.value
+        }, attrs.value), null, 16, _hoisted_1)), [
+          [vue.vModelText, inputValue.value]
         ]);
       };
     }

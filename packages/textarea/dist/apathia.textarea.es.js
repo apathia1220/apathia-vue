@@ -1,11 +1,14 @@
-import { defineComponent, useAttrs, toRef, computed, withDirectives, openBlock, createElementBlock, mergeProps, isRef, unref, vModelText } from "vue";
+import { defineComponent, useAttrs, toRef, computed, withDirectives, openBlock, createElementBlock, mergeProps, unref, vModelText } from "vue";
 import { useInjectProp } from "@apathia/apathia.hooks";
 import { style } from "@apathia/apathia.twind";
 const _hoisted_1 = ["disabled"];
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Textarea"
+  },
   __name: "Textarea",
   props: {
-    modelValue: null,
+    modelValue: {},
     disabled: { type: Boolean, default: void 0 }
   },
   emits: ["update:modelValue"],
@@ -38,11 +41,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     }));
     return (_ctx, _cache) => {
       return withDirectives((openBlock(), createElementBlock("textarea", mergeProps({
-        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => isRef(inputValue) ? inputValue.value = $event : null),
+        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => inputValue.value = $event),
         disabled: !!unref(disableInput),
-        class: unref(classes)
-      }, unref(attrs)), null, 16, _hoisted_1)), [
-        [vModelText, unref(inputValue)]
+        class: classes.value
+      }, attrs.value), null, 16, _hoisted_1)), [
+        [vModelText, inputValue.value]
       ]);
     };
   }

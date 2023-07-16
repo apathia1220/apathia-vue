@@ -1,4 +1,4 @@
-import { ref, watch, nextTick, defineComponent, resolveComponent, openBlock, createBlock, Teleport, createVNode, Transition, mergeProps, withCtx, createElementBlock, normalizeClass, createElementVNode, normalizeStyle, renderSlot, toDisplayString, createCommentVNode, withDirectives, vShow, h, TransitionGroup, inject } from "vue";
+import { ref, watch, nextTick, defineComponent, useSlots, unref, openBlock, createBlock, Teleport, createVNode, Transition, mergeProps, withCtx, createElementBlock, normalizeClass, createElementVNode, normalizeStyle, renderSlot, toDisplayString, createCommentVNode, withDirectives, vShow, h, TransitionGroup, inject } from "vue";
 import { keyframes, css, style, tw } from "@apathia/apathia.twind";
 import { CustomRender } from "@apathia/apathia.custom-render";
 import { useEventListener, onClickOutside } from "@apathia/apathia.hooks";
@@ -49,21 +49,21 @@ function showScrollbar() {
     document.body.style.width = "auto";
   }
 }
-function createModal(props, ctx) {
+function createModal(props, emit, slots) {
   const shadeRef = ref(null);
   const modalRef = ref(null);
   const widthStyle = getWidthStyle(props.width, props.top);
-  const isTemplate = !!ctx.slots.default;
+  const isTemplate = !!slots.default;
   mountContainerDom("modal");
   function templateClose() {
     if (props.beforeClose && props.beforeClose()) {
-      ctx.emit("update:modelValue", false);
+      emit("update:modelValue", false);
       popModalStack();
     }
   }
   function functionClose() {
     if (props.beforeClose && props.beforeClose()) {
-      ctx.emit("close");
+      emit("close");
       popModalStack();
     }
   }
@@ -89,7 +89,7 @@ function createModal(props, ctx) {
         shadeRef.value.scrollTop = 0;
       }
     } else {
-      ctx.emit("close");
+      emit("close");
     }
   });
   return {
@@ -106,83 +106,35 @@ function getWidthStyle(width, top) {
     margin-top: ${top}${typeof top === "number" ? "px" : ""};
   `;
 }
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
 const _sfc_main = defineComponent({
-  name: "Modal",
-  components: {
-    CustomRender
+  ...{
+    name: "Modal"
   },
+  __name: "Modal",
   props: {
-    modelValue: {
-      type: Boolean,
-      default: false
-    },
-    title: {
-      type: String,
-      default: ""
-    },
-    subTitle: {
-      type: String,
-      default: ""
-    },
-    render: {
-      type: [String, Function],
-      default: () => null
-    },
-    renderHeader: {
-      type: [String, Function],
-      default: () => null
-    },
-    top: {
-      type: [Number, String],
-      default: 60
-    },
-    width: {
-      type: [Number, String],
-      default: 640
-    },
-    showClose: {
-      type: Boolean,
-      default: true
-    },
-    maskClosable: {
-      type: Boolean,
-      default: false
-    },
-    keyboard: {
-      type: Boolean,
-      default: true
-    },
-    beforeClose: {
-      type: Function,
-      default: () => true
-    }
+    modelValue: { type: Boolean, default: false },
+    title: { default: "" },
+    subTitle: { default: "" },
+    render: { type: [String, Function], default: () => null },
+    renderHeader: { type: [String, Function], default: () => null },
+    top: { default: 60 },
+    width: { default: 640 },
+    showClose: { type: Boolean, default: true },
+    maskClosable: { type: Boolean, default: false },
+    keyboard: { type: Boolean, default: true },
+    beforeClose: { type: Function, default: () => true },
+    onClose: {}
   },
-  emits: ["close", "update:modelValue"],
-  setup(props, ctx) {
+  emits: ["update:modelValue", "close"],
+  setup(__props, { emit: emits }) {
+    const props = __props;
+    const slots = useSlots();
     const { shadeRef, modalRef, widthStyle, close, isTemplate } = createModal(
       props,
-      ctx
+      emits,
+      slots
     );
-    return {
-      ...initStyle(),
-      shadeRef,
-      modalRef,
-      widthStyle,
-      close,
-      showScrollbar,
-      isTemplate
-    };
-  }
-});
-function initStyle() {
-  const slidein = keyframes`
+    const slideIn = keyframes`
     from {
       transform: translateY(-20px);
       opacity: 0;
@@ -192,12 +144,12 @@ function initStyle() {
       opacity: 1;
     }
   `;
-  const slideinCss = css({
-    animation: "0.5s ease",
-    animationName: slidein,
-    animationFillMode: "forwards"
-  });
-  const flash = keyframes`
+    const slideInCss = css({
+      animation: "0.5s ease",
+      animationName: slideIn,
+      animationFillMode: "forwards"
+    });
+    const flash = keyframes`
     from {
       opacity: 0;
     }
@@ -205,128 +157,120 @@ function initStyle() {
       opacity: 1;
     }
   `;
-  const flashCss = css({
-    animation: "0.5s ease",
-    animationName: flash
-  });
-  const shadeClass = style`fixed inset-0 h-full bg-fill-gray bg-opacity-50 overflow-auto ${flashCss}`;
-  const modalClass = style`mx-auto rounded bg-fill-white mb-8 -translate-y-5 ${slideinCss}`;
-  const modalHeaderClass = style`flex justify-between p-4 rounded-t text-content-primary border(b solid fill-neutral)`;
-  const modalContentClass = style`p-4`;
-  const delIconClass = style`font-medium self-start ml-3 cursor-pointer hover:(text-error-primary)`;
-  const titleClass = tw`text-lg`;
-  const subTitleClass = tw`text-content-accent text-sm mt-0.5`;
-  const transitionClass = {
-    "leave-to-class": tw`opacity-0`
-  };
-  const durationClass = tw`duration-500`;
-  return {
-    shadeClass,
-    modalClass,
-    modalHeaderClass,
-    delIconClass,
-    modalContentClass,
-    titleClass,
-    subTitleClass,
-    transitionClass,
-    durationClass
-  };
-}
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_CustomRender = resolveComponent("CustomRender");
-  return _ctx.isTemplate ? (openBlock(), createBlock(Teleport, {
-    key: 0,
-    to: ".apathia-modal"
-  }, [
-    createVNode(Transition, mergeProps(_ctx.transitionClass, { onAfterLeave: _ctx.showScrollbar }), {
-      default: withCtx(() => [
-        _ctx.modelValue ? (openBlock(), createElementBlock("div", {
-          key: 0,
-          class: normalizeClass(_ctx.durationClass)
-        }, [
-          createElementVNode("div", {
-            ref: "shadeRef",
-            class: normalizeClass(_ctx.shadeClass)
-          }, [
-            createElementVNode("div", {
-              ref: "modalRef",
-              style: normalizeStyle(_ctx.widthStyle),
-              class: normalizeClass(_ctx.modalClass)
+    const flashCss = css({
+      animation: "0.5s ease",
+      animationName: flash
+    });
+    const shadeClass = style`fixed inset-0 h-full bg-fill-gray bg-opacity-50 overflow-auto ${flashCss}`;
+    const modalClass = style`mx-auto rounded bg-fill-white mb-8 -translate-y-5 ${slideInCss}`;
+    const modalHeaderClass = style`flex justify-between p-4 rounded-t text-content-primary border(b solid fill-neutral)`;
+    const modalContentClass = style`p-4`;
+    const delIconClass = style`font-medium self-start ml-3 cursor-pointer hover:(text-error-primary)`;
+    const titleClass = tw`text-lg`;
+    const subTitleClass = tw`text-content-accent text-sm mt-0.5`;
+    const transitionClass = {
+      "leave-to-class": tw`opacity-0`
+    };
+    const durationClass = tw`duration-500`;
+    return (_ctx, _cache) => {
+      return unref(isTemplate) ? (openBlock(), createBlock(Teleport, {
+        key: 0,
+        to: ".apathia-modal"
+      }, [
+        createVNode(Transition, mergeProps(transitionClass, { onAfterLeave: unref(showScrollbar) }), {
+          default: withCtx(() => [
+            _ctx.modelValue ? (openBlock(), createElementBlock("div", {
+              key: 0,
+              class: normalizeClass(durationClass)
             }, [
               createElementVNode("div", {
-                class: normalizeClass(_ctx.modalHeaderClass)
+                ref_key: "shadeRef",
+                ref: shadeRef,
+                class: normalizeClass(shadeClass)
               }, [
-                renderSlot(_ctx.$slots, "header", { close: _ctx.close }, () => [
-                  createElementVNode("div", null, [
-                    createElementVNode("p", {
-                      class: normalizeClass(_ctx.titleClass)
-                    }, toDisplayString(_ctx.title), 3),
-                    _ctx.subTitle ? (openBlock(), createElementBlock("p", {
-                      key: 0,
-                      class: normalizeClass(_ctx.subTitleClass)
-                    }, toDisplayString(_ctx.subTitle), 3)) : createCommentVNode("", true)
+                createElementVNode("div", {
+                  ref_key: "modalRef",
+                  ref: modalRef,
+                  style: normalizeStyle(unref(widthStyle)),
+                  class: normalizeClass(modalClass)
+                }, [
+                  createElementVNode("div", {
+                    class: normalizeClass(modalHeaderClass)
+                  }, [
+                    renderSlot(_ctx.$slots, "header", { close: unref(close) }, () => [
+                      createElementVNode("div", null, [
+                        createElementVNode("p", {
+                          class: normalizeClass(titleClass)
+                        }, toDisplayString(_ctx.title), 1),
+                        _ctx.subTitle ? (openBlock(), createElementBlock("p", {
+                          key: 0,
+                          class: normalizeClass(subTitleClass)
+                        }, toDisplayString(_ctx.subTitle), 1)) : createCommentVNode("", true)
+                      ]),
+                      _ctx.showClose ? (openBlock(), createElementBlock("span", {
+                        key: 0,
+                        class: normalizeClass(delIconClass),
+                        onClick: _cache[0] || (_cache[0] = (...args) => unref(close) && unref(close)(...args))
+                      }, "\u2715")) : createCommentVNode("", true)
+                    ])
                   ]),
-                  _ctx.showClose ? (openBlock(), createElementBlock("span", {
-                    key: 0,
-                    class: normalizeClass(_ctx.delIconClass),
-                    onClick: _cache[0] || (_cache[0] = (...args) => _ctx.close && _ctx.close(...args))
-                  }, "\u2715", 2)) : createCommentVNode("", true)
-                ])
-              ], 2),
-              createElementVNode("div", {
-                class: normalizeClass(_ctx.modalContentClass)
-              }, [
-                renderSlot(_ctx.$slots, "default", { close: _ctx.close })
-              ], 2)
-            ], 6)
-          ], 2)
-        ], 2)) : createCommentVNode("", true)
-      ]),
-      _: 3
-    }, 16, ["onAfterLeave"])
-  ])) : withDirectives((openBlock(), createElementBlock("div", {
-    key: 1,
-    ref: "shadeRef",
-    class: normalizeClass(_ctx.shadeClass)
-  }, [
-    createElementVNode("div", {
-      ref: "modalRef",
-      style: normalizeStyle(_ctx.widthStyle),
-      class: normalizeClass(_ctx.modalClass)
-    }, [
-      _ctx.renderHeader ? (openBlock(), createBlock(_component_CustomRender, {
-        key: 0,
-        render: _ctx.renderHeader
-      }, null, 8, ["render"])) : (openBlock(), createElementBlock("div", {
+                  createElementVNode("div", {
+                    class: normalizeClass(modalContentClass)
+                  }, [
+                    renderSlot(_ctx.$slots, "default", { close: unref(close) })
+                  ])
+                ], 4)
+              ], 512)
+            ])) : createCommentVNode("", true)
+          ]),
+          _: 3
+        }, 16, ["onAfterLeave"])
+      ])) : withDirectives((openBlock(), createElementBlock("div", {
         key: 1,
-        class: normalizeClass(_ctx.modalHeaderClass)
+        ref_key: "shadeRef",
+        ref: shadeRef,
+        class: normalizeClass(shadeClass)
       }, [
-        createElementVNode("div", null, [
-          createElementVNode("p", {
-            class: normalizeClass(_ctx.titleClass)
-          }, toDisplayString(_ctx.title), 3),
-          _ctx.subTitle ? (openBlock(), createElementBlock("p", {
+        createElementVNode("div", {
+          ref_key: "modalRef",
+          ref: modalRef,
+          style: normalizeStyle(unref(widthStyle)),
+          class: normalizeClass(modalClass)
+        }, [
+          _ctx.renderHeader ? (openBlock(), createBlock(unref(CustomRender), {
             key: 0,
-            class: normalizeClass(_ctx.subTitleClass)
-          }, toDisplayString(_ctx.subTitle), 3)) : createCommentVNode("", true)
-        ]),
-        _ctx.showClose ? (openBlock(), createElementBlock("span", {
-          key: 0,
-          class: normalizeClass(_ctx.delIconClass),
-          onClick: _cache[1] || (_cache[1] = (...args) => _ctx.close && _ctx.close(...args))
-        }, "\u2715", 2)) : createCommentVNode("", true)
-      ], 2)),
-      createElementVNode("div", {
-        class: normalizeClass(_ctx.modalContentClass)
-      }, [
-        createVNode(_component_CustomRender, { render: _ctx.render }, null, 8, ["render"])
-      ], 2)
-    ], 6)
-  ], 2)), [
-    [vShow, _ctx.modelValue]
-  ]);
-}
-var Modal = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+            render: _ctx.renderHeader
+          }, null, 8, ["render"])) : (openBlock(), createElementBlock("div", {
+            key: 1,
+            class: normalizeClass(modalHeaderClass)
+          }, [
+            createElementVNode("div", null, [
+              createElementVNode("p", {
+                class: normalizeClass(titleClass)
+              }, toDisplayString(_ctx.title), 1),
+              _ctx.subTitle ? (openBlock(), createElementBlock("p", {
+                key: 0,
+                class: normalizeClass(subTitleClass)
+              }, toDisplayString(_ctx.subTitle), 1)) : createCommentVNode("", true)
+            ]),
+            _ctx.showClose ? (openBlock(), createElementBlock("span", {
+              key: 0,
+              class: normalizeClass(delIconClass),
+              onClick: _cache[1] || (_cache[1] = (...args) => unref(close) && unref(close)(...args))
+            }, "\u2715")) : createCommentVNode("", true)
+          ])),
+          createElementVNode("div", {
+            class: normalizeClass(modalContentClass)
+          }, [
+            createVNode(unref(CustomRender), { render: _ctx.render }, null, 8, ["render"])
+          ])
+        ], 4)
+      ], 512)), [
+        [vShow, _ctx.modelValue]
+      ]);
+    };
+  }
+});
 const modalDefaultProps = {
   modelValue: false,
   title: "Title",
@@ -357,7 +301,7 @@ const ModalContainer = defineComponent({
     };
     return () => h(TransitionGroup, Object.assign(Object.assign({}, transitionGroupClass), { onAfterLeave: showScrollbar, tag: "div" }), {
       default() {
-        return props.modalList.map((option) => h("div", { key: option.id }, h(Modal, Object.assign(Object.assign({}, option.props), { onClose: () => {
+        return props.modalList.map((option) => h("div", { key: option.id }, h(_sfc_main, Object.assign(Object.assign({}, option.props), { onClose: () => {
           var _a, _b;
           remove(option.id);
           (_b = (_a = option.props).onClose) === null || _b === void 0 ? void 0 : _b.call(_a);
@@ -403,4 +347,4 @@ function modalInstall(app, injectKey) {
 function useModal(key) {
   return inject(key || modalKey);
 }
-export { Modal, modalInstall, useModal };
+export { _sfc_main as Modal, modalInstall, useModal };

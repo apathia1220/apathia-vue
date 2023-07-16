@@ -1,5 +1,5 @@
 import type { Ref, ComputedRef } from 'vue';
-import type { SelectValueType as ValueType, SelectState, OptionRegister, OptionRemover } from './types';
+import type { SelectValueType, SelectState, OptionRegister, OptionRemover } from './types';
 export declare function useOption(userProps: {
     value: Ref<number | string | boolean>;
     disabled: Ref<boolean>;
@@ -7,8 +7,8 @@ export declare function useOption(userProps: {
     unregister: OptionRemover;
     updateRegister: OptionRegister;
     selectState: SelectState;
-    changeHandler: (value: ValueType, label: string, isInnerChange?: boolean) => void;
-    isSameValue: (newVal: ValueType, oldVal: ValueType) => boolean;
+    changeHandler: (value: SelectValueType, label: string, isInnerChange?: boolean) => void;
+    isSameValue: (newVal: SelectValueType, oldVal: SelectValueType) => boolean;
     focus: (uid: number, focusedEl?: HTMLElement) => void;
     compoId: number;
 }): {

@@ -1,7 +1,5 @@
 import { RendererElement } from 'vue';
-declare type TransitionProps = {
-    duration: number;
-};
+import type { TransitionProps } from './types';
 export declare function useTransition(props: TransitionProps): {
     getTransitionProps: () => {
         onEnter: (el: RendererElement) => void;

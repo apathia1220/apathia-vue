@@ -7,37 +7,18 @@ import {
   ComponentPublicInstance,
   Ref,
 } from 'vue'
-import {
-  createPopper,
-  Instance as PopperInstance,
-  Placement,
-  StrictModifiers,
-} from '@popperjs/core'
+import { createPopper, StrictModifiers } from '@popperjs/core'
 import { onClickOutside, useEventListener } from '@apathia/apathia.hooks'
 import { mountContainerDom } from '@apathia/apathia.shared'
 import { isRefType, getArrowStyle, isHTMLElement } from './util'
-import type { ElementType, RefType } from './util'
+import type {
+  PopperProps,
+  ElementType,
+  PopperEmitOption,
+  PopperInstance,
+} from './types'
 
-interface Option {
-  placement: Placement
-  skidding: number
-  distance: number
-  trigger: string
-  delay: number
-  disabled: boolean
-  component?: ComponentPublicInstance
-  showArrow?: boolean
-  modelValue?: boolean
-  target?: HTMLElement | RefType
-  delayClose?: number
-}
-interface EmitOption {
-  emitVisible: (val: boolean) => void
-  emitHide: (val: boolean, instance: PopperInstance | null) => void
-  emitShow: (val: boolean, instance: PopperInstance | null) => void
-}
-
-export function usePopper(option: Option, emitOption: EmitOption) {
+export function usePopper(option: PopperProps, emitOption: PopperEmitOption) {
   const contentRef = ref<HTMLElement | null>(null)
   const arrowRef = ref<HTMLElement | null>(null)
   const { emitVisible, emitHide, emitShow } = emitOption
@@ -291,19 +272,19 @@ export function usePopper(option: Option, emitOption: EmitOption) {
   })
 
   const getContentProps = () => ({
-    ref: (el: HTMLElement) => {
-      contentRef.value = el
+    ref: (el: Element | ComponentPublicInstance | null) => {
+      contentRef.value = el as HTMLElement
     },
   })
   const getArrowProps = () => ({
-    ref: (el: HTMLElement) => {
-      arrowRef.value = el
+    ref: (el: Element | ComponentPublicInstance | null) => {
+      arrowRef.value = el as HTMLElement
     },
   })
   const getTargetProps = () => ({
-    ref: (el: HTMLElement) => {
+    ref: (el: Element | ComponentPublicInstance | null) => {
       if (isRefType(target)) {
-        target.value = el
+        target.value = el as HTMLElement
       }
     },
   })

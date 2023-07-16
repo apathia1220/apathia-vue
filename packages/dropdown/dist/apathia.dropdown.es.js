@@ -2,7 +2,10 @@ import { defineComponent, ref, provide, computed, openBlock, createBlock, unref,
 import { BaseButton } from "@apathia/apathia.button";
 import { Popper } from "@apathia/apathia.popper";
 import { style } from "@apathia/apathia.twind";
-const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+const _sfc_main$2 = defineComponent({
+  ...{
+    name: "Dropdown"
+  },
   __name: "Dropdown",
   props: {
     delay: { default: 300 },
@@ -53,14 +56,14 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       return openBlock(), createBlock(unref(Popper), {
         modelValue: visible.value,
         "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => visible.value = $event),
-        trigger: __props.trigger,
-        placement: __props.placement,
+        trigger: _ctx.trigger,
+        placement: _ctx.placement,
         "show-arrow": false,
         "popper-class": `${unref(staticStyle).popper} ${divide.value ? unref(staticStyle).divide : ""}`,
         distance: 5,
         "transition-class": unref(transitionClass),
-        delay: __props.delay,
-        disabled: __props.disabled,
+        delay: _ctx.delay,
+        disabled: _ctx.disabled,
         onShow: show,
         onHide: hide
       }, {
@@ -73,7 +76,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
               class: normalizeClass(unref(staticStyle).baseButton)
             }, {
               default: withCtx(() => [
-                createTextVNode(toDisplayString(__props.label) + " ", 1),
+                createTextVNode(toDisplayString(_ctx.label) + " ", 1),
                 createElementVNode("span", {
                   class: normalizeClass(`v-icon v-icon-chevron-down ${unref(staticStyle).iconClass}`)
                 }, null, 2)
@@ -87,7 +90,10 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "DropdownItem"
+  },
   __name: "DropdownItem",
   props: {
     active: { type: Boolean, default: false },
@@ -112,8 +118,8 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       return openBlock(), createElementBlock("div", {
         class: normalizeClass({
           [unref(styles).menuItem]: true,
-          [unref(styles).active]: !__props.disabled && __props.active,
-          [unref(styles).disabled]: __props.disabled
+          [unref(styles).active]: !_ctx.disabled && _ctx.active,
+          [unref(styles).disabled]: _ctx.disabled
         }),
         onClick: clickCurItem
       }, [
@@ -122,7 +128,10 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "DropdownGroup"
+  },
   __name: "DropdownGroup",
   setup(__props) {
     const getDropdownGroupStyle = () => ({

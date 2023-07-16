@@ -6,14 +6,17 @@
     return e && typeof e === "object" && "default" in e ? e : { "default": e };
   }
   var ElementResizeDetectorMaker__default = /* @__PURE__ */ _interopDefaultLegacy(ElementResizeDetectorMaker);
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = vue.defineComponent({
+    ...{
+      name: "Scrollbar"
+    },
     __name: "Scrollbar",
     props: {
-      move: null,
-      length: null,
-      size: null,
+      move: {},
+      length: {},
+      size: {},
       hide: { type: Boolean },
-      type: null
+      type: {}
     },
     emits: ["change"],
     setup(__props, { emit }) {
@@ -27,7 +30,7 @@
         clientY: 0
       });
       const track = vue.ref(0);
-      const draging = vue.ref(false);
+      const dragging = vue.ref(false);
       const trackContainerRef = vue.ref(null);
       const fields = vue.computed(() => {
         const isHorizontal = props.type === "horizontal";
@@ -43,7 +46,7 @@
       const trackStyle = vue.computed(() => ({
         borderRadius: `${props.size / 2}px`,
         [fields.value.size]: `${props.size}px`,
-        opacity: props.hide && !draging.value ? 0 : 1
+        opacity: props.hide && !dragging.value ? 0 : 1
       }));
       const slideStyle = vue.computed(() => ({
         borderRadius: `${props.size / 2}px`,
@@ -72,7 +75,7 @@
         });
       }, 16);
       const handleDragSlide = (event) => {
-        if (!draging.value)
+        if (!dragging.value)
           return;
         const offset = calculate(
           event[fields.value.mouseClient] - trackPosition[fields.value.mouseClient]
@@ -82,13 +85,13 @@
         event.stopPropagation();
       };
       const startDrag = () => {
-        draging.value = true;
+        dragging.value = true;
         document.addEventListener("mousemove", handleDragSlide);
         document.addEventListener("mouseup", stopDrag);
         document.addEventListener("touchend", stopDrag);
       };
       const stopDrag = () => {
-        draging.value = false;
+        dragging.value = false;
         document.removeEventListener("mousemove", handleDragSlide);
         document.removeEventListener("mouseup", stopDrag);
         document.removeEventListener("touchend", stopDrag);
@@ -109,12 +112,12 @@
           ref_key: "trackContainerRef",
           ref: trackContainerRef,
           class: vue.normalizeClass(vue.unref(styles).track),
-          style: vue.normalizeStyle(vue.unref(trackStyle)),
+          style: vue.normalizeStyle(trackStyle.value),
           onClick: handleTrackClick,
           onWheelPassive: _cache[0] || (_cache[0] = (...args) => vue.unref(handleTrackScroll) && vue.unref(handleTrackScroll)(...args))
         }, [
           vue.createElementVNode("div", {
-            style: vue.normalizeStyle(vue.unref(slideStyle)),
+            style: vue.normalizeStyle(slideStyle.value),
             class: vue.normalizeClass(vue.unref(styles).slide),
             onMousedown: startDrag
           }, null, 38)
@@ -122,19 +125,22 @@
       };
     }
   });
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "ScrollContainer"
+    },
     __name: "ScrollContainer",
     props: {
       size: { default: "normal" },
       tag: { default: "div" },
-      scrollTop: null,
-      scrollLeft: null,
+      scrollTop: {},
+      scrollLeft: {},
       autoHide: { type: Boolean },
       hideVertical: { type: Boolean },
       hideHorizontal: { type: Boolean }
     },
     emits: ["update:scrollTop", "update:scrollLeft"],
-    setup(__props, { expose, emit }) {
+    setup(__props, { expose: __expose, emit }) {
       const props = __props;
       const SIDEBAR_SIDE_MAP = {
         thick: 20,
@@ -145,11 +151,11 @@
         const scrollbar = apathia_twind.apply`absolute bottom-0 right-0`;
         return {
           scrollContainer: apathia_twind.style`relative h-full overflow-hidden${apathia_twind.css`
-        &::-webkit-scrollbar {
-          -webkit-appearance: none;
-          width: 7px;
-        }
-      `}`,
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 7px;
+      }
+    `}`,
           scrollbarY: apathia_twind.tw`${scrollbar}${apathia_twind.apply`top-0`}`,
           scrollbarX: apathia_twind.tw`${scrollbar}${apathia_twind.apply`left-0`}`
         };
@@ -368,7 +374,7 @@
         }
         window.removeEventListener("resize", getDomSize);
       });
-      expose({
+      __expose({
         scrollBy,
         scrollTo
       });
@@ -381,10 +387,10 @@
           onMouseenter: _cache[0] || (_cache[0] = () => focus.value = true),
           onMouseleave: _cache[1] || (_cache[1] = () => focus.value = false)
         }, [
-          (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(__props.tag), {
+          (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(_ctx.tag), {
             ref_key: "wrapRef",
             ref: wrapRef,
-            style: vue.normalizeStyle(vue.unref(scrollAreaStyle)),
+            style: vue.normalizeStyle(scrollAreaStyle.value),
             onScrollPassive: handleAreaScroll
           }, {
             default: vue.withCtx(() => [
@@ -392,26 +398,26 @@
             ]),
             _: 3
           }, 40, ["style"])),
-          vue.unref(showScrollY) ? (vue.openBlock(), vue.createBlock(_sfc_main$1, {
+          showScrollY.value ? (vue.openBlock(), vue.createBlock(_sfc_main$1, {
             key: 0,
             type: "vertical",
             class: vue.normalizeClass(vue.unref(styles).scrollbarY),
-            style: vue.normalizeStyle(vue.unref(scrollbarYStyle)),
-            length: vue.unref(verticalSlideHeight),
-            size: vue.unref(trackSize),
-            move: vue.unref(moveY),
-            hide: vue.unref(hideScrollbar),
+            style: vue.normalizeStyle(scrollbarYStyle.value),
+            length: verticalSlideHeight.value,
+            size: trackSize.value,
+            move: moveY.value,
+            hide: hideScrollbar.value,
             onChange: onSlideYChange
           }, null, 8, ["class", "style", "length", "size", "move", "hide"])) : vue.createCommentVNode("", true),
-          vue.unref(showScrollX) ? (vue.openBlock(), vue.createBlock(_sfc_main$1, {
+          showScrollX.value ? (vue.openBlock(), vue.createBlock(_sfc_main$1, {
             key: 1,
             type: "horizontal",
             class: vue.normalizeClass(vue.unref(styles).scrollbarX),
-            style: vue.normalizeStyle(vue.unref(scrollbarXStyle)),
-            length: vue.unref(horizontalSlideWidth),
-            size: vue.unref(trackSize),
-            move: vue.unref(moveX),
-            hide: vue.unref(hideScrollbar),
+            style: vue.normalizeStyle(scrollbarXStyle.value),
+            length: horizontalSlideWidth.value,
+            size: trackSize.value,
+            move: moveX.value,
+            hide: hideScrollbar.value,
             onChange: onSlideXChange
           }, null, 8, ["class", "style", "length", "size", "move", "hide"])) : vue.createCommentVNode("", true)
         ], 34);

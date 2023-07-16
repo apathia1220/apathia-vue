@@ -6,4 +6,3 @@ export * from './unrefElement';
 export * from './request';
 export * from './directives';
 export * from './merge';
-export * from './resizeImage';

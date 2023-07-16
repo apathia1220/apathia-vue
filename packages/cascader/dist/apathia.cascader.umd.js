@@ -2,7 +2,10 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.hooks"), require("@apathia/apathia.checkbox"), require("@apathia/apathia.icon"), require("@apathia/apathia.shared"), require("@apathia/apathia.twind"), require("@apathia/apathia.icon-svg")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.hooks", "@apathia/apathia.checkbox", "@apathia/apathia.icon", "@apathia/apathia.shared", "@apathia/apathia.twind", "@apathia/apathia.icon-svg"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.cascader = {}, global.Vue, global.hooks, global.checkbox, global.icon, global.shared, global.twind, global["icon-svg"]));
 })(this, function(exports2, vue, apathia_hooks, apathia_checkbox, apathia_icon, apathia_shared, apathia_twind, apathia_iconSvg) {
   "use strict";
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = vue.defineComponent({
+    ...{
+      name: "CascaderNode"
+    },
     __name: "Nodes",
     props: {
       nodes: { default: () => [] },
@@ -63,7 +66,7 @@
           ref: tagContainerRef,
           class: vue.normalizeClass({
             [vue.unref(styles).container]: true,
-            [vue.unref(styles).active]: __props.focus
+            [vue.unref(styles).active]: _ctx.focus
           }),
           onClick: handleClick
         }, [
@@ -75,12 +78,12 @@
               ref: contentRef,
               class: vue.normalizeClass(vue.unref(styles).nodes)
             }, [
-              __props.nodes.length ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(__props.nodes, (node) => {
+              _ctx.nodes.length ? (vue.openBlock(true), vue.createElementBlock(vue.Fragment, { key: 0 }, vue.renderList(_ctx.nodes, (node) => {
                 return vue.openBlock(), vue.createElementBlock("div", {
-                  key: node.fullkey,
+                  key: node.fullKey,
                   class: vue.normalizeClass(vue.unref(styles).tag)
                 }, [
-                  vue.createElementVNode("span", null, vue.toDisplayString(__props.showAllLevels ? node.fullname.join(__props.separator) : node.fullname[node.fullname.length - 1]), 1),
+                  vue.createElementVNode("span", null, vue.toDisplayString(_ctx.showAllLevels ? node.fullName.join(_ctx.separator) : node.fullName[node.fullName.length - 1]), 1),
                   vue.createElementVNode("span", {
                     class: vue.normalizeClass(vue.unref(styles).iconWrap)
                   }, [
@@ -98,10 +101,10 @@
                     }, 1032, ["class", "onClick"])
                   ], 2)
                 ], 2);
-              }), 128)) : !(__props.search && showSearch.value) ? (vue.openBlock(), vue.createElementBlock("div", {
+              }), 128)) : !(_ctx.search && showSearch.value) ? (vue.openBlock(), vue.createElementBlock("div", {
                 key: 1,
                 class: vue.normalizeClass(vue.unref(styles).placeholder)
-              }, vue.toDisplayString(__props.placeholder), 3)) : vue.createCommentVNode("", true)
+              }, vue.toDisplayString(_ctx.placeholder), 3)) : vue.createCommentVNode("", true)
             ], 2),
             vue.withDirectives(vue.createElementVNode("input", {
               ref: "iptRef",
@@ -109,11 +112,11 @@
               class: vue.normalizeClass(vue.unref(styles).search),
               onInput: onSearchInput
             }, null, 34), [
-              [vue.vShow, __props.search && showSearch.value],
+              [vue.vShow, _ctx.search && showSearch.value],
               [vue.vModelText, searchInput.value]
             ])
           ], 2),
-          __props.clearable && __props.nodes.length ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_icon.Icon), {
+          _ctx.clearable && _ctx.nodes.length ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_icon.Icon), {
             key: 0,
             size: "12",
             class: vue.normalizeClass(vue.unref(styles).clearIcon),
@@ -129,10 +132,14 @@
     }
   });
   const _hoisted_1 = ["onClick", "onMouseenter"];
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "Cascader",
+      inheritAttrs: false
+    },
     __name: "Cascader",
     props: {
-      modelValue: null,
+      modelValue: {},
       placeholder: { default: "\u8BF7\u9009\u62E9" },
       emitPath: { type: Boolean, default: true },
       disabled: { type: Boolean },
@@ -145,7 +152,7 @@
       trigger: { default: "click" },
       fieldNames: { default: () => ({}) },
       multiple: { type: Boolean, default: false },
-      height: null,
+      height: {},
       search: { type: Boolean, default: false }
     },
     emits: [
@@ -161,10 +168,10 @@
       const looseEqualArray = (a, b) => a.length === b.length && a.every((v, i) => looseEqual(v, b[i]));
       const mergeArray = (oldArr, newArr) => {
         const oldMap = oldArr.reduce((acc, item) => {
-          acc[item.fullkey] = true;
+          acc[item.fullKey] = true;
           return acc;
         }, {});
-        const newItems = newArr.filter((item) => !oldMap[item.fullkey]);
+        const newItems = newArr.filter((item) => !oldMap[item.fullKey]);
         return oldArr.concat(newItems);
       };
       const getCascaderStyles = () => ({
@@ -197,19 +204,19 @@
           const label = node[labelField];
           const value = node[valueField];
           const currentKey2 = generateKey(node[valueField]);
-          const fullpath = (path || []).concat(value);
-          const fullname = (name || []).concat(label);
-          const fullkey = key ? `${key}@${currentKey2}` : `${currentKey2}`;
+          const fullPath = (path || []).concat(value);
+          const fullName = (name || []).concat(label);
+          const fullKey = key ? `${key}@${currentKey2}` : `${currentKey2}`;
           const hasChildren = children && children.length !== 0;
           return {
             label,
             value,
-            fullpath,
-            fullname,
-            fullkey,
+            fullPath,
+            fullName,
+            fullKey,
             disabled: !!node.disabled,
             leaf: !hasChildren,
-            children: hasChildren ? normalize(children, fullname, fullpath, fullkey) : void 0
+            children: hasChildren ? normalize(children, fullName, fullPath, fullKey) : void 0
           };
         });
       };
@@ -247,7 +254,7 @@
       });
       const nodeMap = vue.computed(() => {
         return allNodes.value.reduce((map, node) => {
-          map[`${node.fullkey}`] = node;
+          map[`${node.fullKey}`] = node;
           return map;
         }, {});
       });
@@ -258,18 +265,20 @@
           return "";
         if (nodes2.length !== 1) {
           console.warn(
-            "value is not unique in the given data, consider set emitPath true and provide fullpath"
+            "value is not unique in the given data, consider set emitPath true and provide fullPath"
           );
           return "";
         }
-        return nodes2[0].fullkey;
+        return nodes2[0].fullKey;
       };
-      const fullkeys = vue.computed(() => {
+      const fullKeys = vue.computed(() => {
         const value = props.modelValue;
         if (props.multiple) {
           let keys = [];
           if (!Array.isArray(value)) {
-            console.warn("[Cascader] modelValue must be an array when multiple is true");
+            console.warn(
+              "[Cascader] modelValue must be an array when multiple is true"
+            );
             return [];
           }
           if (props.emitPath) {
@@ -282,7 +291,7 @@
             keys = value.map(
               (item) => resolveKey(
                 item,
-                (node, value2) => looseEqualArray(node.fullpath, value2)
+                (node, value2) => looseEqualArray(node.fullPath, value2)
               )
             ).filter(Boolean);
           } else {
@@ -310,7 +319,7 @@
           }
           key = resolveKey(
             value,
-            (node, value2) => looseEqualArray(node.fullpath, value2)
+            (node, value2) => looseEqualArray(node.fullPath, value2)
           );
         } else {
           key = resolveKey(
@@ -325,8 +334,8 @@
         return key ? [key] : [];
       });
       const selectedKeyMap = vue.computed(
-        () => fullkeys.value.reduce((map, fullkey) => {
-          map[fullkey] = true;
+        () => fullKeys.value.reduce((map, fullKey) => {
+          map[fullKey] = true;
           return map;
         }, {})
       );
@@ -339,20 +348,22 @@
           return /^[0-9]{1,20}$/.test(props.height.trim()) ? props.height + "px" : props.height;
         }
       });
-      const nodes = vue.computed(() => fullkeys.value.map((fullkey) => nodeMap.value[fullkey]));
+      const nodes = vue.computed(
+        () => fullKeys.value.map((fullKey) => nodeMap.value[fullKey])
+      );
       const validKey = vue.computed(() => {
         return allNodes.value.filter((node) => props.changeOnSelect ? true : node.leaf).reduce(
           (acc, node) => ({
             ...acc,
-            [node.fullkey]: true
+            [node.fullKey]: true
           }),
           {}
         );
       });
       const activePathMap = vue.computed(() => {
         const currentKeyWayMap = currentKey.value ? allNodes.value.reduce((map, node) => {
-          if (currentKey.value.indexOf(node.fullkey) === 0) {
-            map[node.fullkey] = true;
+          if (currentKey.value.indexOf(node.fullKey) === 0) {
+            map[node.fullKey] = true;
           }
           return map;
         }, {}) : {};
@@ -374,7 +385,7 @@
           lists.value = [nodeTree.value];
           return;
         }
-        const [cur] = fullkeys.value;
+        const [cur] = fullKeys.value;
         if (cur) {
           lists.value = resolveLists(cur);
         } else {
@@ -384,13 +395,13 @@
       const expandLists = (start, len, inserted) => {
         lists.value.splice(start, len, inserted);
       };
-      const resolveLists = (fullkey) => {
+      const resolveLists = (fullKey) => {
         const lists2 = [nodeTree.value];
-        let node = nodeTree.value.find((item) => fullkey.indexOf(item.fullkey) === 0);
-        while (node && node.fullkey !== fullkey) {
+        let node = nodeTree.value.find((item) => fullKey.indexOf(item.fullKey) === 0);
+        while (node && node.fullKey !== fullKey) {
           if (node && node.children) {
             lists2.push(node.children);
-            node = node.children.find((item) => fullkey.indexOf(item.fullkey) === 0);
+            node = node.children.find((item) => fullKey.indexOf(item.fullKey) === 0);
           }
         }
         return lists2;
@@ -407,12 +418,12 @@
       };
       const selectNode = (node) => {
         emit("select", node);
-        currentKey.value = node.fullkey;
+        currentKey.value = node.fullKey;
         if (node.leaf || props.changeOnSelect) {
-          if (!selectedKeyMap.value[node.fullkey]) {
+          if (!selectedKeyMap.value[node.fullKey]) {
             replaceWithNodeValue(node);
           }
-          const selected = selectedKeyMap.value[node.fullkey];
+          const selected = selectedKeyMap.value[node.fullKey];
           if (props.multiple) {
             checkChange(!selected, node);
           } else {
@@ -436,7 +447,7 @@
       const onItemMouseOver = (node, depth) => {
         if (!node.disabled) {
           if (props.trigger === "hover") {
-            currentKey.value = node.fullkey;
+            currentKey.value = node.fullKey;
             if (!node.leaf && node.children) {
               expandLists(depth + 1, lists.value.length - depth, node.children);
             }
@@ -454,7 +465,9 @@
         if (props.emitPath) {
           emit(
             "update:modelValue",
-            props.modelValue.filter((i) => !looseEqualArray(i, node.fullpath))
+            props.modelValue.filter(
+              (i) => !looseEqualArray(i, node.fullPath)
+            )
           );
           return;
         }
@@ -465,7 +478,10 @@
       };
       const addNodeValue = (node) => {
         if (props.emitPath) {
-          emit("update:modelValue", [...props.modelValue, node.fullpath]);
+          emit("update:modelValue", [
+            ...props.modelValue,
+            node.fullPath
+          ]);
           return;
         }
         emit("update:modelValue", [...props.modelValue, node.value]);
@@ -475,7 +491,7 @@
           emit("update:modelValue", props.emitPath ? [] : "");
           return;
         }
-        emit("update:modelValue", props.emitPath ? node.fullpath : node.value);
+        emit("update:modelValue", props.emitPath ? node.fullPath : node.value);
       };
       vue.onMounted(() => {
         if (props.autoFocus) {
@@ -493,12 +509,12 @@
         }, [
           vue.createVNode(_sfc_main$1, {
             focus: expand.value,
-            nodes: vue.unref(nodes),
-            "show-all-levels": __props.showAllLevels,
-            separator: __props.separator,
-            placeholder: __props.placeholder,
-            clearable: __props.clearable,
-            search: __props.search,
+            nodes: nodes.value,
+            "show-all-levels": _ctx.showAllLevels,
+            separator: _ctx.separator,
+            placeholder: _ctx.placeholder,
+            clearable: _ctx.clearable,
+            search: _ctx.search,
             onSearchChange: handleSearchChange,
             "onUpdate:focus": handleFocus,
             onRemove: removeNode,
@@ -515,7 +531,7 @@
                 return vue.openBlock(), vue.createElementBlock("div", {
                   key: index,
                   class: vue.normalizeClass(vue.unref(styles).scrollWrap),
-                  style: vue.normalizeStyle({ height: vue.unref(customHeight) })
+                  style: vue.normalizeStyle({ height: customHeight.value })
                 }, [
                   vue.createElementVNode("div", {
                     class: vue.normalizeClass(vue.unref(styles).panel)
@@ -528,20 +544,20 @@
                       }, [
                         vue.renderSlot(_ctx.$slots, "default", {
                           node,
-                          active: vue.unref(activePathMap)[node.fullkey],
-                          selected: vue.unref(selectedKeyMap)[node.fullkey],
+                          active: activePathMap.value[node.fullKey],
+                          selected: selectedKeyMap.value[node.fullKey],
                           leaf: node.leaf
                         }, () => [
                           vue.createElementVNode("div", {
                             class: vue.normalizeClass({
                               [vue.unref(styles).node]: true,
                               [vue.unref(styles).nodeDisabled]: node.disabled,
-                              [vue.unref(styles).nodeActive]: vue.unref(activePathMap)[node.fullkey]
+                              [vue.unref(styles).nodeActive]: activePathMap.value[node.fullKey]
                             })
                           }, [
-                            __props.multiple && (__props.changeOnSelect || node.leaf) ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_checkbox.Checkbox), {
+                            _ctx.multiple && (_ctx.changeOnSelect || node.leaf) ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_checkbox.Checkbox), {
                               key: 0,
-                              "model-value": vue.unref(selectedKeyMap)[node.fullkey],
+                              "model-value": selectedKeyMap.value[node.fullKey],
                               class: vue.normalizeClass(vue.unref(styles).checkbox),
                               "onUpdate:modelValue": ($event) => checkChange($event, node),
                               onClick: _cache[0] || (_cache[0] = vue.withModifiers(() => {

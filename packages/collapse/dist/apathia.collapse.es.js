@@ -1,8 +1,9 @@
-import { defineComponent, h, Transition, watch, resolveComponent, openBlock, createElementBlock, Fragment, renderSlot, createElementVNode, normalizeClass, normalizeStyle, createVNode, withCtx, createCommentVNode, toDisplayString, withDirectives, vShow } from "vue";
+import { defineComponent, h, Transition, watch, openBlock, createElementBlock, Fragment, renderSlot, unref, createElementVNode, normalizeClass, normalizeStyle, createVNode, withCtx, createCommentVNode, toDisplayString, withDirectives, vShow } from "vue";
 import { Icon } from "@apathia/apathia.icon";
 import { useToggle } from "@apathia/apathia.hooks";
 import { style } from "@apathia/apathia.twind";
 import { raf } from "@apathia/apathia.shared";
+import { ArrowRight } from "@apathia/apathia.icon-svg";
 function useTransition(props) {
   function onEnter(el) {
     setHeight(el, "0px");
@@ -53,42 +54,20 @@ var CollapseTransition = defineComponent({
     return () => h(Transition, getTransitionProps(), slots);
   }
 });
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
 const _sfc_main = defineComponent({
-  name: "Collapse",
-  components: {
-    CollapseTransition,
-    Icon
+  ...{
+    name: "Collapse"
   },
+  __name: "Collapse",
   props: {
-    expand: {
-      type: Boolean,
-      default: true
-    },
-    duration: {
-      type: Number,
-      default: 400
-    },
-    header: {
-      type: String,
-      default: "header"
-    },
-    showArrow: {
-      type: Boolean,
-      default: true
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
+    expand: { type: Boolean, default: true },
+    duration: { default: 400 },
+    header: { default: "header" },
+    showArrow: { type: Boolean, default: true },
+    disabled: { type: Boolean, default: false }
   },
-  setup(props) {
+  setup(__props) {
+    const props = __props;
     const [show, toggleShow, setShow] = useToggle(props.expand);
     const styles = initStyle();
     watch(
@@ -100,68 +79,58 @@ const _sfc_main = defineComponent({
         toggleShow();
       }
     };
-    return {
-      handleClick,
-      show,
-      toggleShow,
-      styles
+    function initStyle() {
+      const headerClass = style`flex items-center h-10 leading-10 bg-fill-light rounded cursor-pointer`;
+      const rollClass = style`rotate-90 translate-y-0.5 duration-300`;
+      const headerDisableClass = style`cursor-not-allowed`;
+      const icon = style`mx-2 transition`;
+      return {
+        headerClass,
+        rollClass,
+        headerDisableClass,
+        icon
+      };
+    }
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock(Fragment, null, [
+        renderSlot(_ctx.$slots, "toggleHeader", {
+          show: unref(show),
+          toggleShow: unref(toggleShow)
+        }, () => [
+          createElementVNode("div", {
+            class: normalizeClass([unref(styles).headerClass, _ctx.disabled ? unref(styles).headerDisableClass : ""]),
+            onClick: handleClick
+          }, [
+            _ctx.showArrow ? (openBlock(), createElementBlock("span", {
+              key: 0,
+              style: normalizeStyle({ transform: `rotate(${unref(show) ? 90 : 0}deg)` })
+            }, [
+              createVNode(unref(Icon), {
+                class: normalizeClass(unref(styles).icon)
+              }, {
+                default: withCtx(() => [
+                  createVNode(unref(ArrowRight))
+                ]),
+                _: 1
+              }, 8, ["class"])
+            ], 4)) : createCommentVNode("", true),
+            renderSlot(_ctx.$slots, "header", {}, () => [
+              createElementVNode("div", null, toDisplayString(_ctx.header), 1)
+            ])
+          ], 2)
+        ]),
+        createVNode(unref(CollapseTransition), { duration: _ctx.duration }, {
+          default: withCtx(() => [
+            withDirectives(createElementVNode("div", null, [
+              renderSlot(_ctx.$slots, "default")
+            ], 512), [
+              [vShow, unref(show)]
+            ])
+          ]),
+          _: 3
+        }, 8, ["duration"])
+      ], 64);
     };
   }
 });
-function initStyle() {
-  const headerClass = style`flex items-center h-10 leading-10 bg-fill-light rounded cursor-pointer`;
-  const rollClass = style`rotate-90 translate-y-0.5 duration-300`;
-  const headerDisableClass = style`cursor-not-allowed`;
-  const icon = style`mx-2 transition`;
-  return {
-    headerClass,
-    rollClass,
-    headerDisableClass,
-    icon
-  };
-}
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_ArrowRight = resolveComponent("ArrowRight");
-  const _component_Icon = resolveComponent("Icon");
-  const _component_CollapseTransition = resolveComponent("CollapseTransition");
-  return openBlock(), createElementBlock(Fragment, null, [
-    renderSlot(_ctx.$slots, "toggleHeader", {
-      show: _ctx.show,
-      toggleShow: _ctx.toggleShow
-    }, () => [
-      createElementVNode("div", {
-        class: normalizeClass([_ctx.styles.headerClass, _ctx.disabled ? _ctx.styles.headerDisableClass : ""]),
-        onClick: _cache[0] || (_cache[0] = (...args) => _ctx.handleClick && _ctx.handleClick(...args))
-      }, [
-        _ctx.showArrow ? (openBlock(), createElementBlock("span", {
-          key: 0,
-          style: normalizeStyle({ transform: `rotate(${_ctx.show ? 90 : 0}deg)` })
-        }, [
-          createVNode(_component_Icon, {
-            class: normalizeClass(_ctx.styles.icon)
-          }, {
-            default: withCtx(() => [
-              createVNode(_component_ArrowRight)
-            ]),
-            _: 1
-          }, 8, ["class"])
-        ], 4)) : createCommentVNode("", true),
-        renderSlot(_ctx.$slots, "header", {}, () => [
-          createElementVNode("div", null, toDisplayString(_ctx.header), 1)
-        ])
-      ], 2)
-    ]),
-    createVNode(_component_CollapseTransition, { duration: _ctx.duration }, {
-      default: withCtx(() => [
-        withDirectives(createElementVNode("div", null, [
-          renderSlot(_ctx.$slots, "default")
-        ], 512), [
-          [vShow, _ctx.show]
-        ])
-      ]),
-      _: 3
-    }, 8, ["duration"])
-  ], 64);
-}
-var Collapse = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-export { Collapse, CollapseTransition };
+export { _sfc_main as Collapse, CollapseTransition };

@@ -3,28 +3,29 @@ import { onClickOutside } from '@apathia/apathia.hooks'
 import { mountContainerDom } from '@apathia/apathia.shared'
 import { pushModal, popModalStack } from './modalStack'
 import { hideScrollbar } from './helper'
-import type { ModalProps } from './types'
+import type { ModalProps, ModalEmits } from './types'
 
 export function createModal(
   props: ModalProps,
-  ctx: SetupContext<('close' | 'update:modelValue')[]>,
+  emit: SetupContext<ModalEmits>['emit'],
+  slots: SetupContext['slots'],
 ) {
   const shadeRef = ref<HTMLElement | null>(null) as Ref<HTMLElement | null>
   const modalRef = ref<HTMLElement | null>(null) as Ref<HTMLElement | null>
   const widthStyle = getWidthStyle(props.width, props.top)
-  const isTemplate = !!ctx.slots.default
+  const isTemplate = !!slots.default
 
   mountContainerDom('modal')
 
   function templateClose() {
     if (props.beforeClose && props.beforeClose()) {
-      ctx.emit('update:modelValue', false)
+      emit('update:modelValue', false)
       popModalStack()
     }
   }
   function functionClose() {
     if (props.beforeClose && props.beforeClose()) {
-      ctx.emit('close')
+      emit('close')
       popModalStack()
     }
   }
@@ -56,7 +57,7 @@ export function createModal(
           shadeRef.value.scrollTop = 0
         }
       } else {
-        ctx.emit('close')
+        emit('close')
       }
     },
   )

@@ -1,38 +1,11 @@
 import { ref, computed } from 'vue'
 import type { ComputedRef, SetupContext } from 'vue'
-import type { TransferDataItem as DataItem, Props, Key, TargetOrder } from './types'
-
-// interface TransferProps {
-//   modelValue: Key[]
-//   data: Record<string, string | boolean | number>[]
-//   filterable: boolean
-//   filterPlaceholder: string
-//   filterMethod: (word: string, option: DataItem) => boolean
-//   targetOrder: TargetOrder
-//   titles: [string, string]
-//   propKeys: Props
-//   leftDefaultChecked: Key[]
-//   rightDefaultChecked: Key[]
-// }
-
-interface TransferProps {
-  modelValue: Key[]
-  data: Array<Record<string, string | boolean | number>>
-  filterable?: boolean
-  filterPlaceholder?: string
-  filterMethod?: (word: string, option: DataItem) => boolean
-  targetOrder?: TargetOrder
-  titles?: [string, string]
-  propKeys: Props
-  leftDefaultChecked?: Key[]
-  rightDefaultChecked?: Key[]
-}
-
-type EmitEvent = 'update:modelValue' | 'select' | 'remove'
+import type { TransferDataItem, Key } from './types'
+import type { TransferProps, TransferEmits } from './types'
 
 export default (
   userProps: Readonly<ComputedRef<TransferProps>>,
-  emit: SetupContext<EmitEvent[]>['emit'],
+  emit: SetupContext<TransferEmits>['emit'],
 ) => {
   const selectedSource = ref<Key[]>([])
   const selectedTarget = ref<Key[]>([])
@@ -45,7 +18,7 @@ export default (
     })),
   )
   const valueMap = computed(() =>
-    processedData.value.reduce<Record<string, DataItem>>((acc, cur) => {
+    processedData.value.reduce<Record<string, TransferDataItem>>((acc, cur) => {
       acc[`${cur.value}`] = cur
       return acc
     }, {}),

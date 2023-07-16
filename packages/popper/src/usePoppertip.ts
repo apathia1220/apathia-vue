@@ -9,28 +9,8 @@ import {
   Ref,
 } from 'vue'
 import { mountComponent, mountContainerDom } from '@apathia/apathia.shared'
-import type { RenderFn } from '@apathia/apathia.custom-render'
 import Popper from './Popper.vue'
-
-interface PopperPropType {
-  render: RenderFn
-  target: HTMLElement
-  modelValue: boolean
-  delayClose: number
-  distance?: number
-  skidding?: number
-  dark?: boolean
-  placement?: string
-  transitionClass?: Record<string, any>
-  showArrow?: boolean
-  disabled?: boolean
-  popperClass?: string
-}
-
-interface PopperListProps {
-  props: PopperPropType
-  id: string
-}
+import type { PopperProps as PopperPropType, PopperListProps } from './types'
 
 const PopperDefaultProp = {
   modelValue: false,

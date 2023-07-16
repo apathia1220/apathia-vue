@@ -1,5 +1,11 @@
-import { computed, SetupContext, Ref, WritableComputedRef, ComputedRef } from 'vue'
-import type { Column, DataItem } from './types'
+import {
+  computed,
+  SetupContext,
+  Ref,
+  WritableComputedRef,
+  ComputedRef,
+} from 'vue'
+import type { Column, DataItem, TableEmits } from './types'
 
 type Event = 'update:selected' | 'update:selectedKeys'
 export interface TableMultiSelectedHelper {
@@ -17,7 +23,7 @@ export function useTableSelected(
   selected: Ref<DataItem[]>,
   key: Ref<string>,
   columns: Ref<Column[]>,
-  ctx: SetupContext<Event[]>,
+  emit: SetupContext<TableEmits>['emit'],
 ): TableMultiSelectedHelper {
   const disabledKeyMap = computed(() => {
     const [selectionColumn] = columns.value.filter(
@@ -73,8 +79,8 @@ export function useTableSelected(
           !disabledKeyMap.value[`${item[key.value]}`],
       )
 
-      ctx.emit('update:selected', selectedItems)
-      ctx.emit(
+      emit('update:selected', selectedItems)
+      emit(
         'update:selectedKeys',
         selectedItems.map(item => item[key.value]),
       )

@@ -1,10 +1,10 @@
 /// <reference types="lodash" />
-import { Ref } from 'vue';
-import { SelectValueType, Option, UserProps } from './types';
-export default function useSelect(userProps: UserProps, emit: any): {
+import { Ref, SetupContext, ComponentPublicInstance } from 'vue';
+import { SelectValueType, Option, SelectUserProps, SelectEmits } from './types';
+export default function useSelect(userProps: SelectUserProps, emit: SetupContext<SelectEmits>['emit']): {
     getRootProps: () => {
         disabled: boolean;
-        ref: (el: HTMLElement) => void;
+        ref: (el: Element | ComponentPublicInstance | null) => void;
         onClick: () => void;
         onKeydown: (event: KeyboardEvent) => void;
     };
@@ -15,7 +15,7 @@ export default function useSelect(userProps: UserProps, emit: any): {
         placeholder: string;
         disabled: boolean;
         readonly: boolean;
-        ref: (el: HTMLInputElement) => void;
+        ref: (el: Element | ComponentPublicInstance | null) => void;
         onInput: (event: InputEvent) => void;
         onFocus: () => void;
         onBlur: () => void;
@@ -24,13 +24,13 @@ export default function useSelect(userProps: UserProps, emit: any): {
         style: {
             width: string;
         };
-        ref: (el: HTMLElement) => void;
+        ref: (el: Element | ComponentPublicInstance | null) => void;
     };
     toggleDropdown: () => void;
     register: (disabledOption: boolean, uid: number, value: SelectValueType, labelStr: string) => void;
     unregister: (uid: number) => void;
     updateRegister: (disabledVal: boolean, uid: number, value: SelectValueType, labelStr: string) => void;
-    focus: (uid: number, focusedEl?: HTMLElement | undefined) => void;
+    focus: (uid: number, focusedEl?: HTMLElement) => void;
     clear: () => void;
     isSameValue: (newVal: SelectValueType, oldVal: SelectValueType) => boolean;
     keyHandler: (event: KeyboardEvent) => void;

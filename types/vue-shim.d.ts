@@ -6,10 +6,6 @@ declare module '*.vue' {
 }
 
 declare module '@'
-// declare module '@apathia/apathia.alert'
-// declare module '@apathia/apathia.table'
-// declare module '@apathia/apathia.image'
-// declare module '@apathia/apathia.transfer'
 
 declare type Timeout = ReturnType<typeof setTimeout>
 declare type Interval = ReturnType<typeof setInterval>

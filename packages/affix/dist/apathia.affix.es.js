@@ -1,10 +1,13 @@
-import { defineComponent, ref, computed, onMounted, onBeforeUnmount, openBlock, createElementBlock, createElementVNode, normalizeClass, unref, normalizeStyle, renderSlot, withDirectives, vShow } from "vue";
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount, openBlock, createElementBlock, createElementVNode, normalizeClass, normalizeStyle, renderSlot, withDirectives, vShow } from "vue";
 import { tw, apply } from "@apathia/apathia.twind";
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Affix"
+  },
   __name: "Affix",
   props: {
     offsetTop: { default: 0 },
-    offsetBottom: null
+    offsetBottom: {}
   },
   emits: ["change"],
   setup(__props, { emit }) {
@@ -122,7 +125,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         createElementVNode("div", {
           ref_key: "pointRef",
           ref: pointRef,
-          class: normalizeClass(unref(classes)),
+          class: normalizeClass(classes.value),
           style: normalizeStyle(styles.value)
         }, [
           renderSlot(_ctx.$slots, "default")

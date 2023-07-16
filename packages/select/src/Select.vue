@@ -1,31 +1,60 @@
 <template>
-  <div v-bind="{ ...getRootProps() }" :class="{
-    [styles.selectWrapper]: true,
-    [styles.disabled]: disableSelect,
-    [styles.active]: active,
-  }">
-    <input v-bind="{ ...getInputProps() }" :class="{ [styles.inputSelected]: true, [styles.focused]: inputFocused }" />
-    <svg :class="{ [styles.arrow]: true }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-      aria-hidden="true">
-      <path fill-rule="evenodd"
-        d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-        clip-rule="evenodd" />
-    </svg>
-    <svg v-if="clearable" :class="{
-      [styles.clearableIcon]: true,
-      [styles.clearable]: clearable && filterStr,
-    }" xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 24 24" fill="currentColor" @click.stop="clear">
+  <div
+    v-bind="{ ...getRootProps() }"
+    :class="{
+      [styles.selectWrapper]: true,
+      [styles.disabled]: disableSelect,
+      [styles.active]: active,
+    }"
+  >
+    <input
+      v-bind="{ ...getInputProps() }"
+      :class="{ [styles.inputSelected]: true, [styles.focused]: inputFocused }"
+    />
+    <svg
+      :class="{ [styles.arrow]: true }"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
       <path
-        d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+        fill-rule="evenodd"
+        d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    <svg
+      v-if="clearable"
+      :class="{
+        [styles.clearableIcon]: true,
+        [styles.clearable]: clearable && filterStr,
+      }"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="-3 -3 24 24"
+      fill="currentColor"
+      @click.stop="clear"
+    >
+      <path
+        d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
+      />
     </svg>
 
     <teleport to="body">
-      <div v-auto-pos.root="rootEl" v-bind="{ ...getDropdownProps() }" :class="{
-        [styles.dropdownContainer]: true,
-        [styles.dropdownContainerShow]: active,
-      }">
-        <ul v-if="!isRemote || !isLoading" :class="{ [styles.optionList]: true }" role="listbox"
-          :style="{ maxHeight: maxHeight + 'px' }">
+      <div
+        v-auto-pos.root="rootEl"
+        v-bind="{ ...getDropdownProps() }"
+        :class="{
+          [styles.dropdownContainer]: true,
+          [styles.dropdownContainerShow]: active,
+        }"
+      >
+        <ul
+          v-if="!isRemote || !isLoading"
+          :class="{ [styles.optionList]: true }"
+          role="listbox"
+          :style="{ maxHeight: maxHeight + 'px' }"
+        >
           <slot></slot>
           <slot v-if="isLoading" name="loading">
             <p :class="{ [styles.tips]: true }">加载中...</p>
@@ -43,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, toRefs, provide, SetupContext } from 'vue'
+import { toRefs, provide } from 'vue'
 import { useInjectProp } from '@apathia/apathia.hooks'
 import { autoPos as vAutoPos } from '@apathia/apathia.shared'
 import { style } from '@apathia/apathia.twind'
@@ -57,20 +86,13 @@ import {
   UnregisterKey,
   UpdateRegisterKey,
 } from './injectKeys'
-import { SelectValueType, UserProps } from './types'
+import type { SelectProps, SelectEmits } from './types'
 
-const props = withDefaults(defineProps<{
-  modelValue: SelectValueType
-  valueKey?: string
-  placeholder?: string
-  filterable?: boolean
-  clearable?: boolean
-  emptyText?: string
-  disabled?: boolean
-  maxHeight?: number | string
-  isLoading?: boolean
-  placement?: string
-}>(), {
+defineOptions({
+  name: 'Select',
+})
+
+const props = withDefaults(defineProps<SelectProps>(), {
   valueKey: 'value',
   placeholder: '请选择...',
   filterable: false,
@@ -79,16 +101,10 @@ const props = withDefaults(defineProps<{
   disabled: undefined,
   maxHeight: 235,
   isLoading: false,
-  placement: ''
+  placement: '',
 })
 
-const emits = defineEmits([
-  'update:modelValue',
-  'change',
-  'input',
-  'native-change',
-  'query-change',
-])
+const emits = defineEmits<SelectEmits>()
 
 const {
   disabled,
@@ -131,7 +147,7 @@ const {
   getInputProps,
   getDropdownProps,
   rootEl,
-} = useSelect(userProps as UserProps, emits)
+} = useSelect(userProps, emits)
 
 provide(UpdateRegisterKey, updateRegister)
 provide(RegisterKey, register)

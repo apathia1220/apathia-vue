@@ -4,7 +4,10 @@
   "use strict";
   const _hoisted_1 = ["id"];
   const _hoisted_2 = { key: 0 };
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = vue.defineComponent({
+    ...{
+      name: "SideNode"
+    },
     __name: "SideNode",
     props: {
       node: { default: () => ({}) },
@@ -41,7 +44,9 @@
       const isActiveParent = vue.computed(
         () => props.node.children ? isParent(props.node.children, props.activeKey, props.keyField) : false
       );
-      const isActiveItem = vue.computed(() => props.activeKey === props.node[props.keyField]);
+      const isActiveItem = vue.computed(
+        () => props.activeKey === props.node[props.keyField]
+      );
       const [expand, toggleExpand, setExpand] = apathia_hooks.useToggle(!!isActiveParent.value);
       const expandClass = vue.computed(
         () => `${styles.sidenodeExpand} ${styles.sidenodeIconClass} ${expand.value ? styles.sidenodeTurn : ""}`
@@ -67,46 +72,46 @@
         const _component_SideNode = vue.resolveComponent("SideNode", true);
         return vue.openBlock(), vue.createElementBlock("li", null, [
           vue.renderSlot(_ctx.$slots, "default", {
-            mini: __props.mini,
-            activeParent: vue.unref(isActiveParent),
+            mini: _ctx.mini,
+            activeParent: isActiveParent.value,
             expand: vue.unref(expand),
-            activeItem: vue.unref(isActiveItem),
+            activeItem: isActiveItem.value,
             onClick: clickHandler,
-            node: __props.node
+            node: _ctx.node
           }, () => [
             vue.createElementVNode("div", {
-              id: vue.unref(isActiveItem) ? "expandSideNode" : void 0,
-              class: vue.normalizeClass(vue.unref(rowClass)),
+              id: isActiveItem.value ? "expandSideNode" : void 0,
+              class: vue.normalizeClass(rowClass.value),
               onClick: clickHandler
             }, [
               vue.withDirectives(vue.createElementVNode("span", {
                 class: vue.normalizeClass(vue.unref(styles).sidenodeText)
-              }, vue.toDisplayString(__props.node.text), 3), [
-                [vue.vShow, !__props.mini]
+              }, vue.toDisplayString(_ctx.node.text), 3), [
+                [vue.vShow, !_ctx.mini]
               ]),
               vue.withDirectives(vue.createVNode(vue.unref(apathia_icon.Icon), {
-                class: vue.normalizeClass(vue.unref(expandClass))
+                class: vue.normalizeClass(expandClass.value)
               }, {
                 default: vue.withCtx(() => [
                   vue.createVNode(vue.unref(apathia_iconSvg.ArrowDown))
                 ]),
                 _: 1
               }, 8, ["class"]), [
-                [vue.vShow, __props.node.children && !__props.mini]
+                [vue.vShow, _ctx.node.children && !_ctx.mini]
               ])
             ], 10, _hoisted_1)
           ]),
-          __props.node.children && !__props.mini ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
+          _ctx.node.children && !_ctx.mini ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2, [
             vue.withDirectives(vue.createElementVNode("ul", {
               class: vue.normalizeClass(vue.unref(styles).sidenodeChildren)
             }, [
-              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(__props.node.children, (item, index) => {
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(_ctx.node.children, (item, index) => {
                 return vue.openBlock(), vue.createBlock(_component_SideNode, {
                   key: index,
                   node: item,
-                  "active-key": __props.activeKey,
-                  "select-handler": __props.selectHandler,
-                  "key-field": __props.keyField
+                  "active-key": _ctx.activeKey,
+                  "select-handler": _ctx.selectHandler,
+                  "key-field": _ctx.keyField
                 }, {
                   default: vue.withCtx(({
                     mini: miniValue,
@@ -196,7 +201,10 @@
     const scrollTop = el.offsetTop - containerHeight / 2;
     return scrollTop >= 0 ? scrollTop : 0;
   }
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "SideNav"
+    },
     __name: "SideNav",
     props: {
       menuList: { default: () => [] },
@@ -241,14 +249,14 @@
                   class: vue.unref(styles).sidenavInput
                 }), null, 16)
               ], 2), [
-                [vue.vShow, __props.search && !vue.unref(showMini)]
+                [vue.vShow, _ctx.search && !vue.unref(showMini)]
               ]),
               (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(filteredMenu), (node) => {
                 return vue.openBlock(), vue.createBlock(_sfc_main$1, {
-                  key: node[__props.activeKey],
+                  key: node[_ctx.activeKey],
                   node,
-                  "active-key": __props.activeKey,
-                  "key-field": __props.keyField,
+                  "active-key": _ctx.activeKey,
+                  "key-field": _ctx.keyField,
                   mini: vue.unref(showMini),
                   "select-handler": selectNode
                 }, {

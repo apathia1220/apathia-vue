@@ -1,4 +1,4 @@
-import { defineComponent, provide, computed, openBlock, createElementBlock, normalizeClass, renderSlot, toRef, normalizeStyle, createTextVNode, toDisplayString, createCommentVNode, createElementVNode } from "vue";
+import { defineComponent, provide, computed, openBlock, createElementBlock, normalizeClass, unref, renderSlot, toRef, normalizeStyle, createTextVNode, toDisplayString, createCommentVNode, createElementVNode } from "vue";
 import { style, apply, css, tw } from "@apathia/apathia.twind";
 import { useInjectProp } from "@apathia/apathia.hooks";
 const FORM_DISABLE_KEY = "FormDisabled";
@@ -6,42 +6,20 @@ const FORM_LABEL_WIDTH_KEY = "FormLabelWidth";
 const FORM_LABEL_ALIGN_KEY = "FormItemAlign";
 const FORM_LABEL_POSITION_KEY = "FormLabelPosition";
 const FORM_ITEM_INLINE_KEY = "FormItemInline";
-const POSITION = ["left", "right", "top"];
-const ALIGN = ["top", "center", "bottom"];
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
 const _sfc_main$1 = defineComponent({
-  name: "Form",
-  props: {
-    disabled: {
-      type: Boolean,
-      default: void 0
-    },
-    inline: {
-      type: Boolean,
-      default: false
-    },
-    labelWidth: {
-      type: [Number, String],
-      default: 80
-    },
-    labelPosition: {
-      type: String,
-      validate: (value) => POSITION.includes(value),
-      default: "left"
-    },
-    labelAlign: {
-      type: String,
-      validator: (val) => ALIGN.includes(val),
-      default: "top"
-    }
+  ...{
+    name: "Form"
   },
-  setup(props) {
+  __name: "Form",
+  props: {
+    disabled: { type: Boolean, default: void 0 },
+    inline: { type: Boolean, default: false },
+    labelWidth: { default: 80 },
+    labelPosition: { default: "left" },
+    labelAlign: { default: "top" }
+  },
+  setup(__props) {
+    const props = __props;
     provide(
       FORM_ITEM_INLINE_KEY,
       computed(() => props.inline)
@@ -62,59 +40,37 @@ const _sfc_main$1 = defineComponent({
       FORM_LABEL_ALIGN_KEY,
       computed(() => props.labelAlign)
     );
+    const getFromStyle = () => ({
+      form: style`mb-2`
+    });
     const styles = getFromStyle();
-    return {
-      styles
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(unref(styles).form)
+      }, [
+        renderSlot(_ctx.$slots, "default")
+      ], 2);
     };
   }
 });
-const getFromStyle = () => ({
-  form: style`mb-2`
-});
-function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", {
-    class: normalizeClass(_ctx.styles.form)
-  }, [
-    renderSlot(_ctx.$slots, "default")
-  ], 2);
-}
-var Form = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
 const _sfc_main = defineComponent({
-  name: "FormItem",
-  props: {
-    prop: {
-      type: String
-    },
-    labelAlign: {
-      type: String,
-      validator: (val) => ALIGN.includes(val)
-    },
-    labelPosition: {
-      type: String,
-      validator: (val) => POSITION.includes(val)
-    },
-    label: {
-      type: String
-    },
-    required: {
-      type: Boolean
-    },
-    offset: {
-      type: Boolean
-    },
-    labelWidth: {
-      type: [Number, String]
-    },
-    inline: {
-      type: Boolean,
-      default: void 0
-    },
-    contentClass: {
-      type: String
-    }
+  ...{
+    name: "FormItem"
   },
-  setup(props) {
-    const styles = getFormItemStyle();
+  __name: "FormItem",
+  props: {
+    prop: {},
+    labelAlign: {},
+    labelPosition: {},
+    label: {},
+    required: { type: Boolean },
+    offset: { type: Boolean },
+    labelWidth: {},
+    inline: { type: Boolean, default: void 0 },
+    contentClass: {}
+  },
+  setup(__props) {
+    const props = __props;
     const realLabelPosition = useInjectProp(
       FORM_LABEL_POSITION_KEY,
       "left",
@@ -155,7 +111,7 @@ const _sfc_main = defineComponent({
       "text-align": realLabelPosition.value === "right" ? "right" : "left",
       "margin-bottom": realLabelPosition.value === "top" ? "0.5rem" : ""
     }));
-    const lableClasses = computed(() => ({
+    const labelClasses = computed(() => ({
       [styles.labelBlock]: realLabelPosition.value === "top",
       [styles.labelInline]: realLabelPosition.value !== "top",
       [styles.labelAlignTop]: realLabelAlign.value === "top",
@@ -163,55 +119,48 @@ const _sfc_main = defineComponent({
       [styles.labelAlignBottom]: realLabelAlign.value === "bottom",
       [styles.labelRequired]: props.required
     }));
-    return {
-      styles,
-      containerClasses,
-      lableClasses,
-      labelStyle,
-      realLabelAlign
+    const getFormItemStyle = () => {
+      const label = apply`text-sm text-content-primary`;
+      const mark = css`
+    &:before {
+      content: '*';
+      ${apply`text-error-primary align-top`}
+    }
+  `;
+      return {
+        container: style`mb-2 ml-2`,
+        flex: style`flex`,
+        inlineFlex: style`inline-flex mr-2 last:mr-0`,
+        labelBlock: style`w-full ${label}`,
+        labelInline: style`mr-2 flex-shrink-0 ${label}`,
+        labelAlignTop: style`self-start`,
+        labelAlignCenter: style`self-center`,
+        labelAlignBottom: style`self-end`,
+        labelRequired: tw`${mark}`,
+        content: style`flex-auto`
+      };
+    };
+    const styles = getFormItemStyle();
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", {
+        class: normalizeClass(containerClasses.value)
+      }, [
+        _ctx.label || _ctx.offset || _ctx.$slots.label ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          class: normalizeClass(labelClasses.value),
+          style: normalizeStyle(labelStyle.value)
+        }, [
+          renderSlot(_ctx.$slots, "label", {}, () => [
+            createTextVNode(toDisplayString(_ctx.label), 1)
+          ])
+        ], 6)) : createCommentVNode("", true),
+        createElementVNode("div", {
+          class: normalizeClass([unref(styles).content, _ctx.contentClass])
+        }, [
+          renderSlot(_ctx.$slots, "default")
+        ], 2)
+      ], 2);
     };
   }
 });
-const getFormItemStyle = () => {
-  const label = apply`text-sm text-content-primary`;
-  const mark = css`
-      &:before {
-        content: '*';
-        ${apply`text-error-primary align-top`}
-      }
-    `;
-  return {
-    container: style`mb-2 ml-2`,
-    flex: style`flex`,
-    inlineFlex: style`inline-flex mr-2 last:mr-0`,
-    labelBlock: style`w-full ${label}`,
-    labelInline: style`mr-2 flex-shrink-0 ${label}`,
-    labelAlignTop: style`self-start`,
-    labelAlignCenter: style`self-center`,
-    labelAlignBottom: style`self-end`,
-    labelRequired: tw`${mark}`,
-    content: style`flex-auto`
-  };
-};
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", {
-    class: normalizeClass(_ctx.containerClasses)
-  }, [
-    _ctx.label || _ctx.offset || _ctx.$slots.label ? (openBlock(), createElementBlock("label", {
-      key: 0,
-      class: normalizeClass(_ctx.lableClasses),
-      style: normalizeStyle(_ctx.labelStyle)
-    }, [
-      renderSlot(_ctx.$slots, "label", {}, () => [
-        createTextVNode(toDisplayString(_ctx.label), 1)
-      ])
-    ], 6)) : createCommentVNode("", true),
-    createElementVNode("div", {
-      class: normalizeClass([_ctx.styles.content, _ctx.contentClass])
-    }, [
-      renderSlot(_ctx.$slots, "default")
-    ], 2)
-  ], 2);
-}
-var FormItem = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-export { Form, FormItem };
+export { _sfc_main$1 as Form, _sfc_main as FormItem };

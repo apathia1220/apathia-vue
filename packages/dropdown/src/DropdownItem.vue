@@ -12,26 +12,24 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults, inject } from 'vue'
-import { DropdownInstance } from '@apathia/apathia.popper'
+import { inject } from 'vue'
 import { style } from '@apathia/apathia.twind'
+import type { DropdownInstance } from './types'
 
-// defineOptions({
-//   name: 'DropdownItem',
-// })
+defineOptions({
+  name: 'DropdownItem',
+})
 
 interface DropdownItemProps {
   active?: boolean
   disabled?: boolean
 }
 
-const getDropdownItemStyle = () => (
-    {
-        menuItem: style`block px-2 py-2 rounded text(sm content-primary) hover:bg-fill-light cursor-pointer`,
-        active: style`text-brand-active`,
-        disabled: style`text-content-neutral hover:bg-fill-white cursor-default pointer-events-none`,
-    }
-)
+const getDropdownItemStyle = () => ({
+  menuItem: style`block px-2 py-2 rounded text(sm content-primary) hover:bg-fill-light cursor-pointer`,
+  active: style`text-brand-active`,
+  disabled: style`text-content-neutral hover:bg-fill-white cursor-default pointer-events-none`,
+})
 
 withDefaults(defineProps<DropdownItemProps>(), {
   active: false,

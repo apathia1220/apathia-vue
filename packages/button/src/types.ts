@@ -1,4 +1,4 @@
-export interface ButtonPorps {
+export type ButtonProps = {
     tag: string | object
     href: boolean
     primary: boolean

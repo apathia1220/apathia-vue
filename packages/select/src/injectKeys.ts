@@ -1,5 +1,10 @@
 import type { InjectionKey } from 'vue'
-import { SelectValueType as ValueType, SelectState, OptionRegister, OptionRemover } from './types'
+import type {
+  SelectValueType,
+  SelectState,
+  OptionRegister,
+  OptionRemover,
+} from './types'
 
 export const RegisterKey: InjectionKey<OptionRegister> = Symbol('register')
 
@@ -8,15 +13,16 @@ export const UpdateRegisterKey: InjectionKey<OptionRegister> =
 
 export const UnregisterKey: InjectionKey<OptionRemover> = Symbol('unregister')
 
-export const SelectStateKey: InjectionKey<SelectState> = Symbol('selectState')
+export const SelectStateKey: InjectionKey<Partial<SelectState>> =
+  Symbol('selectState')
 
 export const ChangeHandlerKey: InjectionKey<
-  (value: ValueType, label: string, isInnerChange?: boolean) => void
+  (value: SelectValueType, label: string, isInnerChange?: boolean) => void
 > = Symbol('changeHandler')
 
 export const FocusKey: InjectionKey<(uid: number, el?: HTMLElement) => void> =
   Symbol('focus')
 
 export const SameValueCompareKey: InjectionKey<
-  (newValue: ValueType, oldValue: ValueType) => boolean
+  (newValue: SelectValueType, oldValue: SelectValueType) => boolean
 > = Symbol('sameValueCompare')

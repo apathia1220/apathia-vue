@@ -1,5 +1,4 @@
-import { Ref } from "vue";
-export declare type PaginationConfiger = {
+export declare type PaginationConfig = {
     currentPage: number;
     totalItems: number;
     pageSize: number;
@@ -16,9 +15,12 @@ export declare type PaginationConfiger = {
     jumpPage: boolean;
     [x: string]: any;
 };
-export interface PaginationProps {
-    options: Ref<Partial<PaginationConfiger>>;
-}
+export declare type PaginationProps = {
+    options: PaginationConfig;
+};
+export declare type PaginationEmits = {
+    'page-change': [pageNumber: number, totalPages: number];
+};
 export declare type PageItem = {
     number: number;
     text: string | number;

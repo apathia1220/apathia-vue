@@ -2,12 +2,15 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.popper"), require("@apathia/apathia.hooks"), require("@apathia/apathia.twind")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.popper", "@apathia/apathia.hooks", "@apathia/apathia.twind"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.slider = {}, global.Vue, global.popper, global.hooks, global.twind));
 })(this, function(exports2, vue, apathia_popper, apathia_hooks, apathia_twind) {
   "use strict";
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = vue.defineComponent({
+    ...{
+      name: "Stop"
+    },
     __name: "Stop",
     props: {
-      step: null,
-      min: null,
-      max: null,
+      step: {},
+      min: {},
+      max: {},
       vertical: { type: Boolean },
       marks: { default: () => ({}) }
     },
@@ -29,33 +32,36 @@
       const styles = getStopStyles();
       return (_ctx, _cache) => {
         return vue.openBlock(), vue.createElementBlock("div", {
-          class: vue.normalizeClass([vue.unref(styles).stopWrap, __props.vertical ? vue.unref(styles).stopWrapY : vue.unref(styles).stopWrapX])
+          class: vue.normalizeClass([vue.unref(styles).stopWrap, _ctx.vertical ? vue.unref(styles).stopWrapY : vue.unref(styles).stopWrapX])
         }, [
-          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(stepCount) + 1, (count, index) => {
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(stepCount.value + 1, (count, index) => {
             return vue.openBlock(), vue.createElementBlock("div", {
               key: index,
-              class: vue.normalizeClass([vue.unref(styles).stop, __props.vertical ? vue.unref(styles).stopY : vue.unref(styles).stopX]),
+              class: vue.normalizeClass([vue.unref(styles).stop, _ctx.vertical ? vue.unref(styles).stopY : vue.unref(styles).stopX]),
               style: vue.normalizeStyle({
-                [__props.vertical ? "bottom" : "left"]: `${1 / vue.unref(stepCount) * index * 100}%`
+                [_ctx.vertical ? "bottom" : "left"]: `${1 / stepCount.value * index * 100}%`
               })
             }, [
               vue.createElementVNode("span", {
                 class: vue.normalizeClass([
                   vue.unref(styles).stopText,
-                  __props.vertical ? vue.unref(styles).stopTextY : vue.unref(styles).stopTextX
+                  _ctx.vertical ? vue.unref(styles).stopTextY : vue.unref(styles).stopTextX
                 ]),
-                style: vue.normalizeStyle((__props.marks[getValueByStep(count - 1)] || {}).style)
-              }, vue.toDisplayString((__props.marks[getValueByStep(count - 1)] || {}).label), 7)
+                style: vue.normalizeStyle((_ctx.marks[getValueByStep(count - 1)] || {}).style)
+              }, vue.toDisplayString((_ctx.marks[getValueByStep(count - 1)] || {}).label), 7)
             ], 6);
           }), 128))
         ], 2);
       };
     }
   });
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "Slider"
+    },
     __name: "Slider",
     props: {
-      modelValue: null,
+      modelValue: {},
       disabled: { type: Boolean },
       min: { default: 0 },
       max: { default: 100 },
@@ -64,10 +70,10 @@
       showTooltip: { type: Boolean, default: true },
       formatTooltip: { type: Function, default: (cur) => cur },
       range: { type: Boolean },
-      valueRange: null,
+      valueRange: {},
       marks: { default: () => ({}) },
       vertical: { type: Boolean },
-      height: null
+      height: {}
     },
     emits: ["update:modelValue"],
     setup(__props, { emit }) {
@@ -86,31 +92,29 @@
         stepsY: apathia_twind.style`w-1 absolute bottom-0`,
         stepsHover: apathia_twind.style`bg-brand-active`,
         button: apathia_twind.style`group-hover:border-brand-active border(2 solid brand-primary) h-4 w-4 bg-fill-white rounded-lg cursor-pointer ${apathia_twind.css`
-      z-index: 1;
-    `}`,
+    z-index: 1;
+  `}`,
         popperWrap: apathia_twind.style`absolute`,
         buttonHover: apathia_twind.style`border-brand-active`,
         buttonX: apathia_twind.style`-translate-x-1/2${apathia_twind.css`
-      top: 2px;
-    `}`,
+    top: 2px;
+  `}`,
         buttonY: apathia_twind.style`translate-y-1/2${apathia_twind.css`
-      left: 2px;
-    `}`
+    left: 2px;
+  `}`
       });
       const isTouchEvent = (e) => e.type.startsWith("touch");
       const styles = getSliderStyles();
       const trackRef = vue.ref(null);
-      const moveRange = vue.reactive(
-        {
-          clientX: [0, 0],
-          clientY: [0, 0]
-        }
-      );
+      const moveRange = vue.reactive({
+        clientX: [0, 0],
+        clientY: [0, 0]
+      });
       const disableDrag = apathia_hooks.useInjectProp("Form", false, vue.toRef(props, "disabled"));
       const buttonRef = vue.ref(null);
       const buttonSize = vue.ref(0);
       const popperRef = vue.ref(null);
-      const popperVisble = vue.ref(false);
+      const popperVisible = vue.ref(false);
       vue.onMounted(() => {
         if (trackRef.value) {
           const { x, y, height, width } = trackRef.value.getBoundingClientRect();
@@ -121,7 +125,7 @@
           buttonSize.value = buttonRef.value.offsetWidth;
         }
       });
-      const [draging, , setDraging] = apathia_hooks.useToggle(false);
+      const [dragging, , setDragging] = apathia_hooks.useToggle(false);
       const btnEndStyle = vue.computed(() => {
         const value = `${((props.modelValue - props.min) / props.max - props.min) * 100}%`;
         return props.vertical ? { bottom: value } : { left: value };
@@ -139,7 +143,7 @@
           return;
         }
         e.preventDefault();
-        setDraging(true);
+        setDragging(true);
         stopFns.push(apathia_hooks.useEventListener(window, "mousemove", handleDragging));
         stopFns.push(apathia_hooks.useEventListener(window, "touchmove", handleDragging));
         stopFns.push(apathia_hooks.useEventListener(window, "mouseup", stopDrag));
@@ -147,9 +151,9 @@
         stopFns.push(apathia_hooks.useEventListener(window, "contextmenu", stopDrag));
       };
       const stopDrag = () => {
-        setDraging(false);
+        setDragging(false);
         stopFns.forEach((fn) => fn && fn());
-        popperVisble.value = false;
+        popperVisible.value = false;
       };
       const resolveValueInRange = (targetPos, posRange) => {
         const valueRange = [props.min, props.max];
@@ -188,12 +192,12 @@
         );
       };
       const handleDragging = (e) => {
-        if (draging.value) {
+        if (dragging.value) {
           handleTrackClick(e);
           if (popperRef.value && popperRef.value.update && typeof popperRef.value.update === "function") {
             popperRef.value && popperRef.value.update();
           }
-          popperVisble.value = true;
+          popperVisible.value = true;
         }
       };
       const handleTrackClick = (e) => {
@@ -231,10 +235,10 @@
           vue.createElementVNode("div", {
             class: vue.normalizeClass({
               [vue.unref(styles).slider]: true,
-              [vue.unref(styles).sliderX]: !__props.vertical,
-              [vue.unref(styles).sliderY]: __props.vertical
+              [vue.unref(styles).sliderX]: !_ctx.vertical,
+              [vue.unref(styles).sliderY]: _ctx.vertical
             }),
-            style: vue.normalizeStyle(vue.unref(sliderStyle)),
+            style: vue.normalizeStyle(sliderStyle.value),
             onClick: handleTrackClick
           }, [
             vue.createElementVNode("div", {
@@ -242,48 +246,48 @@
               ref: trackRef,
               class: vue.normalizeClass({
                 [vue.unref(styles).track]: true,
-                [vue.unref(styles).trackX]: !__props.vertical,
-                [vue.unref(styles).trackY]: __props.vertical,
-                [vue.unref(styles).trackHover]: vue.unref(draging)
+                [vue.unref(styles).trackX]: !_ctx.vertical,
+                [vue.unref(styles).trackY]: _ctx.vertical,
+                [vue.unref(styles).trackHover]: vue.unref(dragging)
               })
             }, null, 2),
             vue.createElementVNode("div", {
               class: vue.normalizeClass({
                 [vue.unref(styles).steps]: true,
-                [vue.unref(styles).stepsX]: !__props.vertical,
-                [vue.unref(styles).stepsY]: __props.vertical,
-                [vue.unref(styles).stepsHover]: vue.unref(draging)
+                [vue.unref(styles).stepsX]: !_ctx.vertical,
+                [vue.unref(styles).stepsY]: _ctx.vertical,
+                [vue.unref(styles).stepsHover]: vue.unref(dragging)
               }),
-              style: vue.normalizeStyle(vue.unref(stepsStyle))
+              style: vue.normalizeStyle(stepsStyle.value)
             }, null, 6),
-            __props.showSteps ? (vue.openBlock(), vue.createBlock(_sfc_main$1, {
+            _ctx.showSteps ? (vue.openBlock(), vue.createBlock(_sfc_main$1, {
               key: 0,
-              step: __props.step,
-              min: __props.min,
-              max: __props.max,
-              vertical: __props.vertical,
-              marks: __props.marks
+              step: _ctx.step,
+              min: _ctx.min,
+              max: _ctx.max,
+              vertical: _ctx.vertical,
+              marks: _ctx.marks
             }, null, 8, ["step", "min", "max", "vertical", "marks"])) : vue.createCommentVNode("", true),
-            __props.showTooltip ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_popper.Popper), {
+            _ctx.showTooltip ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_popper.Popper), {
               key: 1,
               ref_key: "popperRef",
               ref: popperRef,
-              modelValue: popperVisble.value,
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => popperVisble.value = $event),
+              modelValue: popperVisible.value,
+              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => popperVisible.value = $event),
               dark: "",
-              placement: __props.vertical ? "right" : "bottom",
+              placement: _ctx.vertical ? "right" : "bottom",
               trigger: "hover",
-              class: vue.normalizeClass([vue.unref(styles).popperWrap, __props.vertical ? vue.unref(styles).buttonY : vue.unref(styles).buttonX]),
-              style: vue.normalizeStyle(vue.unref(btnEndStyle))
+              class: vue.normalizeClass([vue.unref(styles).popperWrap, _ctx.vertical ? vue.unref(styles).buttonY : vue.unref(styles).buttonX]),
+              style: vue.normalizeStyle(btnEndStyle.value)
             }, {
               content: vue.withCtx(() => [
-                vue.createTextVNode(vue.toDisplayString(__props.formatTooltip(__props.modelValue)), 1)
+                vue.createTextVNode(vue.toDisplayString(_ctx.formatTooltip(_ctx.modelValue)), 1)
               ]),
               default: vue.withCtx(() => [
                 vue.createElementVNode("div", {
                   ref_key: "buttonRef",
                   ref: buttonRef,
-                  class: vue.normalizeClass([vue.unref(styles).button, vue.unref(draging) ? vue.unref(styles).buttonHover : ""]),
+                  class: vue.normalizeClass([vue.unref(styles).button, vue.unref(dragging) ? vue.unref(styles).buttonHover : ""]),
                   onMousedown: startDrag
                 }, null, 34)
               ]),

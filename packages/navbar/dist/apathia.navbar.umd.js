@@ -4,12 +4,12 @@
   "use strict";
   const _hoisted_1 = ["onClick"];
   const _hoisted_2 = ["onClick"];
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
     __name: "Navbar",
     props: {
       type: { default: "default" },
       modelValue: { default: "" },
-      list: null,
+      list: {},
       trigger: { default: "hover" },
       disabledParent: { type: Boolean, default: true }
     },
@@ -18,13 +18,13 @@
       const props = __props;
       function initStyle(type) {
         const radius = apathia_twind.css`
-      &:first-child {
-        border-radius: 4px 0 0 4px;
-      }
-      &:last-child {
-        border-radius: 0 4px 4px 0;
-      }
-    `;
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  `;
         const Theme = {
           default: {
             nav: apathia_twind.apply`bg-fill-light hover:(bg-fill-gray) ${apathia_twind.apply`${radius}`}`,
@@ -96,7 +96,7 @@
             ref: contentRef,
             class: vue.normalizeClass(vue.unref(styles).layoutContainer)
           }, [
-            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(__props.list, (nav) => {
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(_ctx.list, (nav) => {
               return vue.openBlock(), vue.createElementBlock("li", {
                 key: nav.value,
                 class: vue.normalizeClass(`${vue.unref(styles).layoutNav} ${isActive(nav) || isActiveParent(nav) ? vue.unref(styles).activeNav : ""}`),

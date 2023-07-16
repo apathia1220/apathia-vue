@@ -2,7 +2,10 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("@apathia/apathia.shared"), require("@apathia/apathia.custom-render"), require("@apathia/apathia.icon"), require("@apathia/apathia.icon-svg")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "@apathia/apathia.shared", "@apathia/apathia.custom-render", "@apathia/apathia.icon", "@apathia/apathia.icon-svg"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.alert = {}, global.Vue, global.twind, global.shared, global["custom-render"], global.icon, global["icon-svg"]));
 })(this, function(exports2, vue, apathia_twind, apathia_shared, apathia_customRender, apathia_icon, apathia_iconSvg) {
   "use strict";
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "Alert"
+    },
     __name: "Alert",
     props: {
       type: { default: "default" },
@@ -11,7 +14,7 @@
       message: { default: "" },
       showIcon: { type: Boolean, default: true },
       showClose: { type: Boolean, default: true },
-      render: null
+      render: {}
     },
     emits: ["close"],
     setup(__props, { emit }) {
@@ -57,14 +60,7 @@
           messageClass: messageClass2
         };
       }
-      const {
-        layout,
-        iconWrap,
-        delIcon,
-        contentClass,
-        titleClass,
-        messageClass
-      } = initAlertStyle(props.type);
+      const { layout, iconWrap, delIcon, contentClass, titleClass, messageClass } = initAlertStyle(props.type);
       let timer;
       function close() {
         clearTimer();
@@ -86,15 +82,15 @@
           onMouseenter: clearTimer,
           onMouseleave: resetTimer
         }, [
-          !__props.render ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
-            __props.showIcon ? (vue.openBlock(), vue.createElementBlock("div", {
+          !_ctx.render ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
+            _ctx.showIcon ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               class: vue.normalizeClass(vue.unref(iconWrap))
             }, [
               vue.renderSlot(_ctx.$slots, "icon", {}, () => [
                 vue.createVNode(vue.unref(apathia_icon.Icon), { size: 20 }, {
                   default: vue.withCtx(() => [
-                    (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(iconMap[__props.type])))
+                    (vue.openBlock(), vue.createBlock(vue.resolveDynamicComponent(iconMap[_ctx.type])))
                   ]),
                   _: 1
                 })
@@ -103,14 +99,14 @@
             vue.createElementVNode("div", {
               class: vue.normalizeClass(vue.unref(contentClass))
             }, [
-              __props.title ? (vue.openBlock(), vue.createElementBlock("p", {
+              _ctx.title ? (vue.openBlock(), vue.createElementBlock("p", {
                 key: 0,
                 class: vue.normalizeClass(vue.unref(titleClass))
-              }, vue.toDisplayString(__props.title), 3)) : vue.createCommentVNode("", true),
-              __props.message ? (vue.openBlock(), vue.createElementBlock("p", {
+              }, vue.toDisplayString(_ctx.title), 3)) : vue.createCommentVNode("", true),
+              _ctx.message ? (vue.openBlock(), vue.createElementBlock("p", {
                 key: 1,
                 class: vue.normalizeClass(vue.unref(messageClass))
-              }, vue.toDisplayString(__props.message), 3)) : vue.createCommentVNode("", true)
+              }, vue.toDisplayString(_ctx.message), 3)) : vue.createCommentVNode("", true)
             ], 2),
             vue.createElementVNode("span", {
               class: vue.normalizeClass(vue.unref(delIcon)),
@@ -118,7 +114,7 @@
             }, " \u2715 ", 2)
           ], 64)) : (vue.openBlock(), vue.createBlock(vue.unref(apathia_customRender.CustomRender), {
             key: 1,
-            render: () => __props.render && __props.render({ close })
+            render: () => _ctx.render && _ctx.render({ close })
           }, null, 8, ["render"]))
         ], 34);
       };

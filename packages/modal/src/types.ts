@@ -1,4 +1,3 @@
-// @ts-ignore
 import type { RenderCustom } from '@apathia/apathia.custom-render'
 
 export type ModalProps = {
@@ -6,6 +5,7 @@ export type ModalProps = {
   title?: string
   subTitle?: string
   render?: RenderCustom
+  renderHeader?: RenderCustom
   top?: number | string
   width?: number | string
   showClose?: boolean
@@ -18,4 +18,14 @@ export type ModalProps = {
 export type ModalListItemProps = {
   props: ModalProps
   id: string
+}
+
+export type ModalEmits = {
+  'update:modelValue': [value: boolean]
+  close: []
+}
+
+export type ModalInstance = {
+  props: ModalProps
+  close: () => void
 }

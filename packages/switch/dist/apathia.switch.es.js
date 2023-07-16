@@ -2,17 +2,20 @@ import { defineComponent, useSlots, computed, openBlock, createBlock, resolveDyn
 import { CustomRender } from "@apathia/apathia.custom-render";
 import { useInjectProp } from "@apathia/apathia.hooks";
 import { getComputedStyle, style, css, apply } from "@apathia/apathia.twind";
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Switch"
+  },
   __name: "Switch",
   props: {
     as: { default: "div" },
     modelValue: { type: [String, Number, Boolean], default: false },
     trueValue: { type: [String, Number, Boolean], default: true },
     falseValue: { type: [String, Number, Boolean], default: false },
-    inactiveText: null,
-    activeText: null,
-    disabled: { type: [Boolean, null], default: void 0 },
-    size: null,
+    inactiveText: {},
+    activeText: {},
+    disabled: { type: Boolean, default: void 0 },
+    size: {},
     loading: { type: Boolean, default: false }
   },
   emits: ["update:modelValue", "change"],
@@ -30,29 +33,29 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const circleSize = `calc(${outerHeight} - 2px)`;
       return {
         wrapper: style`inline-block box-border m-0 p-0 text-2xl focus:outline-none cursor-pointer text-sm ${css`
-        line-height: auto;
-        `} ${loading ? apply`opacity-40` : ""}`,
+      line-height: auto;
+    `} ${loading ? apply`opacity-40` : ""}`,
         switchWrap: style`inline-block relative select-none transition-all
         ${disabled ? "cursor-not-allowed" : "cursor-pointer"}
         ${disabled ? "bg-opacity-40" : "bg-opacity-0"}
         ${isTrue2 ? "border(solid brand-primary) bg-brand-primary" : "border(solid line-accent) bg-fill-neutral"}
         ${css`
-            height: ${outerHeight};
-            min-width: ${outerMinWidth};
-            line-height: ${outerHeight};
-            border-radius: ${outerHeight};
+          height: ${outerHeight};
+          min-width: ${outerMinWidth};
+          line-height: ${outerHeight};
+          border-radius: ${outerHeight};
         `}
         `,
         outer: style`inline-block transition-all
         ${css`
-            &:focus {
+          &:focus {
             box-shadow: 0 0 0 2px fade(rgb(140, 94, 247), 20%);
             outline: 0;
-            }
-            &:focus:hover {
+          }
+          &:focus:hover {
             ${apply`shadow-none`}
-            }
-            &:after {
+          }
+          &:after {
             ${apply`bg-fill-white absolute top-px cursor-pointer`}
             left: ${isTrue2 ? `calc(100% - ${outerHeight} + 1px)` : "1px"};
             height: ${circleSize};
@@ -60,8 +63,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             content: '';
             border-radius: 50%;
             transition: left 0.2s ease-in-out, width 0.2s ease-in-out;
-            }
-            &:before {
+          }
+          &:before {
             ${apply`bg-transparent absolute border(brand-primary r t-0 b-0 l-0) ${isTrue2 ? "right-1" : "left-1"}`}
             display: ${loading ? "block" : "none"};
             height: calc(${outerHeight} - 8px);
@@ -72,24 +75,24 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             z-index: 1;
             animation: switch-loading 1s linear;
             animation-iteration-count: infinite;
-            }
-            @keyframes switch-loading {
+          }
+          @keyframes switch-loading {
             0% {
-                transform: rotate(0);
+              transform: rotate(0);
             }
             100% {
-                transform: rotate(360deg);
+              transform: rotate(360deg);
             }
-            }
+          }
         `}`,
         inner: style`px-1 text-content-white text-xs transition-all duration-300  ${css`
-        margin: ${isTrue2 ? `0 ${circleSize} 0 0` : `0 0 0 ${circleSize}`};
-        i {
-            width: ${circleSize};
-            height: ${circleSize};
-            text-align: center;
-        }
-        `}`,
+      margin: ${isTrue2 ? `0 ${circleSize} 0 0` : `0 0 0 ${circleSize}`};
+      i {
+        width: ${circleSize};
+        height: ${circleSize};
+        text-align: center;
+      }
+    `}`,
         inactiveText: style`${!isTrue2 ? "text-brand-primary" : ""}`,
         activeText: style`${isTrue2 ? "text-brand-primary" : ""}`
       };
@@ -113,14 +116,20 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     const styles = getComputedStyle(
-      { isTrue, large, small, disabled: !!disableChange.value, loading: props.loading },
+      {
+        isTrue,
+        large,
+        small,
+        disabled: !!disableChange.value,
+        loading: props.loading
+      },
       getStyles
     );
     return (_ctx, _cache) => {
-      return openBlock(), createBlock(resolveDynamicComponent(__props.as), {
+      return openBlock(), createBlock(resolveDynamicComponent(_ctx.as), {
         class: normalizeClass({
           [unref(styles).wrapper]: true,
-          [unref(styles).wrapperLoading]: __props.loading
+          [unref(styles).wrapperLoading]: _ctx.loading
         }),
         onClick: handleChange
       }, {
@@ -134,7 +143,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             createElementVNode("span", {
               class: normalizeClass(unref(styles).inner)
             }, [
-              createVNode(unref(CustomRender), { render: unref(innerRender) }, null, 8, ["render"])
+              createVNode(unref(CustomRender), { render: innerRender.value }, null, 8, ["render"])
             ], 2)
           ], 2)
         ]),

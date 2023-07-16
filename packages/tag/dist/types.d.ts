@@ -5,7 +5,7 @@ export declare type TagItem = string | {
     iconClass?: string;
     [k: string]: any;
 };
-export interface TagsProps {
+export declare type TagsProps = {
     modelValue: TagItem[];
     primary?: boolean;
     success?: boolean;
@@ -16,8 +16,8 @@ export interface TagsProps {
     showTag: (tag: TagItem) => string;
     handleTag: (str: string) => TagItem;
     disabled: boolean;
-}
-export interface TagProps {
+};
+export declare type TagProps = {
     text: string;
     iconClass: string;
     primary?: boolean;
@@ -26,4 +26,11 @@ export interface TagProps {
     warning?: boolean;
     hollow?: boolean;
     closable: boolean;
-}
+};
+export declare type TagEmits = {
+    close: [];
+};
+export declare type TagsEmits = {
+    'update:modelValue': [tags: TagItem[]];
+    change: [tags: TagItem[]];
+};

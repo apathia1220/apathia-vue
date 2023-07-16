@@ -1,4 +1,4 @@
-import { Column, ResponsePager } from './types';
+import type { Column, ResponsePager } from './types';
 export declare function createTable<T>(cols: Column[], shallowData?: boolean): readonly [import("vue").ComputedRef<{
     data: T[];
     loading: boolean;
@@ -52,7 +52,7 @@ export declare function createTable<T>(cols: Column[], shallowData?: boolean): r
         size: number;
         total: number;
     }) => void;
-    updatePager: (pager?: ResponsePager | undefined) => void;
+    updatePager: (pager?: ResponsePager) => void;
     getCurrentPage: () => number;
     triggerPagination: (value: boolean) => void;
     triggerData: (value: boolean) => void;

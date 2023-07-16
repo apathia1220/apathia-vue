@@ -1,11 +1,6 @@
-import { ref, onMounted, watch, onUpdated, Ref } from 'vue'
+import { ref, onMounted, watch, onUpdated } from 'vue'
 import { useEventListener } from '@apathia/apathia.hooks'
-import type { Column } from './types'
-
-interface RealColumns {
-  realColumns: Ref<Column[]>
-  containerRef: Ref<HTMLElement | null>
-}
+import type { Column, RealColumns } from './types'
 
 export function useTableColumns(props: {
   columns: Column[]

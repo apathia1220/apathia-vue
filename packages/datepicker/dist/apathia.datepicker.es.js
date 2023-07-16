@@ -100,11 +100,14 @@ function RangeSelectPlugin(range, change) {
   };
 }
 var Datepicker_vue_vue_type_style_index_0_lang = "";
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "Datepicker"
+  },
   __name: "Datepicker",
   props: {
     options: { default: () => ({}) },
-    modelValue: null,
+    modelValue: {},
     dateFormat: { default: "Y-m-d H:i:S" },
     timestamp: { type: Boolean, default: false },
     range: { default: () => ({}) }
@@ -242,11 +245,11 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
   __name: "DatepickerGroup",
   props: {
-    startTime: null,
-    endTime: null,
+    startTime: {},
+    endTime: {},
     dateFormat: { default: "Y-m-d H:i:S" },
     timestamp: { type: Boolean, default: false },
     disabled: { type: Boolean, default: void 0 },
@@ -312,10 +315,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         class: normalizeClass(unref(styles).layout)
       }, [
         createVNode(_sfc_main$1, {
-          "model-value": __props.startTime,
+          "model-value": _ctx.startTime,
           options: startOptions.value,
-          timestamp: __props.timestamp,
-          range: __props.range,
+          timestamp: _ctx.timestamp,
+          range: _ctx.range,
           placeholder: "\u5F00\u59CB\u65F6\u95F4",
           disabled: unref(disableInput),
           onChange: startDateChange,
@@ -325,10 +328,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           class: normalizeClass(unref(styles).divider)
         }, "-", 2),
         createVNode(_sfc_main$1, {
-          "model-value": __props.endTime,
+          "model-value": _ctx.endTime,
           options: endOptions.value,
-          timestamp: __props.timestamp,
-          range: __props.range,
+          timestamp: _ctx.timestamp,
+          range: _ctx.range,
           placeholder: "\u7ED3\u675F\u65F6\u95F4",
           disabled: unref(disableInput),
           onChange: endDateChange,

@@ -8,7 +8,7 @@ export type TagItem =
       iconClass?: string
       [k: string]: any
     }
-export interface TagsProps {
+export type TagsProps = {
   modelValue: TagItem[]
   primary?: boolean
   success?: boolean
@@ -21,7 +21,7 @@ export interface TagsProps {
   disabled: boolean
 }
 
-export interface TagProps {
+export type TagProps = {
   text: string
   iconClass: string
   primary?: boolean
@@ -30,4 +30,13 @@ export interface TagProps {
   warning?: boolean
   hollow?: boolean
   closable: boolean
+}
+
+export type TagEmits = {
+  close: []
+}
+
+export type TagsEmits = {
+  'update:modelValue': [tags: TagItem[]]
+  change: [tags: TagItem[]]
 }

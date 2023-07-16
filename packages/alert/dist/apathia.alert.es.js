@@ -4,7 +4,10 @@ import { mountComponent } from "@apathia/apathia.shared";
 import { CustomRender } from "@apathia/apathia.custom-render";
 import { Icon } from "@apathia/apathia.icon";
 import { InfoFilled, WarningFilled, SuccessFilled, CircleCloseFilled, Notification } from "@apathia/apathia.icon-svg";
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Alert"
+  },
   __name: "Alert",
   props: {
     type: { default: "default" },
@@ -13,7 +16,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     message: { default: "" },
     showIcon: { type: Boolean, default: true },
     showClose: { type: Boolean, default: true },
-    render: null
+    render: {}
   },
   emits: ["close"],
   setup(__props, { emit }) {
@@ -59,14 +62,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         messageClass: messageClass2
       };
     }
-    const {
-      layout,
-      iconWrap,
-      delIcon,
-      contentClass,
-      titleClass,
-      messageClass
-    } = initAlertStyle(props.type);
+    const { layout, iconWrap, delIcon, contentClass, titleClass, messageClass } = initAlertStyle(props.type);
     let timer;
     function close() {
       clearTimer();
@@ -88,15 +84,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         onMouseenter: clearTimer,
         onMouseleave: resetTimer
       }, [
-        !__props.render ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-          __props.showIcon ? (openBlock(), createElementBlock("div", {
+        !_ctx.render ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+          _ctx.showIcon ? (openBlock(), createElementBlock("div", {
             key: 0,
             class: normalizeClass(unref(iconWrap))
           }, [
             renderSlot(_ctx.$slots, "icon", {}, () => [
               createVNode(unref(Icon), { size: 20 }, {
                 default: withCtx(() => [
-                  (openBlock(), createBlock(resolveDynamicComponent(iconMap[__props.type])))
+                  (openBlock(), createBlock(resolveDynamicComponent(iconMap[_ctx.type])))
                 ]),
                 _: 1
               })
@@ -105,14 +101,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           createElementVNode("div", {
             class: normalizeClass(unref(contentClass))
           }, [
-            __props.title ? (openBlock(), createElementBlock("p", {
+            _ctx.title ? (openBlock(), createElementBlock("p", {
               key: 0,
               class: normalizeClass(unref(titleClass))
-            }, toDisplayString(__props.title), 3)) : createCommentVNode("", true),
-            __props.message ? (openBlock(), createElementBlock("p", {
+            }, toDisplayString(_ctx.title), 3)) : createCommentVNode("", true),
+            _ctx.message ? (openBlock(), createElementBlock("p", {
               key: 1,
               class: normalizeClass(unref(messageClass))
-            }, toDisplayString(__props.message), 3)) : createCommentVNode("", true)
+            }, toDisplayString(_ctx.message), 3)) : createCommentVNode("", true)
           ], 2),
           createElementVNode("span", {
             class: normalizeClass(unref(delIcon)),
@@ -120,7 +116,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           }, " \u2715 ", 2)
         ], 64)) : (openBlock(), createBlock(unref(CustomRender), {
           key: 1,
-          render: () => __props.render && __props.render({ close })
+          render: () => _ctx.render && _ctx.render({ close })
         }, null, 8, ["render"]))
       ], 34);
     };

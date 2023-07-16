@@ -97,70 +97,53 @@
   </nav>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { usePagination } from './usePagination'
 import { style } from '@apathia/apathia.twind'
+import type { PaginationProps, PaginationEmits } from './types'
 
-export default defineComponent({
+defineOptions({
   name: 'Pagination',
-
-  props: {
-    options: {
-      type: Object,
-      required: true,
-    },
-  },
-
-  emits: ['page-change'],
-
-  setup(props, ctx) {
-    const options = computed(() => ({ ...props.options }))
-
-    const userProps = {
-      options,
-    }
-
-    const {
-      jumpTo,
-      pages,
-      totalPages,
-      totalItems,
-      selectPage,
-      setPageBtnRef,
-      innerOptions,
-    } = usePagination(userProps, ctx)
-
-    const styles = getPagonationStyles()
-
-    return {
-      jumpTo,
-      pages,
-      selectPage,
-      setPageBtnRef,
-      innerOptions,
-      totalPages,
-      totalItems,
-      styles,
-    }
-  },
 })
 
-const getPagonationStyles = () => ({
-    wrapper: style`relative bg-fill-white py-3 flex items-center justify-between`,
-    ul: style`relative z-0 inline-flex items-center text-base`,
+const props = defineProps<PaginationProps>()
 
-    item: style`relative inline-flex flex-shrink-0 mx-1 px-btn-lg-y py-px border border-fill-neutral rounded 
+const emit = defineEmits<PaginationEmits>()
+
+const options = computed(() => ({ ...props.options }))
+
+const userProps = {
+  options,
+}
+
+const {
+  jumpTo,
+  pages,
+  totalPages,
+  totalItems,
+  selectPage,
+  setPageBtnRef,
+  innerOptions,
+} = usePagination(userProps, emit)
+
+const getPaginationStyles = () => ({
+  wrapper: style`relative bg-fill-white py-3 flex items-center justify-between`,
+  ul: style`relative z-0 inline-flex items-center text-base`,
+
+  item: style`relative inline-flex flex-shrink-0 mx-1 px-btn-lg-y py-px border border-fill-neutral rounded 
     bg-fill-white text-content-primary cursor-pointer select-none hover:bg-brand-primary hover:text-content-white`,
 
-    active: style`text-content-white bg-brand-primary border-brand-primary outline-none`,
-    itemDisabled: style`cursor-not-allowed pointer-events-none text-content-neutral bg-fill-light border-fill-gray`,
-    numberBtn: style`outline-none`,
-    jump: style`relative z-0 inline-flex items-center -space-x-px text-base border border-fill-neutral rounded`,
-    jumpInput: style`outline-none text-center w-8 px-btn-lg-y py-px border-0 rounded`,
-    jumpBtn: style`text-center w-14  px-btn-lg-y py-px border-0 bg-fill-white rounded
+  active: style`text-content-white bg-brand-primary border-brand-primary outline-none`,
+  itemDisabled: style`cursor-not-allowed pointer-events-none text-content-neutral bg-fill-light border-fill-gray`,
+  numberBtn: style`outline-none`,
+  jump: style`relative z-0 inline-flex items-center -space-x-px text-base border border-fill-neutral rounded`,
+  jumpInput: style`outline-none text-center w-8 px-btn-lg-y py-px border-0 rounded`,
+  jumpBtn: style`text-center w-14  px-btn-lg-y py-px border-0 bg-fill-white rounded
     cursor-pointer hover:bg-brand-primary hover:text-content-white`,
-    count: style`px-4`,
-    pages: style`pr-1`,
+  count: style`px-4`,
+  pages: style`pr-1`,
 })
+
+const styles = getPaginationStyles()
 </script>

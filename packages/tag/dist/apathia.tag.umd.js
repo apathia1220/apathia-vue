@@ -2,7 +2,10 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("lodash-es"), require("@apathia/apathia.button"), require("@apathia/apathia.hooks")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "lodash-es", "@apathia/apathia.button", "@apathia/apathia.hooks"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.tag = {}, global.Vue, global.twind, global["lodash-es"], global.button, global.hooks));
 })(this, function(exports2, vue, apathia_twind, lodashEs, apathia_button, apathia_hooks) {
   "use strict";
-  const _sfc_main$1 = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main$1 = vue.defineComponent({
+    ...{
+      name: "Tag"
+    },
     __name: "Tag",
     props: {
       text: { default: "" },
@@ -56,22 +59,22 @@
       return (_ctx, _cache) => {
         return vue.openBlock(), vue.createElementBlock("li", {
           class: vue.normalizeClass({
-            ...vue.unref(themeClasses),
+            ...themeClasses.value,
             [vue.unref(styles).size]: true,
             [vue.unref(styles).layout]: true
           })
         }, [
-          __props.iconClass ? (vue.openBlock(), vue.createElementBlock("span", {
+          _ctx.iconClass ? (vue.openBlock(), vue.createElementBlock("span", {
             key: 0,
             class: vue.normalizeClass({
-              [__props.iconClass]: true,
+              [_ctx.iconClass]: true,
               [vue.unref(styles).icon]: true
             })
           }, null, 2)) : vue.createCommentVNode("", true),
           vue.renderSlot(_ctx.$slots, "default", {}, () => [
-            vue.createTextVNode(vue.toDisplayString(__props.text), 1)
+            vue.createTextVNode(vue.toDisplayString(_ctx.text), 1)
           ]),
-          __props.closable && !vue.unref(formDisabled) && vue.unref(withinTags) ? (vue.openBlock(), vue.createElementBlock("span", {
+          _ctx.closable && !vue.unref(formDisabled) && vue.unref(withinTags) ? (vue.openBlock(), vue.createElementBlock("span", {
             key: 1,
             class: vue.normalizeClass(vue.unref(styles).delIcon),
             onClick: handleClose
@@ -80,10 +83,13 @@
       };
     }
   });
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "Tags"
+    },
     __name: "Tags",
     props: {
-      modelValue: null,
+      modelValue: {},
       primary: { type: Boolean },
       success: { type: Boolean },
       danger: { type: Boolean },
@@ -123,7 +129,7 @@
           return;
         toggleAdding(true);
       }
-      function handleAppent() {
+      function handleAppend() {
         const tags = [props.handleTag(tagText.value), ...lodashEs.cloneDeep(props.modelValue)];
         emit("update:modelValue", tags);
         emit("change", tags);
@@ -163,14 +169,14 @@
             class: vue.normalizeClass(vue.unref(styles).list)
           }, {
             default: vue.withCtx(() => [
-              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(vue.unref(tagList), (tag, index) => {
+              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(tagList.value, (tag, index) => {
                 return vue.openBlock(), vue.createBlock(_sfc_main$1, vue.mergeProps(tag.theme, {
                   key: tag.text,
                   class: tag.className,
                   "icon-class": tag.iconClass,
                   closable: tag.closable,
                   text: tag.text,
-                  hollow: __props.hollow,
+                  hollow: _ctx.hollow,
                   onClose: ($event) => handleClose(tag, index)
                 }), null, 16, ["class", "icon-class", "closable", "text", "hollow", "onClose"]);
               }), 128)),
@@ -181,7 +187,7 @@
                 vue.createVNode(_component_Input, {
                   modelValue: tagText.value,
                   "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => tagText.value = $event),
-                  onKeyup: vue.withKeys(handleAppent, ["enter"]),
+                  onKeyup: vue.withKeys(handleAppend, ["enter"]),
                   onBlur: _cache[1] || (_cache[1] = ($event) => vue.unref(toggleAdding)(false))
                 }, null, 8, ["modelValue", "onKeyup"])
               ], 2)) : (vue.openBlock(), vue.createBlock(vue.unref(apathia_button.BaseButton), {

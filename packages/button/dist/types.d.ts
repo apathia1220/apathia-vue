@@ -1,4 +1,4 @@
-export interface ButtonPorps {
+export declare type ButtonProps = {
     tag: string | object;
     href: boolean;
     primary: boolean;
@@ -14,4 +14,4 @@ export interface ButtonPorps {
     hollow: boolean;
     round: boolean;
     disabled: boolean;
-}
+};

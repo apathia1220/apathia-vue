@@ -1,24 +1,43 @@
 <template>
   <div :class="styles.panel">
     <div :class="styles.titleBar">
-      <Checkbox v-model="checkAll" :indeterminate="indeterminate" @update:model-value="onCheckAllChange" />
+      <Checkbox
+        v-model="checkAll"
+        :indeterminate="indeterminate"
+        @update:model-value="onCheckAllChange"
+      />
       <span :class="styles.title">{{ title }}</span>
       <!-- /> -->
-      <span :class="styles.counter">{{ checkedLength }} / {{ data.length }}</span>
+      <span :class="styles.counter"
+        >{{ checkedLength }} / {{ data.length }}</span
+      >
     </div>
     <div v-if="filterable" :class="styles.filter">
-      <Input :model-value="searchWords" :placeholder="filterPlaceholder" suffix="v-icon-search"
-        @update:model-value="onSearchInput" />
+      <Input
+        :model-value="searchWords"
+        :placeholder="filterPlaceholder"
+        suffix="v-icon-search"
+        @update:model-value="onSearchInput"
+      />
     </div>
     <div :class="styles.list">
       <ScrollContainer :size="5" hide-horizontal>
         <!-- TODO: transition? -->
         <div>
-          <div v-for="(item, index) in filterList" :key="index" :class="styles.item">
-            <Checkbox :model-value="!!checked[item.value]" :class="{
-              [styles.checkbox]: true,
-              [styles.disabledCheckbox]: item.disabled,
-            }" :disabled="item.disabled" @update:model-value="onItemCheckChange($event, item.value)">
+          <div
+            v-for="(item, index) in filterList"
+            :key="index"
+            :class="styles.item"
+          >
+            <Checkbox
+              :model-value="!!checked[item.value]"
+              :class="{
+                [styles.checkbox]: true,
+                [styles.disabledCheckbox]: item.disabled,
+              }"
+              :disabled="item.disabled"
+              @update:model-value="onItemCheckChange($event, item.value)"
+            >
               <slot name="item" :option="item" :index="index">
                 <span>{{ item.label }}</span>
               </slot>
@@ -31,13 +50,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, withDefaults } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { ScrollContainer } from '@apathia/apathia.scroll-container'
 import { Input } from '@apathia/apathia.input'
 import { Checkbox } from '@apathia/apathia.checkbox'
-import type { Key, TransferDataItem as DataItem, CheckedMap } from './types'
+import type {
+  Key,
+  TransferDataItem,
+  CheckedMap,
+  PanelProps,
+  PanelEmits,
+} from './types'
 import { apply, tw } from '@apathia/apathia.twind'
+
+defineOptions({
+  name: 'Panel',
+})
 
 const getPanelStyles = () => ({
   panel: tw`${apply`border-line-accent border rounded`}`,
@@ -51,24 +80,14 @@ const getPanelStyles = () => ({
   disabledCheckbox: tw`${apply`cursor-not-allowed`}`,
 })
 
-interface PanelProps {
-  modelValue: Key[]
-  data: DataItem[]
-  filterable?: boolean
-  filterPlaceholder?: string
-  defaultChecked?: Key[]
-  filterMethod?: (w: string, option: DataItem) => boolean
-  title: string
-}
-
 const props = withDefaults(defineProps<PanelProps>(), {
   filterPlaceholder: '请输入搜索内容',
   defaultChecked: () => [],
-  filterMethod: (searchWords: string, option: DataItem) =>
-    option.label.includes(searchWords)
+  filterMethod: (searchWords: string, option: TransferDataItem) =>
+    option.label.includes(searchWords),
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits<PanelEmits>()
 
 const checkAll = ref(false)
 const indeterminate = ref(false)

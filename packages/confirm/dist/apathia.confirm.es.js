@@ -1,100 +1,69 @@
-import { defineComponent, resolveComponent, openBlock, createElementBlock, createVNode, createBlock, normalizeClass, withCtx, createTextVNode, toDisplayString, h } from "vue";
+import { defineComponent, openBlock, createElementBlock, createVNode, unref, createBlock, normalizeClass, withCtx, createTextVNode, toDisplayString, h } from "vue";
 import { BaseButton } from "@apathia/apathia.button";
 import { CustomRender } from "@apathia/apathia.custom-render";
 import { apply, tw } from "@apathia/apathia.twind";
 import { useModal } from "@apathia/apathia.modal";
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
 const _sfc_main = defineComponent({
-  name: "Confirm",
-  components: {
-    BaseButton,
-    CustomRender
+  ...{
+    name: "Confirm"
   },
+  __name: "Confirm",
   props: {
-    render: {
-      type: [String, Function]
-    },
-    renderFooter: {
-      type: [String, Function]
-    },
-    confirmText: {
-      type: String,
-      default: "\u786E\u8BA4"
-    },
-    cancelText: {
-      type: String,
-      default: "\u53D6\u6D88"
-    },
-    confirm: {
-      type: Function,
-      required: true
-    },
-    cancel: {
-      type: Function,
-      required: true
-    },
-    btnPosition: {
-      type: String,
-      default: "right"
-    }
+    render: {},
+    renderFooter: {},
+    confirmText: { default: "\u786E\u8BA4" },
+    cancelText: { default: "\u53D6\u6D88" },
+    confirm: {},
+    cancel: {},
+    btnPosition: { default: "right" }
   },
-  setup(props) {
-    return {
-      btnLayout: initStyle(props.btnPosition)
+  setup(__props) {
+    const props = __props;
+    const btnLayout = initStyle(props.btnPosition);
+    function initStyle(pos) {
+      const baseLayout = apply`mt-4 flex`;
+      const position = {
+        left: apply`justify-start`,
+        center: apply`justify-center`,
+        right: apply`justify-end`
+      };
+      return tw`${baseLayout} ${position[pos] || position.left}`;
+    }
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("div", null, [
+        createVNode(unref(CustomRender), { render: _ctx.render }, null, 8, ["render"]),
+        _ctx.renderFooter ? (openBlock(), createBlock(unref(CustomRender), {
+          key: 0,
+          render: _ctx.renderFooter,
+          confirm: _ctx.confirm,
+          cancel: _ctx.cancel
+        }, null, 8, ["render", "confirm", "cancel"])) : (openBlock(), createElementBlock("div", {
+          key: 1,
+          class: normalizeClass(unref(btnLayout))
+        }, [
+          createVNode(unref(BaseButton), {
+            secondary: "",
+            onClick: _ctx.cancel
+          }, {
+            default: withCtx(() => [
+              createTextVNode(toDisplayString(_ctx.cancelText), 1)
+            ]),
+            _: 1
+          }, 8, ["onClick"]),
+          createVNode(unref(BaseButton), {
+            primary: "",
+            onClick: _ctx.confirm
+          }, {
+            default: withCtx(() => [
+              createTextVNode(toDisplayString(_ctx.confirmText), 1)
+            ]),
+            _: 1
+          }, 8, ["onClick"])
+        ], 2))
+      ]);
     };
   }
 });
-function initStyle(pos) {
-  const baseLayout = apply`mt-4 flex`;
-  const position = {
-    left: apply`justify-start`,
-    center: apply`justify-center`,
-    right: apply`justify-end`
-  };
-  return tw`${baseLayout} ${position[pos] || position.left}`;
-}
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_CustomRender = resolveComponent("CustomRender");
-  const _component_BaseButton = resolveComponent("BaseButton");
-  return openBlock(), createElementBlock("div", null, [
-    createVNode(_component_CustomRender, { render: _ctx.render }, null, 8, ["render"]),
-    _ctx.renderFooter ? (openBlock(), createBlock(_component_CustomRender, {
-      key: 0,
-      render: _ctx.renderFooter,
-      confirm: _ctx.confirm,
-      cancel: _ctx.cancel
-    }, null, 8, ["render", "confirm", "cancel"])) : (openBlock(), createElementBlock("div", {
-      key: 1,
-      class: normalizeClass(_ctx.btnLayout)
-    }, [
-      createVNode(_component_BaseButton, {
-        secondary: "",
-        onClick: _ctx.cancel
-      }, {
-        default: withCtx(() => [
-          createTextVNode(toDisplayString(_ctx.cancelText), 1)
-        ]),
-        _: 1
-      }, 8, ["onClick"]),
-      createVNode(_component_BaseButton, {
-        primary: "",
-        onClick: _ctx.confirm
-      }, {
-        default: withCtx(() => [
-          createTextVNode(toDisplayString(_ctx.confirmText), 1)
-        ]),
-        _: 1
-      }, 8, ["onClick"])
-    ], 2))
-  ]);
-}
-var Confirm = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
 function __rest(s, e) {
   var t = {};
   for (var p in s)
@@ -134,9 +103,9 @@ function useConfirm() {
         reject();
         remove();
       }
-      modal(Object.assign(Object.assign({ showClose: false, width: 450 }, modalOptions), { render: () => h(Confirm, Object.assign(Object.assign({}, confirmOptions), { confirm: doConfirm, cancel: doCancel })) }));
+      modal(Object.assign(Object.assign({ showClose: false, width: 450 }, modalOptions), { render: () => h(_sfc_main, Object.assign(Object.assign({}, confirmOptions), { confirm: doConfirm, cancel: doCancel })) }));
     });
   }
   return { confirm, remove };
 }
-export { Confirm, useConfirm };
+export { _sfc_main as Confirm, useConfirm };

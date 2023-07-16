@@ -1,4 +1,3 @@
-// @ts-ignore
 import { style } from '@apathia/apathia.twind'
 import { modalStack } from './modalStack'
 

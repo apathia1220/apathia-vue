@@ -4,6 +4,7 @@ export declare type ModalProps = {
     title?: string;
     subTitle?: string;
     render?: RenderCustom;
+    renderHeader?: RenderCustom;
     top?: number | string;
     width?: number | string;
     showClose?: boolean;
@@ -15,4 +16,12 @@ export declare type ModalProps = {
 export declare type ModalListItemProps = {
     props: ModalProps;
     id: string;
+};
+export declare type ModalEmits = {
+    'update:modelValue': [value: boolean];
+    close: [];
+};
+export declare type ModalInstance = {
+    props: ModalProps;
+    close: () => void;
 };

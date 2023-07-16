@@ -1,18 +1,10 @@
 import { computed, ComputedRef, unref } from 'vue'
-import type { Ref, SetupContext } from 'vue'
-
-interface UserProps {
-  disabled: Ref<boolean>
-  modelValue: Ref<string | number | boolean | Array<unknown>>
-  trueValue: Ref<string | number | boolean>
-  falseValue: Ref<string | number | boolean>
-  value: Ref<string | number | undefined>
-  inputEl: Ref<HTMLInputElement | null>
-}
+import type { SetupContext } from 'vue'
+import type { CheckboxEmit, CheckboxUserProps } from './types'
 
 export default function useCheckbox(
-  userProps: UserProps,
-  ctx: SetupContext,
+  userProps: CheckboxUserProps,
+  emit: SetupContext<CheckboxEmit>['emit'],
 ): {
   isChecked: ComputedRef<boolean>
   handleChange: () => void
@@ -58,14 +50,14 @@ export default function useCheckbox(
         newValue = falseValue.value
       }
     }
-    ctx.emit('update:modelValue', newValue)
+    emit('update:modelValue', newValue)
 
     const input = inputEl && unref(inputEl)
     if (input) {
       input.focus()
     }
 
-    ctx.emit('change', newValue)
+    emit('change', newValue)
   }
 
   return {

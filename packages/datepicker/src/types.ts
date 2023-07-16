@@ -16,13 +16,41 @@ export type RangeConfig = {
 
 export type RangeChange = (v: RangeItem) => void
 
-export interface GroupProps {
+export type GroupProps = {
   startTime: string | number
   endTime: string | number
-  dateFormat: DateFormatType
-  timestamp: boolean
-  disabled: boolean
-  startDateOptions: flatpickr.Options.Options
-  endDateOptions: flatpickr.Options.Options
-  range: RangeConfig
+  dateFormat?: DateFormatType
+  timestamp?: boolean
+  disabled?: boolean
+  startDateOptions?: flatpickr.Options.Options
+  endDateOptions?: flatpickr.Options.Options
+  range?: RangeConfig
+}
+
+export type DateProps = {
+  options?: flatpickr.Options.Options
+  modelValue: string | number
+  dateFormat?: DateFormatType
+  timestamp?: boolean
+  range?: RangeConfig
+}
+
+export type DateEmits = {
+  'update:modelValue': [modelValue: string | number]
+  change: [{ dateStr: string; value: string | number }]
+  rangeChange: [v: RangeItem]
+}
+
+export type GroupEmits = {
+  'update:startTime': [value: string | number]
+  'update:endTime': [value: string | number]
+}
+
+export type PluginConfig = {
+  clearIcon?: string
+  confirmIcon?: string
+  confirmText?: string
+  clearText?: string
+  showAlways?: boolean
+  theme?: string
 }

@@ -6,7 +6,7 @@
   const isRefType = (val) => vue.isRef(val);
   const getArrowStyle = (color, bgc, borderc) => {
     const getArrowBase = () => {
-      const popperArrowBofore = apathia_twind.css`
+      const popperArrowBefore = apathia_twind.css`
       width: 10px;
       height: 10px;
       &:before {
@@ -19,7 +19,7 @@
         height: 10px;
       }
     `;
-      return apathia_twind.apply`absolute z-0 ${popperArrowBofore}`;
+      return apathia_twind.apply`absolute z-0 ${popperArrowBefore}`;
     };
     const arrowBase = apathia_twind.tw(getArrowBase());
     const getContent = () => {
@@ -30,7 +30,7 @@
         right: "left"
       };
       const placeArr = Object.keys(placeMap);
-      const arrowPostion = placeArr.map((v) => apathia_twind.css`
+      const arrowPosition = placeArr.map((v) => apathia_twind.css`
           &[data-popper-placement^=${v}] .${arrowBase} {
             ${placeMap[v]}: -5px;
           }
@@ -51,7 +51,7 @@
         }
       `);
       return apathia_twind.apply`bg-${bgc} max-w-md box-border rounded border-solid border border-${borderc} 
-    p-3 z-50 text(${color} justify sm) shadow break-all ${arrowPostion} ${arrowBorder}`;
+    p-3 z-50 text(${color} justify sm) shadow break-all ${arrowPosition} ${arrowBorder}`;
     };
     const content = getContent();
     return {
@@ -301,107 +301,39 @@
       close
     };
   }
-  const placement = [
-    "top",
-    "top-start",
-    "top-end",
-    "bottom",
-    "bottom-start",
-    "bottom-end",
-    "left",
-    "left-start",
-    "left-end",
-    "right",
-    "right-start",
-    "right-end"
-  ];
-  var _export_sfc = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-      target[key] = val;
-    }
-    return target;
-  };
-  const defaultArrowStyles = () => ({
-    "enter-active-class": apathia_twind.tw`transition-opacity duration-200`,
-    "leave-active-class": apathia_twind.tw`transition-opacity duration-200`,
-    "enter-from-class": apathia_twind.tw`opacity-0`,
-    "leave-to-class": apathia_twind.tw`opacity-0`
-  });
   const _sfc_main = vue.defineComponent({
-    name: "Popper",
-    components: { CustomRender: apathia_customRender.CustomRender },
-    inheritAttrs: false,
+    ...{
+      name: "Popper",
+      inheritAttrs: false
+    },
+    __name: "Popper",
     props: {
-      distance: {
-        type: Number,
-        default: 15
-      },
-      skidding: {
-        type: Number,
-        default: 0
-      },
-      trigger: {
-        type: String,
-        validator: (value) => ["click", "hover", "focus", "manual"].indexOf(value) !== -1,
-        default: "click"
-      },
-      dark: {
-        type: Boolean,
-        default: false
-      },
-      placement: {
-        type: String,
-        validator: (value) => placement.indexOf(value) !== -1,
-        default: "top"
-      },
-      content: {
-        type: String
-      },
-      transitionClass: {
-        type: Object,
-        default: defaultArrowStyles
-      },
-      showArrow: {
-        type: Boolean,
-        default: true
-      },
-      delay: {
-        type: Number,
-        default: 300
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      modelValue: {
-        type: Boolean,
-        default: void 0
-      },
-      popperClass: {
-        type: String,
-        default: ""
-      },
-      appendToBody: {
-        type: Boolean,
-        default: true
-      },
-      render: {
-        type: [String, Function],
-        default: void 0
-      },
-      target: {
-        type: Object,
-        default: void 0
-      },
-      delayClose: {
-        type: Number,
-        default: void 0
-      }
+      distance: { default: 15 },
+      skidding: { default: 0 },
+      trigger: { default: "click" },
+      dark: { type: Boolean, default: false },
+      placement: { default: "top" },
+      content: {},
+      transitionClass: { default: () => ({
+        "enter-active-class": apathia_twind.tw`transition-opacity duration-200`,
+        "leave-active-class": apathia_twind.tw`transition-opacity duration-200`,
+        "enter-from-class": apathia_twind.tw`opacity-0`,
+        "leave-to-class": apathia_twind.tw`opacity-0`
+      }) },
+      showArrow: { type: Boolean, default: true },
+      delay: { default: 300 },
+      disabled: { type: Boolean, default: false },
+      component: {},
+      modelValue: { type: Boolean, default: void 0 },
+      popperClass: { default: "" },
+      appendToBody: { type: Boolean, default: true },
+      render: { type: [String, Function], default: void 0 },
+      target: { default: void 0 },
+      delayClose: { default: void 0 }
     },
     emits: ["update:modelValue", "hide", "show", "afterHide"],
-    setup(props, context) {
-      const { emit, expose } = context;
+    setup(__props, { expose: __expose, emit }) {
+      const props = __props;
       const {
         visibility,
         getArrowStyle: getArrowStyle2,
@@ -423,9 +355,7 @@
           emit("show", val, instance);
         }
       });
-      expose({
-        update
-      });
+      __expose({ update });
       if (props.trigger === "manual" || props.trigger === "hover" || props.trigger === "click") {
         vue.watch(
           () => props.modelValue,
@@ -445,11 +375,7 @@
       };
       const getArrowStyles = (dark) => {
         if (dark) {
-          return getArrowStyle2(
-            "content-white",
-            "content-primary",
-            "content-primary"
-          );
+          return getArrowStyle2("content-white", "content-primary", "content-primary");
         }
         return getArrowStyle2("content-accent", "fill-white", "fill-light");
       };
@@ -457,67 +383,56 @@
         popper: apathia_twind.tw`inline-block`,
         ...getArrowStyles(props.dark)
       }));
-      return {
-        getContentProps,
-        getArrowProps,
-        getTargetProps,
-        visibility,
-        styles,
-        hasMounted,
-        handleAfterHide
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          !_ctx.target ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ...vue.unref(getTargetProps)(), ..._ctx.$attrs }, {
+            class: styles.value.popper
+          }), [
+            vue.renderSlot(_ctx.$slots, "default")
+          ], 16)) : vue.createCommentVNode("", true),
+          _ctx.render ? (vue.openBlock(), vue.createBlock(vue.Transition, vue.mergeProps({ key: 1 }, _ctx.transitionClass, { onAfterLeave: handleAfterHide }), {
+            default: vue.withCtx(() => [
+              vue.unref(hasMounted) ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ...vue.unref(getContentProps)() }, {
+                class: `${styles.value.content} ${_ctx.popperClass}`
+              }), [
+                vue.createVNode(vue.unref(apathia_customRender.CustomRender), { render: _ctx.render }, null, 8, ["render"]),
+                vue.withDirectives(vue.createElementVNode("div", vue.mergeProps({ ...vue.unref(getArrowProps)() }, {
+                  class: styles.value.arrowBase
+                }), null, 16), [
+                  [vue.vShow, _ctx.showArrow]
+                ])
+              ], 16)), [
+                [vue.vShow, vue.unref(visibility)]
+              ]) : vue.createCommentVNode("", true)
+            ]),
+            _: 1
+          }, 16)) : (vue.openBlock(), vue.createBlock(vue.Teleport, {
+            key: 2,
+            to: ".apathia-popper",
+            disabled: !_ctx.appendToBody
+          }, [
+            vue.createVNode(vue.Transition, vue.mergeProps(_ctx.transitionClass, { onAfterLeave: handleAfterHide }), {
+              default: vue.withCtx(() => [
+                vue.unref(hasMounted) ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ...vue.unref(getContentProps)() }, {
+                  class: `${styles.value.content} ${_ctx.popperClass}`
+                }), [
+                  vue.renderSlot(_ctx.$slots, "content", {}, () => [
+                    vue.createTextVNode(vue.toDisplayString(_ctx.content), 1)
+                  ]),
+                  _ctx.showArrow ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ...vue.unref(getArrowProps)() }, {
+                    class: styles.value.arrowBase
+                  }), null, 16)) : vue.createCommentVNode("", true)
+                ], 16)), [
+                  [vue.vShow, vue.unref(visibility)]
+                ]) : vue.createCommentVNode("", true)
+              ]),
+              _: 3
+            }, 16)
+          ], 8, ["disabled"]))
+        ], 64);
       };
     }
   });
-  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_CustomRender = vue.resolveComponent("CustomRender");
-    return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
-      !_ctx.target ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ..._ctx.getTargetProps(), ..._ctx.$attrs }, {
-        class: _ctx.styles.popper
-      }), [
-        vue.renderSlot(_ctx.$slots, "default")
-      ], 16)) : vue.createCommentVNode("", true),
-      _ctx.render ? (vue.openBlock(), vue.createBlock(vue.Transition, vue.mergeProps({ key: 1 }, _ctx.transitionClass, { onAfterLeave: _ctx.handleAfterHide }), {
-        default: vue.withCtx(() => [
-          _ctx.hasMounted ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ..._ctx.getContentProps() }, {
-            class: `${_ctx.styles.content} ${_ctx.popperClass}`
-          }), [
-            vue.createVNode(_component_CustomRender, { render: _ctx.render }, null, 8, ["render"]),
-            vue.withDirectives(vue.createElementVNode("div", vue.mergeProps({ ..._ctx.getArrowProps() }, {
-              class: _ctx.styles.arrowBase
-            }), null, 16), [
-              [vue.vShow, _ctx.showArrow]
-            ])
-          ], 16)), [
-            [vue.vShow, _ctx.visibility]
-          ]) : vue.createCommentVNode("", true)
-        ]),
-        _: 1
-      }, 16, ["onAfterLeave"])) : (vue.openBlock(), vue.createBlock(vue.Teleport, {
-        key: 2,
-        to: ".apathia-popper",
-        disabled: !_ctx.appendToBody
-      }, [
-        vue.createVNode(vue.Transition, vue.mergeProps(_ctx.transitionClass, { onAfterLeave: _ctx.handleAfterHide }), {
-          default: vue.withCtx(() => [
-            _ctx.hasMounted ? vue.withDirectives((vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ..._ctx.getContentProps() }, {
-              class: `${_ctx.styles.content} ${_ctx.popperClass}`
-            }), [
-              vue.renderSlot(_ctx.$slots, "content", {}, () => [
-                vue.createTextVNode(vue.toDisplayString(_ctx.content), 1)
-              ]),
-              _ctx.showArrow ? (vue.openBlock(), vue.createElementBlock("div", vue.mergeProps({ key: 0 }, { ..._ctx.getArrowProps() }, {
-                class: _ctx.styles.arrowBase
-              }), null, 16)) : vue.createCommentVNode("", true)
-            ], 16)), [
-              [vue.vShow, _ctx.visibility]
-            ]) : vue.createCommentVNode("", true)
-          ]),
-          _: 3
-        }, 16, ["onAfterLeave"])
-      ], 8, ["disabled"]))
-    ], 64);
-  }
-  var Popper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
   const PopperDefaultProp = {
     modelValue: false,
     delayClose: 1e3,
@@ -535,7 +450,7 @@
     setup(props, { emit }) {
       const remove = (id) => emit("remove", id);
       const updateModelValue = (id, val) => emit("updateContainer", val, id);
-      return () => vue.h(vue.Fragment, {}, props.popperList.map((option) => vue.h(Popper, Object.assign(Object.assign({}, option.props), { "onUpdate:modelValue": (e) => updateModelValue(option.id, e), key: option.id, onAfterHide: () => remove(option.id) }))));
+      return () => vue.h(vue.Fragment, {}, props.popperList.map((option) => vue.h(_sfc_main, Object.assign(Object.assign({}, option.props), { "onUpdate:modelValue": (e) => updateModelValue(option.id, e), key: option.id, onAfterHide: () => remove(option.id) }))));
     }
   });
   const popperList = vue.ref([]);
@@ -570,7 +485,21 @@
       popper: addPopper
     };
   }
-  exports2.Popper = Popper;
+  const placement = [
+    "top",
+    "top-start",
+    "top-end",
+    "bottom",
+    "bottom-start",
+    "bottom-end",
+    "left",
+    "left-start",
+    "left-end",
+    "right",
+    "right-start",
+    "right-end"
+  ];
+  exports2.Popper = _sfc_main;
   exports2.placement = placement;
   exports2.usePoppertip = usePoppertip;
   Object.defineProperties(exports2, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });

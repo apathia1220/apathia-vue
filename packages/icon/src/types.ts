@@ -1,6 +1,6 @@
-import { CSSProperties } from "vue"
+import { CSSProperties } from 'vue'
 
-export interface IconProps {
-    readonly color?: Pick<CSSProperties, 'color'>
-    readonly size?: number | string
+export type IconProps = {
+  readonly color?: Pick<CSSProperties, 'color'>
+  readonly size?: number | string
 }

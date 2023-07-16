@@ -71,16 +71,19 @@ var useTransfer = (userProps, emit) => {
     removeSelected
   };
 };
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "Panel"
+  },
   __name: "Panel",
   props: {
-    modelValue: null,
-    data: null,
+    modelValue: {},
+    data: {},
     filterable: { type: Boolean },
     filterPlaceholder: { default: "\u8BF7\u8F93\u5165\u641C\u7D22\u5185\u5BB9" },
     defaultChecked: { default: () => [] },
     filterMethod: { type: Function, default: (searchWords, option) => option.label.includes(searchWords) },
-    title: null
+    title: {}
   },
   emits: ["update:modelValue"],
   setup(__props, { emit }) {
@@ -193,18 +196,18 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
           }, null, 8, ["modelValue", "indeterminate"]),
           createElementVNode("span", {
             class: normalizeClass(unref(styles).title)
-          }, toDisplayString(__props.title), 3),
+          }, toDisplayString(_ctx.title), 3),
           createElementVNode("span", {
             class: normalizeClass(unref(styles).counter)
-          }, toDisplayString(unref(checkedLength)) + " / " + toDisplayString(__props.data.length), 3)
+          }, toDisplayString(checkedLength.value) + " / " + toDisplayString(_ctx.data.length), 3)
         ], 2),
-        __props.filterable ? (openBlock(), createElementBlock("div", {
+        _ctx.filterable ? (openBlock(), createElementBlock("div", {
           key: 0,
           class: normalizeClass(unref(styles).filter)
         }, [
           createVNode(unref(Input), {
             "model-value": searchWords.value,
-            placeholder: __props.filterPlaceholder,
+            placeholder: _ctx.filterPlaceholder,
             suffix: "v-icon-search",
             "onUpdate:modelValue": unref(onSearchInput)
           }, null, 8, ["model-value", "placeholder", "onUpdate:modelValue"])
@@ -218,7 +221,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
           }, {
             default: withCtx(() => [
               createElementVNode("div", null, [
-                (openBlock(true), createElementBlock(Fragment, null, renderList(unref(filterList), (item, index) => {
+                (openBlock(true), createElementBlock(Fragment, null, renderList(filterList.value, (item, index) => {
                   return openBlock(), createElementBlock("div", {
                     key: index,
                     class: normalizeClass(unref(styles).item)
@@ -253,11 +256,14 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Transfer"
+  },
   __name: "Transfer",
   props: {
-    modelValue: null,
-    data: null,
+    modelValue: {},
+    data: {},
     filterable: { type: Boolean },
     filterPlaceholder: { default: "\u8BF7\u8F93\u5165\u641C\u7D22\u5185\u5BB9" },
     filterMethod: { type: Function, default: (word, option) => option.label.indexOf(word) > -1 },
@@ -274,7 +280,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
   emits: ["update:modelValue", "select", "remove"],
   setup(__props, { emit }) {
     const props = __props;
-    const getTranferStyles = () => ({
+    const getTransferStyles = () => ({
       transfer: tw`${apply`flex`}`,
       panel: tw`${apply`w-48`}`,
       buttonWrapper: tw`${apply`self-center text-center mx-4`}`,
@@ -302,7 +308,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       addSelected,
       removeSelected
     } = useTransfer(userProps, emit);
-    const styles = getTranferStyles();
+    const styles = getTransferStyles();
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("div", {
         class: normalizeClass(unref(styles).transfer)
@@ -312,11 +318,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => isRef(selectedSource) ? selectedSource.value = $event : null),
           class: normalizeClass(unref(styles).panel),
           data: unref(source),
-          filterable: __props.filterable,
-          "filter-placeholder": __props.filterPlaceholder,
-          "filter-method": __props.filterMethod,
-          title: __props.titles[0],
-          "default-checked": __props.leftDefaultChecked
+          filterable: _ctx.filterable,
+          "filter-placeholder": _ctx.filterPlaceholder,
+          "filter-method": _ctx.filterMethod,
+          title: _ctx.titles[0],
+          "default-checked": _ctx.leftDefaultChecked
         }, {
           item: withCtx(({ option, index }) => [
             renderSlot(_ctx.$slots, "source-item", {
@@ -407,11 +413,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => isRef(selectedTarget) ? selectedTarget.value = $event : null),
           class: normalizeClass(unref(styles).panel),
           data: unref(target),
-          filterable: __props.filterable,
-          "filter-placeholder": __props.filterPlaceholder,
-          "filter-method": __props.filterMethod,
-          title: __props.titles[1],
-          "default-checked": __props.rightDefaultChecked
+          filterable: _ctx.filterable,
+          "filter-placeholder": _ctx.filterPlaceholder,
+          "filter-method": _ctx.filterMethod,
+          title: _ctx.titles[1],
+          "default-checked": _ctx.rightDefaultChecked
         }, {
           item: withCtx(({ option, index }) => [
             renderSlot(_ctx.$slots, "source-item", {

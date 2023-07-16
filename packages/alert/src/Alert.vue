@@ -1,30 +1,21 @@
 <script setup lang="ts">
-import { ComponentOptions, onMounted, withDefaults } from "vue";
-import type { AlertType } from "./AlertFn";
-import { style, apply, tw } from "@apathia/apathia.twind";
-import { RenderFn, CustomRender } from "@apathia/apathia.custom-render";
-import { Icon } from "@apathia/apathia.icon";
+import { ComponentOptions, onMounted } from 'vue'
+import type { AlertType } from './types'
+import { style, apply, tw } from '@apathia/apathia.twind'
+import { CustomRender } from '@apathia/apathia.custom-render'
+import { Icon } from '@apathia/apathia.icon'
 import {
   CircleCloseFilled,
   InfoFilled,
   SuccessFilled,
   WarningFilled,
   Notification,
-} from "@apathia/apathia.icon-svg";
+} from '@apathia/apathia.icon-svg'
+import type { AlertProps, AlertEmit } from './types'
 
-// defineOptions({
-//   name: "Alert",
-// });
-
-interface AlertProps {
-  type?: AlertType;
-  duration?: number;
-  title?: string;
-  message?: string;
-  showIcon?: boolean;
-  showClose?: boolean;
-  render?: RenderFn<Record<"close", (...args: any) => any>>;
-}
+defineOptions({
+  name: 'Alert',
+})
 
 const iconMap: Record<AlertType, ComponentOptions> = {
   info: InfoFilled,
@@ -32,18 +23,18 @@ const iconMap: Record<AlertType, ComponentOptions> = {
   success: SuccessFilled,
   danger: CircleCloseFilled,
   default: Notification,
-};
+}
 
 const props = withDefaults(defineProps<AlertProps>(), {
-  type: "default",
+  type: 'default',
   duration: 3000,
-  title: "",
-  message: "",
+  title: '',
+  message: '',
   showIcon: true,
   showClose: true,
-});
+})
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits<AlertEmit>()
 
 function initAlertStyle(type: AlertType) {
   const Theme = {
@@ -62,15 +53,17 @@ function initAlertStyle(type: AlertType) {
     default: {
       layout: style`bg-brand-light text-brand-primary`,
     },
-  };
+  }
 
-  const theme = Theme[type] || Theme.default;
-  const layout = tw`${theme.layout} ${apply`p-2.5 rounded flex mt-2 duration-300`}`;
-  const iconWrap = style`flex-shrink-0 w-4 mr-3 mt-0.5`;
-  const delIcon = style`ml-2 cursor-pointer hover:(text-error-active)`;
-  const contentClass = style`inline-block font-normal flex-grow break-all`;
-  const titleClass = style`text-lg`;
-  const messageClass = style`text-xs leading-normal`;
+  const theme = Theme[type] || Theme.default
+  const layout = tw`${
+    theme.layout
+  } ${apply`p-2.5 rounded flex mt-2 duration-300`}`
+  const iconWrap = style`flex-shrink-0 w-4 mr-3 mt-0.5`
+  const delIcon = style`ml-2 cursor-pointer hover:(text-error-active)`
+  const contentClass = style`inline-block font-normal flex-grow break-all`
+  const titleClass = style`text-lg`
+  const messageClass = style`text-xs leading-normal`
 
   return {
     layout,
@@ -79,34 +72,28 @@ function initAlertStyle(type: AlertType) {
     contentClass,
     titleClass,
     messageClass,
-  };
-}
-
-const {
-  layout,
-  iconWrap,
-  delIcon,
-  contentClass,
-  titleClass,
-  messageClass,
-} = initAlertStyle(props.type);
-let timer: any;
-
-function close() {
-  clearTimer();
-  emit("close");
-}
-function clearTimer() {
-  clearTimeout(timer);
-}
-function resetTimer() {
-  if (props.duration) {
-    clearTimer();
-    timer = setTimeout(close, props.duration);
   }
 }
 
-onMounted(resetTimer);
+const { layout, iconWrap, delIcon, contentClass, titleClass, messageClass } =
+  initAlertStyle(props.type)
+let timer: any
+
+function close() {
+  clearTimer()
+  emit('close')
+}
+function clearTimer() {
+  clearTimeout(timer)
+}
+function resetTimer() {
+  if (props.duration) {
+    clearTimer()
+    timer = setTimeout(close, props.duration)
+  }
+}
+
+onMounted(resetTimer)
 </script>
 
 <template>
@@ -134,3 +121,4 @@ onMounted(resetTimer);
     </template>
   </div>
 </template>
+./alert./alert

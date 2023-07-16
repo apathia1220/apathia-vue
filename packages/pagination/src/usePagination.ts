@@ -6,12 +6,16 @@ import {
   onBeforeUpdate,
   onUpdated,
 } from 'vue'
-import type { Ref, SetupContext } from 'vue'
+import type {
+  ComponentPublicInstance,
+  ComputedRef,
+  Ref,
+  SetupContext,
+} from 'vue'
 import { mergeWithDefault } from '@apathia/apathia.shared'
-import { PaginationConfiger, PaginationEvent, PaginationProps, PageItem } from './types'
+import type { PaginationConfig, PageItem, PaginationEmits } from './types'
 
-  
-const DEFAULT_OPTIONS: PaginationConfiger = {
+const DEFAULT_OPTIONS: PaginationConfig = {
   currentPage: 1,
   totalItems: 0,
   pageSize: 10,
@@ -29,14 +33,11 @@ const DEFAULT_OPTIONS: PaginationConfiger = {
 }
 
 export function usePagination(
-  props: PaginationProps,
-  ctx: SetupContext<PaginationEvent[]>,
+  props: { options: ComputedRef<PaginationConfig> },
+  emit: SetupContext<PaginationEmits>['emit'],
 ) {
   const realOptions = shallowReactive(
-    mergeWithDefault(
-      DEFAULT_OPTIONS,
-      props.options.value,
-    ) as PaginationConfiger,
+    mergeWithDefault(DEFAULT_OPTIONS, props.options.value),
   )
 
   const jumpTo = ref('1')
@@ -46,8 +47,8 @@ export function usePagination(
   const pages = ref<PageItem[]>([])
   const btnsRef = ref<HTMLElement[]>([]) as Ref<HTMLElement[]>
 
-  const setPageBtnRef = (el: HTMLElement) => {
-    btnsRef.value.push(el)
+  const setPageBtnRef = (el: Element | ComponentPublicInstance | null) => {
+    btnsRef.value.push(el as HTMLElement)
   }
 
   onBeforeUpdate(() => {
@@ -89,7 +90,7 @@ export function usePagination(
     prevPage.value = pageNumber
 
     // emit custom change event
-    ctx.emit('page-change', pageNumber, totalPages.value)
+    emit('page-change', pageNumber, totalPages.value)
 
     handlePageChange(pageNumber)
   }
@@ -154,7 +155,7 @@ export function usePagination(
   watch(
     () => props.options.value,
     optionsVal => {
-      ;(Object.keys(optionsVal) as Array<keyof typeof optionsVal>).forEach(
+      ;(Object.keys(optionsVal) as Array<keyof PaginationConfig>).forEach(
         key => {
           if (optionsVal[key] !== undefined) {
             switch (key) {
@@ -179,7 +180,7 @@ export function usePagination(
   watch(
     () => realOptions,
     optionsVal => {
-      ;(Object.keys(optionsVal) as Array<keyof PaginationConfiger>).forEach(
+      ;(Object.keys(optionsVal) as Array<keyof PaginationConfig>).forEach(
         key => {
           if (optionsVal[key] !== undefined) {
             switch (key) {
@@ -277,10 +278,10 @@ function createPage(number: number, text: number | string) {
 }
 
 /**
- * Gerate pages array, accept a limit maxLength
+ * Generate pages array, accept a limit maxLength
  * @param {Boolean} keepMiddle - Whether to keep current page in the middle of the visible ones
  * @param  {Number} totalPages - Total page number
- * @param {Number} currentPage - Cuurent page number
+ * @param {Number} currentPage - Current page number
  * @param {Number} limit - max length of the array
  * @return {Array} Array of pages
  */
@@ -327,10 +328,10 @@ function initPagesArray(
 }
 
 /**
- * Gerate pages array, accept a limit maxLength
+ * Generate pages array, accept a limit maxLength
  * @param {Boolean} keepMiddle - Whether to keep current page in the middle of the visible ones
  * @param {Number} totalPages - Total page number
- * @param {Number} currentPage - Cuurent page number
+ * @param {Number} currentPage - Current page number
  * @param {Number} limit - max length of the array
  * @return {Array} Array of pages
  */
@@ -369,7 +370,7 @@ function updatePagesArray(
     return pages
   }
 
-  // Add boundray buttons
+  // Add boundary buttons
   if (limit <= 0) {
     return pages
   }

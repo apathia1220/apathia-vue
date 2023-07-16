@@ -5,7 +5,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import ts2 from 'rollup-plugin-typescript2'
-// import DefineOptions from 'unplugin-vue-define-options/vite'
 
 // @apathia/apathia.button => button
 // @apathia/apathia => apathia
@@ -36,7 +35,6 @@ const deps = Object.keys(dependencies)
 
 export default defineConfig({
   plugins: [
-    // DefineOptions(),
     vue(),
     vueJsx(),
     {

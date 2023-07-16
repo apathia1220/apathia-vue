@@ -1,74 +1,53 @@
 (function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("@apathia/apathia.loading"), require("@apathia/apathia.custom-render"), require("@apathia/apathia.checkbox"), require("@apathia/apathia.icon"), require("lodash"), require("@apathia/apathia.button"), require("@apathia/apathia.hooks")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "@apathia/apathia.loading", "@apathia/apathia.custom-render", "@apathia/apathia.checkbox", "@apathia/apathia.icon", "lodash", "@apathia/apathia.button", "@apathia/apathia.hooks"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.table = {}, global.Vue, global.twind, global.loading, global["custom-render"], global.checkbox, global.icon, global.lodash, global.button, global.hooks));
-})(this, function(exports2, vue, apathia_twind, apathia_loading, apathia_customRender, apathia_checkbox, apathia_icon, lodash, apathia_button, apathia_hooks) {
+  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("@apathia/apathia.loading"), require("@apathia/apathia.custom-render"), require("@apathia/apathia.checkbox"), require("@apathia/apathia.icon"), require("@apathia/apathia.icon-svg"), require("lodash"), require("@apathia/apathia.button"), require("@apathia/apathia.hooks")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "@apathia/apathia.loading", "@apathia/apathia.custom-render", "@apathia/apathia.checkbox", "@apathia/apathia.icon", "@apathia/apathia.icon-svg", "lodash", "@apathia/apathia.button", "@apathia/apathia.hooks"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.table = {}, global.Vue, global.twind, global.loading, global["custom-render"], global.checkbox, global.icon, global["icon-svg"], global.lodash, global.button, global.hooks));
+})(this, function(exports2, vue, apathia_twind, apathia_loading, apathia_customRender, apathia_checkbox, apathia_icon, apathia_iconSvg, lodash, apathia_button, apathia_hooks) {
   "use strict";
-  var _export_sfc = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-      target[key] = val;
-    }
-    return target;
-  };
   const _sfc_main$4 = vue.defineComponent({
-    name: "GridSorter",
-    components: {
-      Icon: apathia_icon.Icon
+    ...{
+      name: "TableSorter"
     },
+    __name: "TableSorter",
     props: {
-      sort: {
-        type: Object,
-        required: true
-      },
-      prop: {
-        type: String,
-        required: true
-      }
+      sort: {},
+      prop: {}
     },
     emits: ["sort-change"],
-    setup(props, { emit }) {
-      const styles = getStyles$3();
+    setup(__props, { emit }) {
+      const props = __props;
       const active = vue.computed(() => props.prop === props.sort.prop);
       function sortChange() {
         const newOrder = active.value && props.sort.order === "desc" ? "asc" : "desc";
         emit("sort-change", { prop: props.prop, order: newOrder });
       }
-      return {
-        styles,
-        active,
-        sortChange
+      const getStyles = () => ({
+        arrowWrap: apathia_twind.style`inline-block pl-px align-middle`,
+        arrow: apathia_twind.style`text-content-neutral cursor-pointer`,
+        arrowIcon: apathia_twind.style`h-3.5 w-3.5 align-middle`,
+        active: apathia_twind.style`text-content-accent`
+      });
+      const styles = getStyles();
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("span", {
+          class: vue.normalizeClass(vue.unref(styles).arrowWrap)
+        }, [
+          vue.createElementVNode("span", {
+            class: vue.normalizeClass({
+              [vue.unref(styles).arrow]: true,
+              [vue.unref(styles).active]: active.value
+            }),
+            onClick: sortChange
+          }, [
+            vue.createVNode(vue.unref(apathia_icon.Icon), { size: 14 }, {
+              default: vue.withCtx(() => [
+                _ctx.sort.order === "asc" ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_iconSvg.SortUp), { key: 0 })) : (vue.openBlock(), vue.createBlock(vue.unref(apathia_iconSvg.SortDown), { key: 1 }))
+              ]),
+              _: 1
+            })
+          ], 2)
+        ], 2);
       };
     }
   });
-  const getStyles$3 = () => ({
-    arrowWrap: apathia_twind.style`inline-block pl-px align-middle`,
-    arrow: apathia_twind.style`text-content-neutral cursor-pointer`,
-    arrowIcon: apathia_twind.style`h-3.5 w-3.5 align-middle`,
-    active: apathia_twind.style`text-content-accent`
-  });
-  function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_SortUp = vue.resolveComponent("SortUp");
-    const _component_SortDown = vue.resolveComponent("SortDown");
-    const _component_Icon = vue.resolveComponent("Icon");
-    return vue.openBlock(), vue.createElementBlock("span", {
-      class: vue.normalizeClass(_ctx.styles.arrowWrap)
-    }, [
-      vue.createElementVNode("span", {
-        class: vue.normalizeClass({
-          [_ctx.styles.arrow]: true,
-          [_ctx.styles.active]: _ctx.active
-        }),
-        onClick: _cache[0] || (_cache[0] = (...args) => _ctx.sortChange && _ctx.sortChange(...args))
-      }, [
-        vue.createVNode(_component_Icon, { size: 14 }, {
-          default: vue.withCtx(() => [
-            _ctx.sort.order === "asc" ? (vue.openBlock(), vue.createBlock(_component_SortUp, { key: 0 })) : (vue.openBlock(), vue.createBlock(_component_SortDown, { key: 1 }))
-          ]),
-          _: 1
-        })
-      ], 2)
-    ], 2);
-  }
-  var TableSorter = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$4]]);
   function toStyleObject(value) {
     if (!value) {
       return {};
@@ -90,56 +69,30 @@
       return "";
     return typeof width === "number" || /^\d+$/.test(width) ? `${width}px` : width;
   }
-  var _sfc_main$3 = vue.defineComponent({
-    name: "TableHeader",
-    components: {
-      CustomRender: apathia_customRender.CustomRender,
-      TableSorter,
-      Checkbox: apathia_checkbox.Checkbox
+  const _hoisted_1$2 = ["colspan"];
+  const _hoisted_2$2 = { key: 1 };
+  const _sfc_main$3 = vue.defineComponent({
+    ...{
+      name: "TableHeader"
     },
+    __name: "TableHeader",
     props: {
-      columns: {
-        type: Array,
-        required: true
-      },
-      border: {
-        type: Boolean,
-        default: false
-      },
-      headerRowClassName: {
-        type: Function
-      },
-      headerRowStyle: {
-        type: Function
-      },
-      headerCellClassName: {
-        type: Function
-      },
-      headerCellStyle: {
-        type: Function
-      },
-      sort: {
-        type: Object,
-        default: () => ({
-          sort: "id",
-          order: "asc"
-        })
-      },
-      fixedHeader: {
-        type: Boolean
-      }
+      columns: {},
+      border: { type: Boolean, default: false },
+      headerRowClassName: {},
+      headerRowStyle: {},
+      headerCellClassName: {},
+      headerCellStyle: {},
+      sort: { default: () => ({ sort: "id", order: "asc" }) },
+      fixedHeader: { type: Boolean }
     },
     emits: ["sort-change", "check-all-change"],
-    setup(props, {
-      emit
-    }) {
+    setup(__props, { emit }) {
       var _a, _b;
-      const styles = getStyles$2();
-      const {
-        allSelected,
-        toggleAllSelected,
-        indeterminate
-      } = vue.inject("TableMultiSelected");
+      const props = __props;
+      const { allSelected, toggleAllSelected, indeterminate } = vue.inject(
+        "TableMultiSelected"
+      );
       const handleColumnSortChange = ({
         prop,
         order
@@ -149,63 +102,46 @@
           order
         });
       };
-      const headerRowClasses = ((_a = props.headerRowClassName) === null || _a === void 0 ? void 0 : _a.call(props)) || "";
-      const headerRowStyles = (_b = props.headerRowStyle) === null || _b === void 0 ? void 0 : _b.call(props);
-      const headerCols = vue.computed(() => props.columns.map((column, colIndex) => {
-        var _a2, _b2;
-        const {
-          width,
-          align = "center",
-          colSpan,
-          fixed
-        } = column;
-        if (colSpan === 0)
-          return null;
-        if ("sortable" in column && column.sortable && !column.prop) {
-          console.warn("[Table] \u5982\u679C\u6709\u6392\u5E8F\uFF0C\u5FC5\u987B\u5728prop\u5B57\u6BB5\u4E2D\u58F0\u660E\u6392\u5E8F\u4F7F\u7528\u7684\u5B57\u6BB5");
-          return null;
-        }
-        const cellClassNames = ((_a2 = props.headerCellClassName) === null || _a2 === void 0 ? void 0 : _a2.call(props, {
-          colIndex
-        })) || "";
-        const cellStyles = Object.assign(Object.assign({}, toStyleObject((_b2 = props.headerCellStyle) === null || _b2 === void 0 ? void 0 : _b2.call(props, {
-          colIndex
-        }))), {
-          width: toRealWidth(width),
-          textAlign: align,
-          zIndex: fixed && props.fixedHeader ? 30 : fixed && !props.fixedHeader ? 20 : !fixed && props.fixedHeader ? 10 : 0
-        });
-        return Object.assign(Object.assign({}, column), {
-          thAttrs: {
-            class: cellClassNames,
-            colspan: colSpan,
-            style: cellStyles
+      const headerRowClasses = ((_a = props.headerRowClassName) == null ? void 0 : _a.call(props)) || "";
+      const headerRowStyles = (_b = props.headerRowStyle) == null ? void 0 : _b.call(props);
+      const headerCols = vue.computed(
+        () => props.columns.map((column, colIndex) => {
+          var _a2, _b2;
+          const { width, align = "center", colSpan, fixed } = column;
+          if (colSpan === 0)
+            return null;
+          if ("sortable" in column && column.sortable && !column.prop) {
+            console.warn("[Table] \u5982\u679C\u6709\u6392\u5E8F\uFF0C\u5FC5\u987B\u5728prop\u5B57\u6BB5\u4E2D\u58F0\u660E\u6392\u5E8F\u4F7F\u7528\u7684\u5B57\u6BB5");
+            return null;
           }
-        });
-      }).filter((v) => v !== null));
-      return {
-        styles,
-        headerRowClasses,
-        headerRowStyles,
-        headerCols,
-        allSelected,
-        indeterminate,
-        handleColumnSortChange,
-        toggleAllSelected
-      };
-    }
-  });
-  const getStyles$2 = () => {
-    const borderRight = apathia_twind.css`
+          const cellClassNames = ((_a2 = props.headerCellClassName) == null ? void 0 : _a2.call(props, { colIndex })) || "";
+          const cellStyles = {
+            ...toStyleObject((_b2 = props.headerCellStyle) == null ? void 0 : _b2.call(props, { colIndex })),
+            width: toRealWidth(width),
+            textAlign: align,
+            zIndex: fixed && props.fixedHeader ? 30 : fixed && !props.fixedHeader ? 20 : !fixed && props.fixedHeader ? 10 : 0
+          };
+          return {
+            ...column,
+            thAttrs: {
+              class: cellClassNames,
+              colspan: colSpan,
+              style: cellStyles
+            }
+          };
+        }).filter((v) => v !== null)
+      );
+      const getStyles = () => {
+        const borderRight = apathia_twind.css`
     border-right: 1px solid rgb(0 0 0 / 12%);
   `;
-    const borderLeft = apathia_twind.css`
+        const borderLeft = apathia_twind.css`
     border-left: 1px solid rgb(0 0 0 / 12%);
   `;
-    return {
-      headerWrap: apathia_twind.style`overflow-hidden`,
-      thead: apathia_twind.style`bg-fill-light`,
-      th: apathia_twind.style`text(left content-accent) text-sm font-normal px-2 py-3 border-dashed border bg-fill-gray tracking-wider break-words box-border leading-normal ${apathia_twind.css`
+        return {
+          headerWrap: apathia_twind.style`overflow-hidden`,
+          thead: apathia_twind.style`bg-fill-light`,
+          th: apathia_twind.style`text(left content-accent) text-sm font-normal px-2 py-3 border-dashed border bg-fill-gray tracking-wider break-words box-border leading-normal ${apathia_twind.css`
       ${apathia_twind.apply("border-fill-gray")};
       border-width: 1px 1px 1px 0;
       border-style: solid;
@@ -213,148 +149,106 @@
         border-left-width: 1px;
       }
     `}`,
-      thBordered: apathia_twind.style`border-line-accent`,
-      fixed: apathia_twind.style`sticky`,
-      fixedHeader: apathia_twind.style`top-0`,
-      fixedColumnLeft: apathia_twind.style`left-0 ${borderRight}`,
-      fixedColumnRight: apathia_twind.style`right-0 ${borderLeft}`
-    };
-  };
-  const _hoisted_1$2 = ["colspan"];
-  const _hoisted_2$2 = { key: 1 };
-  function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_Checkbox = vue.resolveComponent("Checkbox");
-    const _component_CustomRender = vue.resolveComponent("CustomRender");
-    const _component_TableSorter = vue.resolveComponent("TableSorter");
-    return vue.openBlock(), vue.createElementBlock("thead", {
-      class: vue.normalizeClass(_ctx.styles.thead)
-    }, [
-      vue.createElementVNode("tr", {
-        class: vue.normalizeClass(_ctx.headerRowClasses),
-        style: vue.normalizeStyle(_ctx.headerRowStyles)
-      }, [
-        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(_ctx.headerCols, (col, index) => {
-          return vue.openBlock(), vue.createElementBlock("th", {
-            key: index,
-            class: vue.normalizeClass({
-              [_ctx.styles.th]: true,
-              [_ctx.styles.fixed]: _ctx.fixedHeader || (col == null ? void 0 : col.fixed),
-              [_ctx.styles.fixedHeader]: _ctx.fixedHeader,
-              [_ctx.styles.fixedColumnLeft]: (col == null ? void 0 : col.fixed) === "left",
-              [_ctx.styles.fixedColumnRight]: (col == null ? void 0 : col.fixed) === "right",
-              [_ctx.styles.thBordered]: _ctx.border,
-              [col == null ? void 0 : col.thAttrs.class]: true
-            }),
-            colspan: col == null ? void 0 : col.thAttrs.colspan,
-            style: vue.normalizeStyle(col == null ? void 0 : col.thAttrs.style),
-            scope: "col"
+          thBordered: apathia_twind.style`border-line-accent`,
+          fixed: apathia_twind.style`sticky`,
+          fixedHeader: apathia_twind.style`top-0`,
+          fixedColumnLeft: apathia_twind.style`left-0 ${borderRight}`,
+          fixedColumnRight: apathia_twind.style`right-0 ${borderLeft}`
+        };
+      };
+      const styles = getStyles();
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("thead", {
+          class: vue.normalizeClass(vue.unref(styles).thead)
+        }, [
+          vue.createElementVNode("tr", {
+            class: vue.normalizeClass(vue.unref(headerRowClasses)),
+            style: vue.normalizeStyle(vue.unref(headerRowStyles))
           }, [
-            (col == null ? void 0 : col.type) === "selection" ? (vue.openBlock(), vue.createBlock(_component_Checkbox, {
-              key: 0,
-              "model-value": _ctx.allSelected,
-              indeterminate: _ctx.indeterminate,
-              "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => _ctx.toggleAllSelected())
-            }, null, 8, ["model-value", "indeterminate"])) : (col == null ? void 0 : col.title) ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
-              typeof col.title === "function" ? (vue.openBlock(), vue.createBlock(_component_CustomRender, {
-                key: 0,
-                render: col.title
-              }, null, 8, ["render"])) : (vue.openBlock(), vue.createElementBlock("span", _hoisted_2$2, vue.toDisplayString(col.title), 1))
-            ], 64)) : vue.createCommentVNode("", true),
-            (col == null ? void 0 : col.sortable) ? (vue.openBlock(), vue.createBlock(_component_TableSorter, {
-              key: 2,
-              sort: _ctx.sort,
-              prop: (col == null ? void 0 : col.prop) || "",
-              onSortChange: _ctx.handleColumnSortChange
-            }, null, 8, ["sort", "prop", "onSortChange"])) : vue.createCommentVNode("", true)
-          ], 14, _hoisted_1$2);
-        }), 128))
-      ], 6)
-    ], 2);
-  }
-  var TableHeader = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render$3]]);
-  var _sfc_main$2 = vue.defineComponent({
-    name: "TableRow",
-    components: {
-      CustomRender: apathia_customRender.CustomRender,
-      Icon: apathia_icon.Icon,
-      BaseButton: apathia_button.BaseButton,
-      Checkbox: apathia_checkbox.Checkbox
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(headerCols.value, (col, index) => {
+              return vue.openBlock(), vue.createElementBlock("th", {
+                key: index,
+                class: vue.normalizeClass({
+                  [vue.unref(styles).th]: true,
+                  [vue.unref(styles).fixed]: _ctx.fixedHeader || (col == null ? void 0 : col.fixed),
+                  [vue.unref(styles).fixedHeader]: _ctx.fixedHeader,
+                  [vue.unref(styles).fixedColumnLeft]: (col == null ? void 0 : col.fixed) === "left",
+                  [vue.unref(styles).fixedColumnRight]: (col == null ? void 0 : col.fixed) === "right",
+                  [vue.unref(styles).thBordered]: _ctx.border,
+                  [col == null ? void 0 : col.thAttrs.class]: true
+                }),
+                colspan: col == null ? void 0 : col.thAttrs.colspan,
+                style: vue.normalizeStyle(col == null ? void 0 : col.thAttrs.style),
+                scope: "col"
+              }, [
+                (col == null ? void 0 : col.type) === "selection" ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_checkbox.Checkbox), {
+                  key: 0,
+                  "model-value": vue.unref(allSelected),
+                  indeterminate: vue.unref(indeterminate),
+                  "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => vue.unref(toggleAllSelected)())
+                }, null, 8, ["model-value", "indeterminate"])) : (col == null ? void 0 : col.title) ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 1 }, [
+                  typeof col.title === "function" ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_customRender.CustomRender), {
+                    key: 0,
+                    render: col.title
+                  }, null, 8, ["render"])) : (vue.openBlock(), vue.createElementBlock("span", _hoisted_2$2, vue.toDisplayString(col.title), 1))
+                ], 64)) : vue.createCommentVNode("", true),
+                (col == null ? void 0 : col.sortable) ? (vue.openBlock(), vue.createBlock(_sfc_main$4, {
+                  key: 2,
+                  sort: _ctx.sort,
+                  prop: (col == null ? void 0 : col.prop) || "",
+                  onSortChange: handleColumnSortChange
+                }, null, 8, ["sort", "prop"])) : vue.createCommentVNode("", true)
+              ], 14, _hoisted_1$2);
+            }), 128))
+          ], 6)
+        ], 2);
+      };
+    }
+  });
+  const _hoisted_1$1 = { key: 0 };
+  const _hoisted_2$1 = { key: 1 };
+  const _hoisted_3$1 = { key: 0 };
+  const _hoisted_4$1 = ["colspan"];
+  const _sfc_main$2 = vue.defineComponent({
+    ...{
+      name: "TableRow"
     },
+    __name: "TableRow",
     props: {
-      columns: {
-        type: Array,
-        required: true
-      },
-      row: {
-        type: Object,
-        required: true
-      },
-      border: {
-        type: Boolean,
-        default: false
-      },
-      stripe: {
-        type: Boolean
-      },
-      rowClassName: {
-        type: Function
-      },
-      rowStyle: {
-        type: Function
-      },
-      cellClassName: {
-        type: Function
-      },
-      cellStyle: {
-        type: Function
-      },
-      cellSpan: {
-        type: Function,
-        default: () => [1, 1]
-      },
-      highlightCurrentRow: {
-        type: Boolean
-      },
-      rowKey: {
-        type: String,
-        default: "id"
-      },
-      rowIndex: {
-        type: Number,
-        default: 0
-      },
-      currentActiveRow: {
-        type: Number,
-        default: 0
-      },
-      expand: {
-        type: Object,
-        default: () => ({})
-      }
+      columns: {},
+      row: {},
+      border: { type: Boolean, default: false },
+      stripe: { type: Boolean },
+      rowClassName: {},
+      rowStyle: {},
+      cellClassName: {},
+      cellStyle: {},
+      cellSpan: { type: Function, default: () => [1, 1] },
+      highlightCurrentRow: { type: Boolean },
+      rowKey: { default: "id" },
+      rowIndex: { default: 0 },
+      currentActiveRow: { default: 0 },
+      expand: { default: () => ({}) }
     },
     emits: ["row-click"],
-    setup(props, ctx) {
+    setup(__props, { emit }) {
       var _a, _b;
-      const styles = getStyles$1();
-      const rowClasses = ((_a = props.rowClassName) === null || _a === void 0 ? void 0 : _a.call(props, {
-        row: props.row,
-        rowIndex: props.rowIndex
-      })) || "";
-      const rowStyles = ((_b = props.rowStyle) === null || _b === void 0 ? void 0 : _b.call(props, {
-        row: props.row,
-        rowIndex: props.rowIndex
-      })) || "";
-      const {
-        selectedMap
-      } = vue.inject("TableMultiSelected");
-      const isRowActiveStyle = vue.computed(() => props.highlightCurrentRow && props.currentActiveRow === props.rowIndex);
-      const expandable = vue.computed(() => {
-        var _a2, _b2;
-        return typeof props.expand.expandRowRender === "function" && !!((_b2 = (_a2 = props.expand).rowExpandable) === null || _b2 === void 0 ? void 0 : _b2.call(_a2, {
-          row: props.row,
-          rowIndex: props.rowIndex
-        }));
-      });
+      const props = __props;
+      const rowClasses = ((_a = props.rowClassName) == null ? void 0 : _a.call(props, { row: props.row, rowIndex: props.rowIndex })) || "";
+      const rowStyles = ((_b = props.rowStyle) == null ? void 0 : _b.call(props, { row: props.row, rowIndex: props.rowIndex })) || "";
+      const { selectedMap } = vue.inject("TableMultiSelected");
+      const isRowActiveStyle = vue.computed(
+        () => props.highlightCurrentRow && props.currentActiveRow === props.rowIndex
+      );
+      const expandable = vue.computed(
+        () => {
+          var _a2, _b2;
+          return typeof props.expand.expandRowRender === "function" && !!((_b2 = (_a2 = props.expand).rowExpandable) == null ? void 0 : _b2.call(_a2, {
+            row: props.row,
+            rowIndex: props.rowIndex
+          }));
+        }
+      );
       const expandActive = vue.ref(false);
       const toggleExpand = () => {
         expandActive.value = !expandActive.value;
@@ -363,7 +257,7 @@
       const clickRow = (e, rowIndex) => {
         if (cancelClick)
           return;
-        ctx.emit("row-click", e, rowIndex, props.row);
+        emit("row-click", e, rowIndex, props.row);
       };
       const handleRowMouseUp = (e) => {
         const selection = window.getSelection();
@@ -374,54 +268,60 @@
           cancelClick = false;
         }
       };
-      const cols = vue.computed(() => props.columns.map((col, colIndex) => {
-        var _a2, _b2, _c;
-        const [rowSpan, colSpan] = (_a2 = props.cellSpan) === null || _a2 === void 0 ? void 0 : _a2.call(props, {
-          row: props.row,
-          col,
-          rowIndex: props.rowIndex,
-          colIndex
-        });
-        if (colSpan === 0 || rowSpan === 0) {
-          return null;
-        }
-        const cellClassName = ((_b2 = props.cellClassName) === null || _b2 === void 0 ? void 0 : _b2.call(props, {
-          row: props.row,
-          col,
-          rowIndex: props.rowIndex,
-          colIndex
-        })) || "";
-        const cellStyles = Object.assign(Object.assign({}, toStyleObject((_c = props.cellStyle) === null || _c === void 0 ? void 0 : _c.call(props, {
-          row: props.row,
-          col,
-          rowIndex: props.rowIndex,
-          colIndex
-        }))), {
-          textAlign: col.align || "center",
-          width: toRealWidth(col.width)
-        });
-        const tdAttrs = {
-          style: cellStyles
-        };
-        if (colSpan !== 1)
-          tdAttrs.colSpan = colSpan;
-        if (rowSpan !== 1)
-          tdAttrs.rowSpan = rowSpan;
-        const tdClasses = {
-          [styles.cell]: true,
-          [styles.borderd]: props.border,
-          [styles.fixedColumnLeft]: col.fixed === "left",
-          [styles.fixedColumnRight]: col.fixed === "right",
-          [styles.activeRow]: isRowActiveStyle.value,
-          [styles.stripedRow]: props.stripe && props.rowIndex % 2 === 1,
-          [styles.whiteRow]: !(isRowActiveStyle.value || props.stripe && props.rowIndex % 2 === 1),
-          [cellClassName]: true
-        };
-        return Object.assign(Object.assign({}, col), {
-          tdClasses,
-          tdAttrs
-        });
-      }).filter(Boolean));
+      const cols = vue.computed(
+        () => props.columns.map((col, colIndex) => {
+          var _a2, _b2, _c;
+          const [rowSpan, colSpan] = (_a2 = props.cellSpan) == null ? void 0 : _a2.call(props, {
+            row: props.row,
+            col,
+            rowIndex: props.rowIndex,
+            colIndex
+          });
+          if (colSpan === 0 || rowSpan === 0) {
+            return null;
+          }
+          const cellClassName = ((_b2 = props.cellClassName) == null ? void 0 : _b2.call(props, {
+            row: props.row,
+            col,
+            rowIndex: props.rowIndex,
+            colIndex
+          })) || "";
+          const cellStyles = {
+            ...toStyleObject(
+              (_c = props.cellStyle) == null ? void 0 : _c.call(props, {
+                row: props.row,
+                col,
+                rowIndex: props.rowIndex,
+                colIndex
+              })
+            ),
+            textAlign: col.align || "center",
+            width: toRealWidth(col.width)
+          };
+          const tdAttrs = {
+            style: cellStyles
+          };
+          if (colSpan !== 1)
+            tdAttrs.colSpan = colSpan;
+          if (rowSpan !== 1)
+            tdAttrs.rowSpan = rowSpan;
+          const tdClasses = {
+            [styles.cell]: true,
+            [styles.bordered]: props.border,
+            [styles.fixedColumnLeft]: col.fixed === "left",
+            [styles.fixedColumnRight]: col.fixed === "right",
+            [styles.activeRow]: isRowActiveStyle.value,
+            [styles.stripedRow]: props.stripe && props.rowIndex % 2 === 1,
+            [styles.whiteRow]: !(isRowActiveStyle.value || props.stripe && props.rowIndex % 2 === 1),
+            [cellClassName]: true
+          };
+          return {
+            ...col,
+            tdClasses,
+            tdAttrs
+          };
+        }).filter(Boolean)
+      );
       const classNames2props = (str) => {
         if (!str) {
           return {
@@ -433,39 +333,23 @@
           return acc;
         }, {});
       };
-      return {
-        selectedMap,
-        rowClasses,
-        rowStyles,
-        expandable,
-        expandActive,
-        cols,
-        clickRow,
-        handleRowMouseUp,
-        toggleExpand,
-        styles,
-        get: lodash.get,
-        classNames2props
-      };
-    }
-  });
-  const getStyles$1 = () => {
-    const borderRight = apathia_twind.css`
+      const getStyles = () => {
+        const borderRight = apathia_twind.css`
     border-right: 1px solid rgb(0 0 0 / 12%);
   `;
-    const borderLeft = apathia_twind.css`
+        const borderLeft = apathia_twind.css`
     border-left: 1px solid rgb(0 0 0 / 12%);
   `;
-    return {
-      row: apathia_twind.style`hover:(bg-fill-light) transition`,
-      cell: apathia_twind.style`px-2 py-3 border(b solid line-accent) break-words text-sm`,
-      fixedColumnLeft: apathia_twind.style`sticky z-20 left-0 ${borderRight}`,
-      fixedColumnRight: apathia_twind.style`sticky z-20 right-0 ${borderLeft}`,
-      borderd: apathia_twind.style`border(r solid line-accent)`,
-      stripedRow: apathia_twind.style`bg-fill-light`,
-      activeRow: apathia_twind.style`bg-brand-hover`,
-      whiteRow: apathia_twind.style`bg-fill-white`,
-      cellBtnsWrap: apathia_twind.style`inline-flex flex-wrap ${apathia_twind.css`
+        return {
+          row: apathia_twind.style`hover:(bg-fill-light) transition`,
+          cell: apathia_twind.style`px-2 py-3 border(b solid line-accent) break-words text-sm`,
+          fixedColumnLeft: apathia_twind.style`sticky z-20 left-0 ${borderRight}`,
+          fixedColumnRight: apathia_twind.style`sticky z-20 right-0 ${borderLeft}`,
+          bordered: apathia_twind.style`border(r solid line-accent)`,
+          stripedRow: apathia_twind.style`bg-fill-light`,
+          activeRow: apathia_twind.style`bg-brand-hover`,
+          whiteRow: apathia_twind.style`bg-fill-white`,
+          cellBtnsWrap: apathia_twind.style`inline-flex flex-wrap ${apathia_twind.css`
       --gap: 0.25rem;
       --column-gap: var(--gap);
       --row-gap: var(--gap);
@@ -474,139 +358,118 @@
         margin: calc(var(--row-gap) / 2) calc(var(--column-gap) / 2);
       }
     `}`,
-      fadeEnd: apathia_twind.style`opacity-0`,
-      fadeActive: apathia_twind.style`transition-all duration-100`
-    };
-  };
-  const _hoisted_1$1 = { key: 0 };
-  const _hoisted_2$1 = { key: 1 };
-  const _hoisted_3$1 = { key: 0 };
-  const _hoisted_4$1 = ["colspan"];
-  function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_Checkbox = vue.resolveComponent("Checkbox");
-    const _component_Minus = vue.resolveComponent("Minus");
-    const _component_Plus = vue.resolveComponent("Plus");
-    const _component_Icon = vue.resolveComponent("Icon");
-    const _component_BaseButton = vue.resolveComponent("BaseButton");
-    const _component_CustomRender = vue.resolveComponent("CustomRender");
-    return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
-      vue.createElementVNode("tr", {
-        class: vue.normalizeClass({
-          [_ctx.styles.row]: true,
-          [_ctx.rowClasses]: true,
-          [_ctx.styles.stripedRow]: _ctx.stripe && _ctx.rowIndex % 2 === 1
-        }),
-        style: vue.normalizeStyle(_ctx.rowStyles),
-        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.clickRow($event, _ctx.rowIndex)),
-        "on:mouseUp": _cache[1] || (_cache[1] = (...args) => _ctx.handleRowMouseUp && _ctx.handleRowMouseUp(...args))
-      }, [
-        (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(_ctx.cols, (col, colIndex) => {
-          return vue.openBlock(), vue.createElementBlock("td", vue.mergeProps({
-            key: colIndex,
-            class: col == null ? void 0 : col.tdClasses
-          }, col == null ? void 0 : col.tdAttrs), [
-            col && "type" in col ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
-              col.type === "index" ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1$1, vue.toDisplayString(_ctx.rowIndex + 1), 1)) : col.type === "selection" ? (vue.openBlock(), vue.createBlock(_component_Checkbox, {
-                key: 1,
-                "model-value": !!_ctx.selectedMap[_ctx.row[_ctx.rowKey]],
-                disabled: col.disabledWhen ? !!col.disabledWhen({ row: _ctx.row, rowIndex: _ctx.rowIndex }) : false
-              }, null, 8, ["model-value", "disabled"])) : col.type === "expand" && _ctx.expandable ? (vue.openBlock(), vue.createBlock(_component_Icon, {
-                key: 2,
-                onClick: _ctx.toggleExpand
-              }, {
-                default: vue.withCtx(() => [
-                  _ctx.expandActive ? (vue.openBlock(), vue.createBlock(_component_Minus, { key: 0 })) : (vue.openBlock(), vue.createBlock(_component_Plus, { key: 1 }))
-                ]),
-                _: 1
-              }, 8, ["onClick"])) : vue.createCommentVNode("", true)
-            ], 64)) : col && "field" in col ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_2$1, vue.toDisplayString(_ctx.get(_ctx.row, col.field, "")), 1)) : col && "buttons" in col ? (vue.openBlock(), vue.createElementBlock("div", {
-              key: 2,
-              class: vue.normalizeClass(_ctx.styles.cellBtnsWrap)
-            }, [
-              (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(col.buttons({
-                row: _ctx.row,
-                rowIndex: _ctx.rowIndex,
-                colIndex
-              }), (button, buttonIndex) => {
-                return vue.openBlock(), vue.createBlock(_component_BaseButton, vue.mergeProps({
-                  key: buttonIndex,
-                  small: ""
-                }, _ctx.classNames2props(button.className), {
-                  onClick: ($event) => button.onClick({
+          fadeEnd: apathia_twind.style`opacity-0`,
+          fadeActive: apathia_twind.style`transition-all duration-100`
+        };
+      };
+      const styles = getStyles();
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock(vue.Fragment, null, [
+          vue.createElementVNode("tr", {
+            class: vue.normalizeClass({
+              [vue.unref(styles).row]: true,
+              [vue.unref(rowClasses)]: true,
+              [vue.unref(styles).stripedRow]: _ctx.stripe && _ctx.rowIndex % 2 === 1
+            }),
+            style: vue.normalizeStyle(vue.unref(rowStyles)),
+            onClick: _cache[0] || (_cache[0] = ($event) => clickRow($event, _ctx.rowIndex)),
+            "on:mouseUp": handleRowMouseUp
+          }, [
+            (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(cols.value, (col, colIndex) => {
+              return vue.openBlock(), vue.createElementBlock("td", vue.mergeProps({
+                key: colIndex,
+                class: col == null ? void 0 : col.tdClasses
+              }, col == null ? void 0 : col.tdAttrs), [
+                col && "type" in col ? (vue.openBlock(), vue.createElementBlock(vue.Fragment, { key: 0 }, [
+                  col.type === "index" ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_1$1, vue.toDisplayString(_ctx.rowIndex + 1), 1)) : col.type === "selection" ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_checkbox.Checkbox), {
+                    key: 1,
+                    "model-value": !!vue.unref(selectedMap)[_ctx.row[_ctx.rowKey]],
+                    disabled: col.disabledWhen ? !!col.disabledWhen({ row: _ctx.row, rowIndex: _ctx.rowIndex }) : false
+                  }, null, 8, ["model-value", "disabled"])) : col.type === "expand" && expandable.value ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_icon.Icon), {
+                    key: 2,
+                    onClick: toggleExpand
+                  }, {
+                    default: vue.withCtx(() => [
+                      expandActive.value ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_iconSvg.Minus), { key: 0 })) : (vue.openBlock(), vue.createBlock(vue.unref(apathia_iconSvg.Plus), { key: 1 }))
+                    ]),
+                    _: 1
+                  })) : vue.createCommentVNode("", true)
+                ], 64)) : col && "field" in col ? (vue.openBlock(), vue.createElementBlock("span", _hoisted_2$1, vue.toDisplayString(vue.unref(lodash.get)(_ctx.row, col.field || "")), 1)) : col && "buttons" in col && col.buttons ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 2,
+                  class: vue.normalizeClass(vue.unref(styles).cellBtnsWrap)
+                }, [
+                  (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(col.buttons({
                     row: _ctx.row,
                     rowIndex: _ctx.rowIndex,
                     colIndex
-                  })
-                }), {
-                  default: vue.withCtx(() => [
-                    vue.createTextVNode(vue.toDisplayString(button.text), 1)
-                  ]),
-                  _: 2
-                }, 1040, ["onClick"]);
-              }), 128))
-            ], 2)) : col && "render" in col ? (vue.openBlock(), vue.createBlock(_component_CustomRender, {
-              key: 3,
-              render: col.render,
-              row: _ctx.row,
-              "col-index": colIndex,
-              "row-index": _ctx.rowIndex
-            }, null, 8, ["render", "row", "col-index", "row-index"])) : vue.createCommentVNode("", true)
-          ], 16);
-        }), 128))
-      ], 38),
-      vue.createVNode(vue.Transition, {
-        "enter-from-class": _ctx.styles.fadeEnd,
-        "enter-active-class": _ctx.styles.fadeActive,
-        "leave-active-class": _ctx.styles.fadeActive,
-        "leave-to-class": _ctx.styles.fadeEnd
-      }, {
-        default: vue.withCtx(() => [
-          _ctx.expandable && _ctx.expandActive ? (vue.openBlock(), vue.createElementBlock("tr", _hoisted_3$1, [
-            vue.createElementVNode("td", {
-              colspan: _ctx.columns.length
-            }, [
-              vue.createVNode(_component_CustomRender, {
-                render: _ctx.expand.expandRowRender,
-                row: _ctx.row,
-                "row-index": _ctx.rowIndex
-              }, null, 8, ["render", "row", "row-index"])
-            ], 8, _hoisted_4$1)
-          ])) : vue.createCommentVNode("", true)
-        ]),
-        _: 1
-      }, 8, ["enter-from-class", "enter-active-class", "leave-active-class", "leave-to-class"])
-    ], 64);
-  }
-  var TableRow = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2]]);
+                  }), (button, buttonIndex) => {
+                    return vue.openBlock(), vue.createBlock(vue.unref(apathia_button.BaseButton), vue.mergeProps({
+                      key: buttonIndex,
+                      small: ""
+                    }, classNames2props(button.className), {
+                      onClick: ($event) => button.onClick({
+                        row: _ctx.row,
+                        rowIndex: _ctx.rowIndex,
+                        colIndex
+                      })
+                    }), {
+                      default: vue.withCtx(() => [
+                        vue.createTextVNode(vue.toDisplayString(button.text), 1)
+                      ]),
+                      _: 2
+                    }, 1040, ["onClick"]);
+                  }), 128))
+                ], 2)) : col && "render" in col ? (vue.openBlock(), vue.createBlock(vue.unref(apathia_customRender.CustomRender), {
+                  key: 3,
+                  render: col.render,
+                  row: _ctx.row,
+                  "col-index": colIndex,
+                  "row-index": _ctx.rowIndex
+                }, null, 8, ["render", "row", "col-index", "row-index"])) : vue.createCommentVNode("", true)
+              ], 16);
+            }), 128))
+          ], 38),
+          vue.createVNode(vue.Transition, {
+            "enter-from-class": vue.unref(styles).fadeEnd,
+            "enter-active-class": vue.unref(styles).fadeActive,
+            "leave-active-class": vue.unref(styles).fadeActive,
+            "leave-to-class": vue.unref(styles).fadeEnd
+          }, {
+            default: vue.withCtx(() => [
+              expandable.value && expandActive.value ? (vue.openBlock(), vue.createElementBlock("tr", _hoisted_3$1, [
+                vue.createElementVNode("td", {
+                  colspan: _ctx.columns.length
+                }, [
+                  vue.createVNode(vue.unref(apathia_customRender.CustomRender), {
+                    render: _ctx.expand.expandRowRender,
+                    row: _ctx.row,
+                    "row-index": _ctx.rowIndex
+                  }, null, 8, ["render", "row", "row-index"])
+                ], 8, _hoisted_4$1)
+              ])) : vue.createCommentVNode("", true)
+            ]),
+            _: 1
+          }, 8, ["enter-from-class", "enter-active-class", "leave-active-class", "leave-to-class"])
+        ], 64);
+      };
+    }
+  });
   const _sfc_main$1 = vue.defineComponent({
-    name: "TableBody",
-    components: {
-      TableRow
+    ...{
+      name: "TableBody",
+      inheritAttrs: false
     },
-    inheritAttrs: false,
+    __name: "TableBody",
     props: {
-      columns: {
-        type: Array,
-        required: true
-      },
-      data: {
-        type: Array,
-        required: true
-      },
-      current: {
-        type: [String, Number],
-        default: -1
-      },
-      highlightCurrentRow: {
-        type: Boolean
-      },
-      rowKey: {
-        type: String,
-        default: "id"
-      }
+      columns: {},
+      data: {},
+      current: { default: -1 },
+      highlightCurrentRow: { type: Boolean },
+      rowKey: { default: "id" }
     },
     emits: ["current-change"],
-    setup(props, { emit }) {
+    setup(__props, { emit }) {
+      const props = __props;
       const currentRowIndex = vue.computed({
         get: () => {
           return props.data.findIndex((i) => i[props.rowKey] === props.current);
@@ -619,9 +482,7 @@
         "TableMultiSelected"
       );
       const multiSelected = vue.computed(
-        () => props.columns.findIndex(
-          (col) => "type" in col && col.type === "selection"
-        ) > -1
+        () => props.columns.findIndex((col) => "type" in col && col.type === "selection") > -1
       );
       const shiftIndex = vue.ref(-1);
       const normalIndex = vue.ref(-1);
@@ -651,30 +512,24 @@
         }
         normalIndex.value = rowIndex;
       };
-      return {
-        clickRow,
-        currentRowIndex
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("tbody", null, [
+          (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(_ctx.data, (row, rowIndex) => {
+            return vue.openBlock(), vue.createBlock(_sfc_main$2, vue.mergeProps(_ctx.$attrs, {
+              key: row[_ctx.rowKey],
+              row,
+              "row-key": _ctx.rowKey,
+              columns: _ctx.columns,
+              "highlight-current-row": _ctx.highlightCurrentRow,
+              "row-index": rowIndex,
+              "current-active-row": currentRowIndex.value,
+              onRowClick: clickRow
+            }), null, 16, ["row", "row-key", "columns", "highlight-current-row", "row-index", "current-active-row"]);
+          }), 128))
+        ]);
       };
     }
   });
-  function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_TableRow = vue.resolveComponent("TableRow");
-    return vue.openBlock(), vue.createElementBlock("tbody", null, [
-      (vue.openBlock(true), vue.createElementBlock(vue.Fragment, null, vue.renderList(_ctx.data, (row, rowIndex) => {
-        return vue.openBlock(), vue.createBlock(_component_TableRow, vue.mergeProps(_ctx.$attrs, {
-          key: row[_ctx.rowKey],
-          row,
-          "row-key": _ctx.rowKey,
-          columns: _ctx.columns,
-          "highlight-current-row": _ctx.highlightCurrentRow,
-          "row-index": rowIndex,
-          "current-active-row": _ctx.currentRowIndex,
-          onRowClick: _ctx.clickRow
-        }), null, 16, ["row", "row-key", "columns", "highlight-current-row", "row-index", "current-active-row", "onRowClick"]);
-      }), 128))
-    ]);
-  }
-  var TableBody = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
   function useTableColumns(props) {
     const tableWidth = vue.ref(0);
     const containerRef = vue.ref(null);
@@ -706,7 +561,7 @@
       containerRef
     };
   }
-  function useTableSelected(data, selectedKeys, selected, key, columns, ctx) {
+  function useTableSelected(data, selectedKeys, selected, key, columns, emit) {
     const disabledKeyMap = vue.computed(() => {
       const [selectionColumn] = columns.value.filter((col) => "type" in col && col.type === "selection");
       if (!selectionColumn || !("disabledWhen" in selectionColumn) || typeof selectionColumn.disabledWhen !== "function")
@@ -737,8 +592,8 @@
       },
       set: (checkedMap) => {
         const selectedItems = data.value.filter((item) => checkedMap[`${item[key.value]}`] && !disabledKeyMap.value[`${item[key.value]}`]);
-        ctx.emit("update:selected", selectedItems);
-        ctx.emit("update:selectedKeys", selectedItems.map((item) => item[key.value]));
+        emit("update:selected", selectedItems);
+        emit("update:selectedKeys", selectedItems.map((item) => item[key.value]));
       }
     });
     const allSelected = vue.computed({
@@ -785,117 +640,52 @@
       shiftToggle
     };
   }
+  const _hoisted_1 = { key: 1 };
+  const _hoisted_2 = { style: { "height": "55px", "text-align": "center" } };
+  const _hoisted_3 = ["colspan"];
+  const _hoisted_4 = /* @__PURE__ */ vue.createElementVNode("p", null, "\u6CA1\u6709\u6570\u636E", -1);
   const _sfc_main = vue.defineComponent({
-    name: "Table",
-    components: {
-      TableHeader,
-      TableBody,
-      Loading: apathia_loading.Loading
+    ...{
+      name: "Table"
     },
+    __name: "Table",
     props: {
-      data: {
-        type: Array,
-        required: true
-      },
-      columns: {
-        type: Array,
-        required: true
-      },
-      stripe: {
-        type: Boolean,
-        default: false
-      },
-      border: {
-        type: Boolean,
-        default: false
-      },
-      headerRowClassName: {
-        type: Function
-      },
-      headerRowStyle: {
-        type: Function
-      },
-      headerCellClassName: {
-        type: Function
-      },
-      headerCellStyle: {
-        type: Function
-      },
-      rowClassName: {
-        type: Function
-      },
-      rowStyle: {
-        type: Function
-      },
-      cellClassName: {
-        type: Function
-      },
-      cellStyle: {
-        type: Function
-      },
-      cellSpan: {
-        type: Function,
-        default: () => [1, 1]
-      },
-      height: {
-        type: Number
-      },
-      showHeader: {
-        type: Boolean,
-        default: true
-      },
-      showData: {
-        type: Boolean,
-        default: true
-      },
-      rowKey: {
-        type: String,
-        default: "id"
-      },
-      highlightCurrentRow: {
-        type: Boolean,
-        default: true
-      },
-      current: {
-        type: [String, Number],
-        default: -1
-      },
-      currentSelected: {
-        type: Object,
-        default: null
-      },
-      selected: {
-        type: Array,
-        default: () => []
-      },
-      selectedKeys: {
-        type: Array,
-        default: () => []
-      },
-      sort: {
-        type: Object,
-        default: () => ({})
-      },
-      expand: {
-        type: Object,
-        default: () => ({})
-      },
-      loading: {
-        type: Boolean
-      },
-      scroll: {
-        type: Object,
-        default: () => ({})
-      }
+      data: {},
+      columns: {},
+      stripe: { type: Boolean, default: false },
+      border: { type: Boolean, default: false },
+      headerRowClassName: {},
+      headerRowStyle: {},
+      headerCellClassName: {},
+      headerCellStyle: {},
+      rowClassName: {},
+      rowStyle: {},
+      cellClassName: {},
+      cellStyle: {},
+      cellSpan: { type: Function, default: () => [1, 1] },
+      height: {},
+      showHeader: { type: Boolean, default: true },
+      showData: { type: Boolean, default: true },
+      rowKey: { default: "key" },
+      highlightCurrentRow: { type: Boolean, default: true },
+      current: { default: -1 },
+      currentSelected: { default: null },
+      selected: { default: () => [] },
+      selectedKeys: { default: () => [] },
+      sort: { default: () => ({}) },
+      expand: { default: () => ({}) },
+      loading: { type: Boolean },
+      scroll: { default: () => ({}) }
     },
-    emits: [
-      "update:selected",
-      "update:selectedKeys",
-      "update:current",
-      "update:currentSelected",
-      "sort-change"
-    ],
-    setup(props, ctx) {
+    emits: ["update:selected", "update:selectedKeys", "update:current", "update:currentSelected", "sort-change"],
+    setup(__props, { emit }) {
+      const props = __props;
+      const getStyles = () => ({
+        container: apathia_twind.style`shadow relative overflow-auto border(b line-accent)`,
+        table: apathia_twind.style`min-w-full w-full table-fixed divide-y divide-line-accent text(sm left) leading-normal rounded box-border m-0 p-0 ${apathia_twind.css(
+          { "border-collapse": "separate", "border-spacing": 0 }
+        )}`
+      });
       const styles = getStyles();
       const currentId = vue.computed(
         () => props.currentSelected ? props.currentSelected[props.rowKey] : props.current
@@ -907,7 +697,7 @@
         selected,
         rowKey,
         columns,
-        ctx
+        emit
       );
       const tableStyle = vue.computed(() => ({
         minWidth: props.scroll.width ? `${props.scroll.width}px` : "",
@@ -923,92 +713,69 @@
         }
       );
       function onCurrentChange(item) {
-        ctx.emit("update:current", item[rowKey.value]);
-        ctx.emit("update:currentSelected", item);
+        emit("update:current", item[rowKey.value]);
+        emit("update:currentSelected", item);
       }
-      return {
-        containerRef,
-        realColumns,
-        tableStyle,
-        fixedHeader,
-        styles,
-        currentId,
-        onCurrentChange,
-        tableMultiSelected
+      return (_ctx, _cache) => {
+        return vue.openBlock(), vue.createElementBlock("div", {
+          ref_key: "containerRef",
+          ref: containerRef,
+          class: vue.normalizeClass(vue.unref(styles).container),
+          style: vue.normalizeStyle({
+            "max-height": fixedHeader.value ? `${_ctx.height}px` : "auto"
+          })
+        }, [
+          vue.createElementVNode("table", vue.mergeProps({
+            class: vue.unref(styles).table,
+            style: tableStyle.value
+          }, _ctx.$attrs), [
+            _ctx.showHeader ? (vue.openBlock(), vue.createBlock(_sfc_main$3, {
+              key: 0,
+              columns: vue.unref(realColumns),
+              border: _ctx.border,
+              "header-row-class-name": _ctx.headerRowClassName,
+              "header-row-style": _ctx.headerRowStyle,
+              "header-cell-class-name": _ctx.headerCellClassName,
+              "header-cell-style": _ctx.headerCellStyle,
+              sort: _ctx.sort,
+              "fixed-header": fixedHeader.value,
+              onSortChange: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("sort-change", $event))
+            }, null, 8, ["columns", "border", "header-row-class-name", "header-row-style", "header-cell-class-name", "header-cell-style", "sort", "fixed-header"])) : vue.createCommentVNode("", true),
+            vue.unref(data).length === 0 || _ctx.loading ? (vue.openBlock(), vue.createElementBlock("tbody", _hoisted_1, [
+              vue.createElementVNode("tr", _hoisted_2, [
+                vue.createElementVNode("td", {
+                  colspan: vue.unref(realColumns).length
+                }, [
+                  _ctx.loading ? vue.renderSlot(_ctx.$slots, "loading", { key: 0 }, () => [
+                    vue.createVNode(vue.unref(apathia_loading.Loading))
+                  ]) : vue.unref(data).length === 0 ? vue.renderSlot(_ctx.$slots, "empty", { key: 1 }, () => [
+                    _hoisted_4
+                  ]) : vue.createCommentVNode("", true)
+                ], 8, _hoisted_3)
+              ])
+            ])) : vue.createCommentVNode("", true),
+            vue.unref(data).length && !_ctx.loading && _ctx.showData ? (vue.openBlock(), vue.createBlock(_sfc_main$1, {
+              key: 2,
+              columns: vue.unref(realColumns),
+              data: vue.unref(data),
+              border: _ctx.border,
+              stripe: _ctx.stripe,
+              "row-class-name": _ctx.rowClassName,
+              "row-style": _ctx.rowStyle,
+              "cell-class-name": _ctx.cellClassName,
+              "cell-style": _ctx.cellStyle,
+              "cell-span": _ctx.cellSpan,
+              current: currentId.value,
+              "highlight-current-row": _ctx.highlightCurrentRow,
+              "row-key": vue.unref(rowKey),
+              expand: _ctx.expand,
+              onCurrentChange
+            }, null, 8, ["columns", "data", "border", "stripe", "row-class-name", "row-style", "cell-class-name", "cell-style", "cell-span", "current", "highlight-current-row", "row-key", "expand"])) : vue.createCommentVNode("", true)
+          ], 16)
+        ], 6);
       };
     }
   });
-  const getStyles = () => ({
-    container: apathia_twind.style`shadow relative overflow-auto border(b line-accent)`,
-    table: apathia_twind.style`min-w-full w-full table-fixed divide-y divide-line-accent text(sm left) leading-normal rounded box-border m-0 p-0 ${apathia_twind.css(
-      { "border-collapse": "separate", "border-spacing": 0 }
-    )}`
-  });
-  const _hoisted_1 = { key: 1 };
-  const _hoisted_2 = { style: { "height": "55px", "text-align": "center" } };
-  const _hoisted_3 = ["colspan"];
-  const _hoisted_4 = /* @__PURE__ */ vue.createElementVNode("p", null, "\u6CA1\u6709\u6570\u636E", -1);
-  function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_TableHeader = vue.resolveComponent("TableHeader");
-    const _component_Loading = vue.resolveComponent("Loading");
-    const _component_TableBody = vue.resolveComponent("TableBody");
-    return vue.openBlock(), vue.createElementBlock("div", {
-      ref: "containerRef",
-      class: vue.normalizeClass(_ctx.styles.container),
-      style: vue.normalizeStyle({
-        "max-height": _ctx.fixedHeader ? `${_ctx.height}px` : "auto"
-      })
-    }, [
-      vue.createElementVNode("table", vue.mergeProps({
-        class: _ctx.styles.table,
-        style: _ctx.tableStyle
-      }, _ctx.$attrs), [
-        _ctx.showHeader ? (vue.openBlock(), vue.createBlock(_component_TableHeader, {
-          key: 0,
-          columns: _ctx.realColumns,
-          border: _ctx.border,
-          "header-row-class-name": _ctx.headerRowClassName,
-          "header-row-style": _ctx.headerRowStyle,
-          "header-cell-class-name": _ctx.headerCellClassName,
-          "header-cell-style": _ctx.headerCellStyle,
-          sort: _ctx.sort,
-          "fixed-header": _ctx.fixedHeader,
-          onSortChange: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("sort-change", $event))
-        }, null, 8, ["columns", "border", "header-row-class-name", "header-row-style", "header-cell-class-name", "header-cell-style", "sort", "fixed-header"])) : vue.createCommentVNode("", true),
-        _ctx.data.length === 0 || _ctx.loading ? (vue.openBlock(), vue.createElementBlock("tbody", _hoisted_1, [
-          vue.createElementVNode("tr", _hoisted_2, [
-            vue.createElementVNode("td", {
-              colspan: _ctx.realColumns.length
-            }, [
-              _ctx.loading ? vue.renderSlot(_ctx.$slots, "loading", { key: 0 }, () => [
-                vue.createVNode(_component_Loading)
-              ]) : _ctx.data.length === 0 ? vue.renderSlot(_ctx.$slots, "empty", { key: 1 }, () => [
-                _hoisted_4
-              ]) : vue.createCommentVNode("", true)
-            ], 8, _hoisted_3)
-          ])
-        ])) : vue.createCommentVNode("", true),
-        _ctx.data.length && !_ctx.loading && _ctx.showData ? (vue.openBlock(), vue.createBlock(_component_TableBody, {
-          key: 2,
-          columns: _ctx.realColumns,
-          data: _ctx.data,
-          border: _ctx.border,
-          stripe: _ctx.stripe,
-          "row-class-name": _ctx.rowClassName,
-          "row-style": _ctx.rowStyle,
-          "cell-class-name": _ctx.cellClassName,
-          "cell-style": _ctx.cellStyle,
-          "cell-span": _ctx.cellSpan,
-          current: _ctx.currentId,
-          "highlight-current-row": _ctx.highlightCurrentRow,
-          "row-key": _ctx.rowKey,
-          expand: _ctx.expand,
-          onCurrentChange: _ctx.onCurrentChange
-        }, null, 8, ["columns", "data", "border", "stripe", "row-class-name", "row-style", "cell-class-name", "cell-style", "cell-span", "current", "highlight-current-row", "row-key", "expand", "onCurrentChange"])) : vue.createCommentVNode("", true)
-      ], 16)
-    ], 6);
-  }
-  var Table = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
   function createTable(cols, shallowData = false) {
     const columns = vue.shallowRef(cols);
     const setColumns = (value) => {
@@ -1111,7 +878,7 @@
     };
     return [tableOptions, tools];
   }
-  exports2.Table = Table;
+  exports2.Table = _sfc_main;
   exports2.createTable = createTable;
   Object.defineProperties(exports2, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
 });

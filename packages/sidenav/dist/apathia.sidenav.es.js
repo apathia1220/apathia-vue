@@ -6,7 +6,10 @@ import { Icon } from "@apathia/apathia.icon";
 import { ArrowDown } from "@apathia/apathia.icon-svg";
 const _hoisted_1 = ["id"];
 const _hoisted_2 = { key: 0 };
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "SideNode"
+  },
   __name: "SideNode",
   props: {
     node: { default: () => ({}) },
@@ -43,7 +46,9 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const isActiveParent = computed(
       () => props.node.children ? isParent(props.node.children, props.activeKey, props.keyField) : false
     );
-    const isActiveItem = computed(() => props.activeKey === props.node[props.keyField]);
+    const isActiveItem = computed(
+      () => props.activeKey === props.node[props.keyField]
+    );
     const [expand, toggleExpand, setExpand] = useToggle(!!isActiveParent.value);
     const expandClass = computed(
       () => `${styles.sidenodeExpand} ${styles.sidenodeIconClass} ${expand.value ? styles.sidenodeTurn : ""}`
@@ -69,46 +74,46 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       const _component_SideNode = resolveComponent("SideNode", true);
       return openBlock(), createElementBlock("li", null, [
         renderSlot(_ctx.$slots, "default", {
-          mini: __props.mini,
-          activeParent: unref(isActiveParent),
+          mini: _ctx.mini,
+          activeParent: isActiveParent.value,
           expand: unref(expand),
-          activeItem: unref(isActiveItem),
+          activeItem: isActiveItem.value,
           onClick: clickHandler,
-          node: __props.node
+          node: _ctx.node
         }, () => [
           createElementVNode("div", {
-            id: unref(isActiveItem) ? "expandSideNode" : void 0,
-            class: normalizeClass(unref(rowClass)),
+            id: isActiveItem.value ? "expandSideNode" : void 0,
+            class: normalizeClass(rowClass.value),
             onClick: clickHandler
           }, [
             withDirectives(createElementVNode("span", {
               class: normalizeClass(unref(styles).sidenodeText)
-            }, toDisplayString(__props.node.text), 3), [
-              [vShow, !__props.mini]
+            }, toDisplayString(_ctx.node.text), 3), [
+              [vShow, !_ctx.mini]
             ]),
             withDirectives(createVNode(unref(Icon), {
-              class: normalizeClass(unref(expandClass))
+              class: normalizeClass(expandClass.value)
             }, {
               default: withCtx(() => [
                 createVNode(unref(ArrowDown))
               ]),
               _: 1
             }, 8, ["class"]), [
-              [vShow, __props.node.children && !__props.mini]
+              [vShow, _ctx.node.children && !_ctx.mini]
             ])
           ], 10, _hoisted_1)
         ]),
-        __props.node.children && !__props.mini ? (openBlock(), createElementBlock("div", _hoisted_2, [
+        _ctx.node.children && !_ctx.mini ? (openBlock(), createElementBlock("div", _hoisted_2, [
           withDirectives(createElementVNode("ul", {
             class: normalizeClass(unref(styles).sidenodeChildren)
           }, [
-            (openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.children, (item, index) => {
+            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.node.children, (item, index) => {
               return openBlock(), createBlock(_component_SideNode, {
                 key: index,
                 node: item,
-                "active-key": __props.activeKey,
-                "select-handler": __props.selectHandler,
-                "key-field": __props.keyField
+                "active-key": _ctx.activeKey,
+                "select-handler": _ctx.selectHandler,
+                "key-field": _ctx.keyField
               }, {
                 default: withCtx(({
                   mini: miniValue,
@@ -198,7 +203,10 @@ function scrollToExpand() {
   const scrollTop = el.offsetTop - containerHeight / 2;
   return scrollTop >= 0 ? scrollTop : 0;
 }
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "SideNav"
+  },
   __name: "SideNav",
   props: {
     menuList: { default: () => [] },
@@ -243,14 +251,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 class: unref(styles).sidenavInput
               }), null, 16)
             ], 2), [
-              [vShow, __props.search && !unref(showMini)]
+              [vShow, _ctx.search && !unref(showMini)]
             ]),
             (openBlock(true), createElementBlock(Fragment, null, renderList(unref(filteredMenu), (node) => {
               return openBlock(), createBlock(_sfc_main$1, {
-                key: node[__props.activeKey],
+                key: node[_ctx.activeKey],
                 node,
-                "active-key": __props.activeKey,
-                "key-field": __props.keyField,
+                "active-key": _ctx.activeKey,
+                "key-field": _ctx.keyField,
                 mini: unref(showMini),
                 "select-handler": selectNode
               }, {

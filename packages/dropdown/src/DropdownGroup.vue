@@ -13,15 +13,13 @@
 import { inject } from 'vue'
 import { style } from '@apathia/apathia.twind'
 
-// defineOptions({
-//   name: 'DropdownGroup',
-// })
+defineOptions({
+  name: 'DropdownGroup',
+})
 
-const getDropdownGroupStyle = () => (
-    {
-        container: style`py-1`,
-    }
-)
+const getDropdownGroupStyle = () => ({
+  container: style`py-1`,
+})
 
 const updateDivide = inject<(a: boolean) => void>('updateDivide')
 const handleDivide = () => {

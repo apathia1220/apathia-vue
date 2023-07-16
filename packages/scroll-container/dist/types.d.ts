@@ -1,13 +1,13 @@
 export declare type ScrollbarType = 'horizontal' | 'vertical';
-export interface ScrollbarProps {
+export declare type ScrollbarProps = {
     move: number;
     length: number;
     size: number;
     hide?: boolean;
     type: ScrollbarType;
-}
+};
 export declare type ContainerSize = 'thick' | 'normal' | 'thin' | number;
-export interface ScrollContainerProps {
+export declare type ScrollContainerProps = {
     size?: ContainerSize;
     tag?: string;
     scrollTop?: number;
@@ -15,4 +15,14 @@ export interface ScrollContainerProps {
     autoHide?: boolean;
     hideVertical?: boolean;
     hideHorizontal?: boolean;
-}
+};
+export declare type ScrollbarEmits = {
+    change: [{
+        offset: number;
+        duration?: number;
+    }];
+};
+export declare type ScrollContainerEmits = {
+    'update:scrollTop': [top: number];
+    'update:scrollLeft': [left: number];
+};

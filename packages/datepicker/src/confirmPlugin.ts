@@ -1,13 +1,5 @@
 import flatpickr from 'flatpickr'
-
-type PluginConfig = {
-  clearIcon?: string
-  confirmIcon?: string
-  confirmText?: string
-  clearText?: string
-  showAlways?: boolean
-  theme?: string
-}
+import type { PluginConfig } from './types'
 
 const defaultConfig: PluginConfig = {
   clearIcon:

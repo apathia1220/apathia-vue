@@ -1,8 +1,7 @@
-import { defineComponent, ref, computed, shallowReactive, openBlock, createElementBlock, Fragment, createElementVNode, normalizeClass, unref, normalizeStyle, withModifiers, createVNode, withCtx, createCommentVNode, renderSlot, createBlock, Teleport, Transition, normalizeProps, guardReactiveProps } from "vue";
+import { defineComponent, ref, computed, shallowReactive, openBlock, createElementBlock, Fragment, createElementVNode, normalizeClass, normalizeStyle, withModifiers, createVNode, unref, withCtx, createCommentVNode, renderSlot, createBlock, Teleport, Transition, normalizeProps, guardReactiveProps } from "vue";
 import { keyframes, css, style, tw } from "@apathia/apathia.twind";
 import { Icon } from "@apathia/apathia.icon";
 import { toast } from "@apathia/apathia.alert";
-import { resizeImage } from "@apathia/apathia.shared";
 import { CopyDocument, View, Close, Plus, Minus, RefreshRight, RefreshLeft } from "@apathia/apathia.icon-svg";
 const _hoisted_1 = ["src", "alt"];
 const _hoisted_2 = ["onClick"];
@@ -11,13 +10,13 @@ const _hoisted_4 = [
   _hoisted_3
 ];
 const _hoisted_5 = ["src", "alt", "onMousedown", "onMousemove", "onMouseup"];
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
   __name: "Image",
   props: {
-    src: null,
+    src: {},
     alt: { default: "img" },
-    width: null,
-    height: null,
+    width: {},
+    height: {},
     preview: { type: Boolean, default: true }
   },
   setup(__props) {
@@ -47,7 +46,7 @@ to {
       iconGap: style`ml-4`,
       maskIcon: style`inline-block fill-current text-xs`,
       transitionClass: {
-        "leave-to-class": tw`opacity-0`
+        leaveToClass: tw`opacity-0`
       },
       duration: tw`duration-500`,
       shadeClass: style`z-50 fixed inset-0 h-full bg-fill-gray bg-opacity-50 overflow-auto ${flashCss}`,
@@ -66,13 +65,6 @@ to {
       hoverEnlarge: style`hover:text-lg transition-all`
     };
     const mask = ref(false);
-    const previewImage = computed(() => {
-      if (!props.src.includes("hdslb.com/bfs"))
-        return props.src;
-      const suffix = props.width && props.height ? `${props.width}x${props.height}` : props.width ? `${props.width}x0` : props.height ? `0x${props.height}` : "160x100";
-      const path = props.src.replace(/^https?:/, "");
-      return resizeImage(path, suffix);
-    });
     const toPx = (val) => {
       if (!val)
         return;
@@ -186,13 +178,13 @@ to {
           class: normalizeClass([styles.imgWrap, { [styles.errorHidden]: isError.value }])
         }, [
           createElementVNode("img", {
-            src: unref(previewImage),
-            alt: __props.alt,
+            src: _ctx.src,
+            alt: _ctx.alt,
             class: normalizeClass(styles.img),
-            style: normalizeStyle(unref(imgStyle)),
+            style: normalizeStyle(imgStyle.value),
             onError: handleError
           }, null, 46, _hoisted_1),
-          __props.preview ? (openBlock(), createElementBlock("div", {
+          _ctx.preview ? (openBlock(), createElementBlock("div", {
             key: 0,
             class: normalizeClass(styles.mask),
             onClick: handleClickOpenMash
@@ -235,7 +227,7 @@ to {
         isError.value ? renderSlot(_ctx.$slots, "error", { key: 0 }, () => [
           createElementVNode("div", {
             class: normalizeClass(styles.error),
-            style: normalizeStyle(unref(imgErrorStyle))
+            style: normalizeStyle(imgErrorStyle.value)
           }, _hoisted_4, 6)
         ]) : createCommentVNode("", true),
         (openBlock(), createBlock(Teleport, { to: "body" }, [
@@ -315,8 +307,8 @@ to {
                     style: normalizeStyle(`transform: translate3d(${unref(translate).x}px, ${unref(translate).y}px, 0px) scale3d(${scaleTimes.value}, ${scaleTimes.value}, 1) rotate(${rotateAngle.value}deg)`)
                   }, [
                     createElementVNode("img", {
-                      src: __props.src,
-                      alt: __props.alt,
+                      src: _ctx.src,
+                      alt: _ctx.alt,
                       class: normalizeClass(styles.previewImg),
                       onMousedown: withModifiers(handleMouseDown, ["prevent"]),
                       onMousemove: withModifiers(handleMouseMove, ["prevent"]),

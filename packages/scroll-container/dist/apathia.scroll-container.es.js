@@ -3,14 +3,17 @@ import ElementResizeDetectorMaker from "element-resize-detector";
 import { raf } from "@apathia/apathia.shared";
 import { style, apply, css, tw } from "@apathia/apathia.twind";
 import { throttle } from "lodash-es";
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "Scrollbar"
+  },
   __name: "Scrollbar",
   props: {
-    move: null,
-    length: null,
-    size: null,
+    move: {},
+    length: {},
+    size: {},
     hide: { type: Boolean },
-    type: null
+    type: {}
   },
   emits: ["change"],
   setup(__props, { emit }) {
@@ -24,7 +27,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       clientY: 0
     });
     const track = ref(0);
-    const draging = ref(false);
+    const dragging = ref(false);
     const trackContainerRef = ref(null);
     const fields = computed(() => {
       const isHorizontal = props.type === "horizontal";
@@ -40,7 +43,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const trackStyle = computed(() => ({
       borderRadius: `${props.size / 2}px`,
       [fields.value.size]: `${props.size}px`,
-      opacity: props.hide && !draging.value ? 0 : 1
+      opacity: props.hide && !dragging.value ? 0 : 1
     }));
     const slideStyle = computed(() => ({
       borderRadius: `${props.size / 2}px`,
@@ -69,7 +72,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       });
     }, 16);
     const handleDragSlide = (event) => {
-      if (!draging.value)
+      if (!dragging.value)
         return;
       const offset = calculate(
         event[fields.value.mouseClient] - trackPosition[fields.value.mouseClient]
@@ -79,13 +82,13 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       event.stopPropagation();
     };
     const startDrag = () => {
-      draging.value = true;
+      dragging.value = true;
       document.addEventListener("mousemove", handleDragSlide);
       document.addEventListener("mouseup", stopDrag);
       document.addEventListener("touchend", stopDrag);
     };
     const stopDrag = () => {
-      draging.value = false;
+      dragging.value = false;
       document.removeEventListener("mousemove", handleDragSlide);
       document.removeEventListener("mouseup", stopDrag);
       document.removeEventListener("touchend", stopDrag);
@@ -106,12 +109,12 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
         ref_key: "trackContainerRef",
         ref: trackContainerRef,
         class: normalizeClass(unref(styles).track),
-        style: normalizeStyle(unref(trackStyle)),
+        style: normalizeStyle(trackStyle.value),
         onClick: handleTrackClick,
         onWheelPassive: _cache[0] || (_cache[0] = (...args) => unref(handleTrackScroll) && unref(handleTrackScroll)(...args))
       }, [
         createElementVNode("div", {
-          style: normalizeStyle(unref(slideStyle)),
+          style: normalizeStyle(slideStyle.value),
           class: normalizeClass(unref(styles).slide),
           onMousedown: startDrag
         }, null, 38)
@@ -119,19 +122,22 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "ScrollContainer"
+  },
   __name: "ScrollContainer",
   props: {
     size: { default: "normal" },
     tag: { default: "div" },
-    scrollTop: null,
-    scrollLeft: null,
+    scrollTop: {},
+    scrollLeft: {},
     autoHide: { type: Boolean },
     hideVertical: { type: Boolean },
     hideHorizontal: { type: Boolean }
   },
   emits: ["update:scrollTop", "update:scrollLeft"],
-  setup(__props, { expose, emit }) {
+  setup(__props, { expose: __expose, emit }) {
     const props = __props;
     const SIDEBAR_SIDE_MAP = {
       thick: 20,
@@ -142,11 +148,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const scrollbar = apply`absolute bottom-0 right-0`;
       return {
         scrollContainer: style`relative h-full overflow-hidden${css`
-        &::-webkit-scrollbar {
-          -webkit-appearance: none;
-          width: 7px;
-        }
-      `}`,
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 7px;
+      }
+    `}`,
         scrollbarY: tw`${scrollbar}${apply`top-0`}`,
         scrollbarX: tw`${scrollbar}${apply`left-0`}`
       };
@@ -365,7 +371,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
       window.removeEventListener("resize", getDomSize);
     });
-    expose({
+    __expose({
       scrollBy,
       scrollTo
     });
@@ -378,10 +384,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         onMouseenter: _cache[0] || (_cache[0] = () => focus.value = true),
         onMouseleave: _cache[1] || (_cache[1] = () => focus.value = false)
       }, [
-        (openBlock(), createBlock(resolveDynamicComponent(__props.tag), {
+        (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
           ref_key: "wrapRef",
           ref: wrapRef,
-          style: normalizeStyle(unref(scrollAreaStyle)),
+          style: normalizeStyle(scrollAreaStyle.value),
           onScrollPassive: handleAreaScroll
         }, {
           default: withCtx(() => [
@@ -389,26 +395,26 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           ]),
           _: 3
         }, 40, ["style"])),
-        unref(showScrollY) ? (openBlock(), createBlock(_sfc_main$1, {
+        showScrollY.value ? (openBlock(), createBlock(_sfc_main$1, {
           key: 0,
           type: "vertical",
           class: normalizeClass(unref(styles).scrollbarY),
-          style: normalizeStyle(unref(scrollbarYStyle)),
-          length: unref(verticalSlideHeight),
-          size: unref(trackSize),
-          move: unref(moveY),
-          hide: unref(hideScrollbar),
+          style: normalizeStyle(scrollbarYStyle.value),
+          length: verticalSlideHeight.value,
+          size: trackSize.value,
+          move: moveY.value,
+          hide: hideScrollbar.value,
           onChange: onSlideYChange
         }, null, 8, ["class", "style", "length", "size", "move", "hide"])) : createCommentVNode("", true),
-        unref(showScrollX) ? (openBlock(), createBlock(_sfc_main$1, {
+        showScrollX.value ? (openBlock(), createBlock(_sfc_main$1, {
           key: 1,
           type: "horizontal",
           class: normalizeClass(unref(styles).scrollbarX),
-          style: normalizeStyle(unref(scrollbarXStyle)),
-          length: unref(horizontalSlideWidth),
-          size: unref(trackSize),
-          move: unref(moveX),
-          hide: unref(hideScrollbar),
+          style: normalizeStyle(scrollbarXStyle.value),
+          length: horizontalSlideWidth.value,
+          size: trackSize.value,
+          move: moveX.value,
+          hide: hideScrollbar.value,
           onChange: onSlideXChange
         }, null, 8, ["class", "style", "length", "size", "move", "hide"])) : createCommentVNode("", true)
       ], 34);

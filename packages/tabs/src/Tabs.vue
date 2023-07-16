@@ -17,13 +17,17 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults } from 'vue'
 import { useScrollX } from '@apathia/apathia.hooks'
 import { tw, apply } from '@apathia/apathia.twind'
+import type { TabsProps, TabItem, TabsEmits } from './types'
+
+defineOptions({
+  name: 'Tabs',
+})
 
 const styleFn = (str: string) => tw`${apply`${str}`}`
 
-function initStyle(undeline: boolean) {
+function initStyle(underline: boolean) {
   const Theme = {
     default: {
       tab: 'rounded hover:(text-brand-active) list-none',
@@ -35,7 +39,7 @@ function initStyle(undeline: boolean) {
     },
   }
 
-  const theme = undeline ? Theme.underline : Theme.default
+  const theme = underline ? Theme.underline : Theme.default
 
   return {
     outContainerClass: styleFn('p-1 overflow-hidden text-lg'),
@@ -47,21 +51,12 @@ function initStyle(undeline: boolean) {
   }
 }
 
-type TabItem = string | number | { [k: string]: any }
-
-interface TabsProps {
-  modelValue: string | number
-  list: Array<TabItem>
-  underline?: boolean
-  showLabel?: Function
-}
-
 const props = withDefaults(defineProps<TabsProps>(), {
   underline: false,
-  showLabel: (tab: TabItem) => tab
+  showLabel: (tab: TabItem) => tab,
 })
 
-const emit = defineEmits(['update:modelValue', 'navChange'])
+const emit = defineEmits<TabsEmits>()
 
 const style = initStyle(props.underline)
 const { contentRef } = useScrollX()
@@ -71,4 +66,3 @@ function changeNav(tab: TabItem) {
   emit('navChange', tab)
 }
 </script>
-

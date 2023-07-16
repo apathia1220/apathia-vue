@@ -7,13 +7,13 @@ export function useDragDrop(
   disabled: Ref<boolean> | ComputedRef<boolean>,
   processFiles: (files?: FileList) => void,
 ) {
-  const draging = ref(false)
+  const dragging = ref(false)
 
   const dragenter = (e: Event) => {
     e.preventDefault()
 
     if (disabled.value) return
-    draging.value = true
+    dragging.value = true
   }
 
   // Set argument as type "Event" to fix useEventListener type issue
@@ -22,7 +22,7 @@ export function useDragDrop(
 
     const fileList = (e as DragEvent).dataTransfer?.files
     processFiles(fileList)
-    draging.value = false
+    dragging.value = false
   }
 
   const dragover = (e: Event) => {
@@ -32,7 +32,7 @@ export function useDragDrop(
   const dragleave = (e: Event) => {
     e.preventDefault()
 
-    draging.value = false
+    dragging.value = false
   }
 
   useEventListener(el, 'dragenter', dragenter)
@@ -41,6 +41,6 @@ export function useDragDrop(
   useEventListener(el, 'dragleave', dragleave)
 
   return {
-    draging,
+    dragging,
   }
 }

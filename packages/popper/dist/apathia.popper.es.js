@@ -1,4 +1,4 @@
-import { isRef, ref, watch, onMounted, onUnmounted, nextTick, defineComponent, computed, resolveComponent, openBlock, createElementBlock, Fragment, mergeProps, renderSlot, createCommentVNode, createBlock, Transition, withCtx, withDirectives, createVNode, createElementVNode, vShow, Teleport, createTextVNode, toDisplayString, h, getCurrentInstance } from "vue";
+import { isRef, ref, watch, onMounted, onUnmounted, nextTick, defineComponent, computed, openBlock, createElementBlock, Fragment, mergeProps, unref, renderSlot, createCommentVNode, createBlock, Transition, withCtx, withDirectives, createVNode, createElementVNode, vShow, Teleport, createTextVNode, toDisplayString, h, getCurrentInstance } from "vue";
 import { tw, css, apply } from "@apathia/apathia.twind";
 import { CustomRender } from "@apathia/apathia.custom-render";
 import { createPopper } from "@popperjs/core";
@@ -8,7 +8,7 @@ const isHTMLElement = (val) => val instanceof HTMLElement;
 const isRefType = (val) => isRef(val);
 const getArrowStyle = (color, bgc, borderc) => {
   const getArrowBase = () => {
-    const popperArrowBofore = css`
+    const popperArrowBefore = css`
       width: 10px;
       height: 10px;
       &:before {
@@ -21,7 +21,7 @@ const getArrowStyle = (color, bgc, borderc) => {
         height: 10px;
       }
     `;
-    return apply`absolute z-0 ${popperArrowBofore}`;
+    return apply`absolute z-0 ${popperArrowBefore}`;
   };
   const arrowBase = tw(getArrowBase());
   const getContent = () => {
@@ -32,7 +32,7 @@ const getArrowStyle = (color, bgc, borderc) => {
       right: "left"
     };
     const placeArr = Object.keys(placeMap);
-    const arrowPostion = placeArr.map((v) => css`
+    const arrowPosition = placeArr.map((v) => css`
           &[data-popper-placement^=${v}] .${arrowBase} {
             ${placeMap[v]}: -5px;
           }
@@ -53,7 +53,7 @@ const getArrowStyle = (color, bgc, borderc) => {
         }
       `);
     return apply`bg-${bgc} max-w-md box-border rounded border-solid border border-${borderc} 
-    p-3 z-50 text(${color} justify sm) shadow break-all ${arrowPostion} ${arrowBorder}`;
+    p-3 z-50 text(${color} justify sm) shadow break-all ${arrowPosition} ${arrowBorder}`;
   };
   const content = getContent();
   return {
@@ -303,107 +303,39 @@ function usePopper(option, emitOption) {
     close
   };
 }
-const placement = [
-  "top",
-  "top-start",
-  "top-end",
-  "bottom",
-  "bottom-start",
-  "bottom-end",
-  "left",
-  "left-start",
-  "left-end",
-  "right",
-  "right-start",
-  "right-end"
-];
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const defaultArrowStyles = () => ({
-  "enter-active-class": tw`transition-opacity duration-200`,
-  "leave-active-class": tw`transition-opacity duration-200`,
-  "enter-from-class": tw`opacity-0`,
-  "leave-to-class": tw`opacity-0`
-});
 const _sfc_main = defineComponent({
-  name: "Popper",
-  components: { CustomRender },
-  inheritAttrs: false,
+  ...{
+    name: "Popper",
+    inheritAttrs: false
+  },
+  __name: "Popper",
   props: {
-    distance: {
-      type: Number,
-      default: 15
-    },
-    skidding: {
-      type: Number,
-      default: 0
-    },
-    trigger: {
-      type: String,
-      validator: (value) => ["click", "hover", "focus", "manual"].indexOf(value) !== -1,
-      default: "click"
-    },
-    dark: {
-      type: Boolean,
-      default: false
-    },
-    placement: {
-      type: String,
-      validator: (value) => placement.indexOf(value) !== -1,
-      default: "top"
-    },
-    content: {
-      type: String
-    },
-    transitionClass: {
-      type: Object,
-      default: defaultArrowStyles
-    },
-    showArrow: {
-      type: Boolean,
-      default: true
-    },
-    delay: {
-      type: Number,
-      default: 300
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    modelValue: {
-      type: Boolean,
-      default: void 0
-    },
-    popperClass: {
-      type: String,
-      default: ""
-    },
-    appendToBody: {
-      type: Boolean,
-      default: true
-    },
-    render: {
-      type: [String, Function],
-      default: void 0
-    },
-    target: {
-      type: Object,
-      default: void 0
-    },
-    delayClose: {
-      type: Number,
-      default: void 0
-    }
+    distance: { default: 15 },
+    skidding: { default: 0 },
+    trigger: { default: "click" },
+    dark: { type: Boolean, default: false },
+    placement: { default: "top" },
+    content: {},
+    transitionClass: { default: () => ({
+      "enter-active-class": tw`transition-opacity duration-200`,
+      "leave-active-class": tw`transition-opacity duration-200`,
+      "enter-from-class": tw`opacity-0`,
+      "leave-to-class": tw`opacity-0`
+    }) },
+    showArrow: { type: Boolean, default: true },
+    delay: { default: 300 },
+    disabled: { type: Boolean, default: false },
+    component: {},
+    modelValue: { type: Boolean, default: void 0 },
+    popperClass: { default: "" },
+    appendToBody: { type: Boolean, default: true },
+    render: { type: [String, Function], default: void 0 },
+    target: { default: void 0 },
+    delayClose: { default: void 0 }
   },
   emits: ["update:modelValue", "hide", "show", "afterHide"],
-  setup(props, context) {
-    const { emit, expose } = context;
+  setup(__props, { expose: __expose, emit }) {
+    const props = __props;
     const {
       visibility,
       getArrowStyle: getArrowStyle2,
@@ -425,9 +357,7 @@ const _sfc_main = defineComponent({
         emit("show", val, instance);
       }
     });
-    expose({
-      update
-    });
+    __expose({ update });
     if (props.trigger === "manual" || props.trigger === "hover" || props.trigger === "click") {
       watch(
         () => props.modelValue,
@@ -447,11 +377,7 @@ const _sfc_main = defineComponent({
     };
     const getArrowStyles = (dark) => {
       if (dark) {
-        return getArrowStyle2(
-          "content-white",
-          "content-primary",
-          "content-primary"
-        );
+        return getArrowStyle2("content-white", "content-primary", "content-primary");
       }
       return getArrowStyle2("content-accent", "fill-white", "fill-light");
     };
@@ -459,67 +385,56 @@ const _sfc_main = defineComponent({
       popper: tw`inline-block`,
       ...getArrowStyles(props.dark)
     }));
-    return {
-      getContentProps,
-      getArrowProps,
-      getTargetProps,
-      visibility,
-      styles,
-      hasMounted,
-      handleAfterHide
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock(Fragment, null, [
+        !_ctx.target ? (openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ...unref(getTargetProps)(), ..._ctx.$attrs }, {
+          class: styles.value.popper
+        }), [
+          renderSlot(_ctx.$slots, "default")
+        ], 16)) : createCommentVNode("", true),
+        _ctx.render ? (openBlock(), createBlock(Transition, mergeProps({ key: 1 }, _ctx.transitionClass, { onAfterLeave: handleAfterHide }), {
+          default: withCtx(() => [
+            unref(hasMounted) ? withDirectives((openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ...unref(getContentProps)() }, {
+              class: `${styles.value.content} ${_ctx.popperClass}`
+            }), [
+              createVNode(unref(CustomRender), { render: _ctx.render }, null, 8, ["render"]),
+              withDirectives(createElementVNode("div", mergeProps({ ...unref(getArrowProps)() }, {
+                class: styles.value.arrowBase
+              }), null, 16), [
+                [vShow, _ctx.showArrow]
+              ])
+            ], 16)), [
+              [vShow, unref(visibility)]
+            ]) : createCommentVNode("", true)
+          ]),
+          _: 1
+        }, 16)) : (openBlock(), createBlock(Teleport, {
+          key: 2,
+          to: ".apathia-popper",
+          disabled: !_ctx.appendToBody
+        }, [
+          createVNode(Transition, mergeProps(_ctx.transitionClass, { onAfterLeave: handleAfterHide }), {
+            default: withCtx(() => [
+              unref(hasMounted) ? withDirectives((openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ...unref(getContentProps)() }, {
+                class: `${styles.value.content} ${_ctx.popperClass}`
+              }), [
+                renderSlot(_ctx.$slots, "content", {}, () => [
+                  createTextVNode(toDisplayString(_ctx.content), 1)
+                ]),
+                _ctx.showArrow ? (openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ...unref(getArrowProps)() }, {
+                  class: styles.value.arrowBase
+                }), null, 16)) : createCommentVNode("", true)
+              ], 16)), [
+                [vShow, unref(visibility)]
+              ]) : createCommentVNode("", true)
+            ]),
+            _: 3
+          }, 16)
+        ], 8, ["disabled"]))
+      ], 64);
     };
   }
 });
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_CustomRender = resolveComponent("CustomRender");
-  return openBlock(), createElementBlock(Fragment, null, [
-    !_ctx.target ? (openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ..._ctx.getTargetProps(), ..._ctx.$attrs }, {
-      class: _ctx.styles.popper
-    }), [
-      renderSlot(_ctx.$slots, "default")
-    ], 16)) : createCommentVNode("", true),
-    _ctx.render ? (openBlock(), createBlock(Transition, mergeProps({ key: 1 }, _ctx.transitionClass, { onAfterLeave: _ctx.handleAfterHide }), {
-      default: withCtx(() => [
-        _ctx.hasMounted ? withDirectives((openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ..._ctx.getContentProps() }, {
-          class: `${_ctx.styles.content} ${_ctx.popperClass}`
-        }), [
-          createVNode(_component_CustomRender, { render: _ctx.render }, null, 8, ["render"]),
-          withDirectives(createElementVNode("div", mergeProps({ ..._ctx.getArrowProps() }, {
-            class: _ctx.styles.arrowBase
-          }), null, 16), [
-            [vShow, _ctx.showArrow]
-          ])
-        ], 16)), [
-          [vShow, _ctx.visibility]
-        ]) : createCommentVNode("", true)
-      ]),
-      _: 1
-    }, 16, ["onAfterLeave"])) : (openBlock(), createBlock(Teleport, {
-      key: 2,
-      to: ".apathia-popper",
-      disabled: !_ctx.appendToBody
-    }, [
-      createVNode(Transition, mergeProps(_ctx.transitionClass, { onAfterLeave: _ctx.handleAfterHide }), {
-        default: withCtx(() => [
-          _ctx.hasMounted ? withDirectives((openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ..._ctx.getContentProps() }, {
-            class: `${_ctx.styles.content} ${_ctx.popperClass}`
-          }), [
-            renderSlot(_ctx.$slots, "content", {}, () => [
-              createTextVNode(toDisplayString(_ctx.content), 1)
-            ]),
-            _ctx.showArrow ? (openBlock(), createElementBlock("div", mergeProps({ key: 0 }, { ..._ctx.getArrowProps() }, {
-              class: _ctx.styles.arrowBase
-            }), null, 16)) : createCommentVNode("", true)
-          ], 16)), [
-            [vShow, _ctx.visibility]
-          ]) : createCommentVNode("", true)
-        ]),
-        _: 3
-      }, 16, ["onAfterLeave"])
-    ], 8, ["disabled"]))
-  ], 64);
-}
-var Popper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
 const PopperDefaultProp = {
   modelValue: false,
   delayClose: 1e3,
@@ -537,7 +452,7 @@ const PopperContainer = defineComponent({
   setup(props, { emit }) {
     const remove = (id) => emit("remove", id);
     const updateModelValue = (id, val) => emit("updateContainer", val, id);
-    return () => h(Fragment, {}, props.popperList.map((option) => h(Popper, Object.assign(Object.assign({}, option.props), { "onUpdate:modelValue": (e) => updateModelValue(option.id, e), key: option.id, onAfterHide: () => remove(option.id) }))));
+    return () => h(Fragment, {}, props.popperList.map((option) => h(_sfc_main, Object.assign(Object.assign({}, option.props), { "onUpdate:modelValue": (e) => updateModelValue(option.id, e), key: option.id, onAfterHide: () => remove(option.id) }))));
   }
 });
 const popperList = ref([]);
@@ -572,4 +487,18 @@ function usePoppertip() {
     popper: addPopper
   };
 }
-export { Popper, placement, usePoppertip };
+const placement = [
+  "top",
+  "top-start",
+  "top-end",
+  "bottom",
+  "bottom-start",
+  "bottom-end",
+  "left",
+  "left-start",
+  "left-end",
+  "right",
+  "right-start",
+  "right-end"
+];
+export { _sfc_main as Popper, placement, usePoppertip };

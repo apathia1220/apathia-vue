@@ -427,10 +427,13 @@ const _hoisted_3 = /* @__PURE__ */ createElementVNode("path", { d: "M14.53 4.53l
 const _hoisted_4 = [
   _hoisted_3
 ];
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "Select"
+  },
   __name: "Select",
   props: {
-    modelValue: null,
+    modelValue: { type: [Number, String, Boolean, Object, null] },
     valueKey: { default: "value" },
     placeholder: { default: "\u8BF7\u9009\u62E9..." },
     filterable: { type: Boolean, default: false },
@@ -441,13 +444,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     isLoading: { type: Boolean, default: false },
     placement: { default: "" }
   },
-  emits: [
-    "update:modelValue",
-    "change",
-    "input",
-    "native-change",
-    "query-change"
-  ],
+  emits: ["update:modelValue", "native-change", "query-change", "change", "input"],
   setup(__props, { emit: emits }) {
     const props = __props;
     const {
@@ -534,11 +531,11 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
           fill: "currentColor",
           "aria-hidden": "true"
         }, _hoisted_2, 2)),
-        __props.clearable ? (openBlock(), createElementBlock("svg", {
+        _ctx.clearable ? (openBlock(), createElementBlock("svg", {
           key: 0,
           class: normalizeClass({
             [styles.clearableIcon]: true,
-            [styles.clearable]: __props.clearable && unref(filterStr)
+            [styles.clearable]: _ctx.clearable && unref(filterStr)
           }),
           xmlns: "http://www.w3.org/2000/svg",
           viewBox: "-3 -3 24 24",
@@ -555,24 +552,24 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
               [styles.dropdownContainerShow]: unref(active)
             }
           }), [
-            !unref(isRemote) || !__props.isLoading ? (openBlock(), createElementBlock("ul", {
+            !unref(isRemote) || !_ctx.isLoading ? (openBlock(), createElementBlock("ul", {
               key: 0,
               class: normalizeClass({ [styles.optionList]: true }),
               role: "listbox",
               style: normalizeStyle({ maxHeight: unref(maxHeight) + "px" })
             }, [
               renderSlot(_ctx.$slots, "default"),
-              __props.isLoading ? renderSlot(_ctx.$slots, "loading", { key: 0 }, () => [
+              _ctx.isLoading ? renderSlot(_ctx.$slots, "loading", { key: 0 }, () => [
                 createElementVNode("p", {
                   class: normalizeClass({ [styles.tips]: true })
                 }, "\u52A0\u8F7D\u4E2D...", 2)
               ]) : createCommentVNode("", true),
-              !__props.isLoading && unref(isEmpty) ? renderSlot(_ctx.$slots, "empty", { key: 1 }, () => [
+              !_ctx.isLoading && unref(isEmpty) ? renderSlot(_ctx.$slots, "empty", { key: 1 }, () => [
                 createElementVNode("p", {
                   class: normalizeClass({ [styles.tips]: true })
                 }, "\u6CA1\u6709\u9009\u9879\u6570\u636E", 2)
               ]) : createCommentVNode("", true),
-              !__props.isLoading && !unref(isEmpty) && unref(isNoResult) ? renderSlot(_ctx.$slots, "no-result", { key: 2 }, () => [
+              !_ctx.isLoading && !unref(isEmpty) && unref(isNoResult) ? renderSlot(_ctx.$slots, "no-result", { key: 2 }, () => [
                 createElementVNode("p", {
                   class: normalizeClass({ [styles.tips]: true })
                 }, "\u6CA1\u6709\u641C\u7D22\u7ED3\u679C", 2)
@@ -688,7 +685,10 @@ function useOption(userProps) {
     isFocused
   };
 }
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Option"
+  },
   __name: "Option",
   props: {
     value: { type: [String, Number, Boolean, null] },
@@ -721,7 +721,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       focus,
       compoId
     };
-    const { getRootProps, isSelected, isFocused, isHidden } = useOption(userProps);
+    const { getRootProps, isSelected, isFocused, isHidden } = useOption(
+      userProps
+    );
     const styles = {
       wrapper: style`block text-content-primary cursor-pointer select-none relative flex items-center py-2 pl-3 pr-9 truncate outline-none`,
       selected: style`font-bold text-brand-primary`,

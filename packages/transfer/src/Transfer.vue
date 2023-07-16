@@ -1,45 +1,79 @@
 <template>
   <div :class="styles.transfer">
-    <Panel v-model="selectedSource" :class="styles.panel" :data="source" :filterable="filterable"
-      :filter-placeholder="filterPlaceholder" :filter-method="filterMethod" :title="titles[0]"
-      :default-checked="leftDefaultChecked">
+    <Panel
+      v-model="selectedSource"
+      :class="styles.panel"
+      :data="source"
+      :filterable="filterable"
+      :filter-placeholder="filterPlaceholder"
+      :filter-method="filterMethod"
+      :title="titles[0]"
+      :default-checked="leftDefaultChecked"
+    >
       <template #item="{ option, index }">
         <slot name="source-item" :option="option" :index="index"> </slot>
       </template>
     </Panel>
     <div :class="styles.buttonWrapper">
       <div>
-        <BaseButton small :class="styles.button" :disabled="source.length === 0" @click="addAll">
+        <BaseButton
+          small
+          :class="styles.button"
+          :disabled="source.length === 0"
+          @click="addAll"
+        >
           <Icon>
             <DArrowLeft />
           </Icon>
         </BaseButton>
       </div>
       <div>
-        <BaseButton small :class="styles.button" :disabled="selectedSource.length === 0" @click="addSelected">
+        <BaseButton
+          small
+          :class="styles.button"
+          :disabled="selectedSource.length === 0"
+          @click="addSelected"
+        >
           <Icon>
             <ArrowRight />
           </Icon>
         </BaseButton>
       </div>
       <div>
-        <BaseButton small :class="styles.button" :disabled="selectedTarget.length === 0" @click="removeSelected">
+        <BaseButton
+          small
+          :class="styles.button"
+          :disabled="selectedTarget.length === 0"
+          @click="removeSelected"
+        >
           <Icon>
             <ArrowLeft />
           </Icon>
         </BaseButton>
       </div>
       <div>
-        <BaseButton small :class="styles.button" :disabled="target.length === 0" @click="removeAll">
+        <BaseButton
+          small
+          :class="styles.button"
+          :disabled="target.length === 0"
+          @click="removeAll"
+        >
           <Icon>
             <DArrowLeft />
           </Icon>
         </BaseButton>
       </div>
     </div>
-    <Panel v-model="selectedTarget" :class="styles.panel" :data="target" :filterable="filterable"
-      :filter-placeholder="filterPlaceholder" :filter-method="filterMethod" :title="titles[1]"
-      :default-checked="rightDefaultChecked">
+    <Panel
+      v-model="selectedTarget"
+      :class="styles.panel"
+      :data="target"
+      :filterable="filterable"
+      :filter-placeholder="filterPlaceholder"
+      :filter-method="filterMethod"
+      :title="titles[1]"
+      :default-checked="rightDefaultChecked"
+    >
       <template #item="{ option, index }">
         <slot name="source-item" :option="option" :index="index"> </slot>
       </template>
@@ -48,50 +82,51 @@
 </template>
 
 <script setup lang="ts">
-import { computed, withDefaults } from "vue";
-import { Icon } from "@apathia/apathia.icon";
-import { BaseButton } from "@apathia/apathia.button";
-import useTransfer from "./useTransfer";
-import Panel from "./Panel.vue";
-import type { Key, TransferDataItem as DataItem, TargetOrder, Props } from "./types";
-import { apply, tw } from "@apathia/apathia.twind";
-import { ArrowLeft, ArrowRight, DArrowLeft, DArrowRight } from "@apathia/apathia.icon-svg";
+import { computed } from 'vue'
+import { Icon } from '@apathia/apathia.icon'
+import { BaseButton } from '@apathia/apathia.button'
+import useTransfer from './useTransfer'
+import Panel from './Panel.vue'
+import { apply, tw } from '@apathia/apathia.twind'
+import {
+  ArrowLeft,
+  ArrowRight,
+  DArrowLeft,
+  DArrowRight,
+} from '@apathia/apathia.icon-svg'
+import type {
+  TransferDataItem as DataItem,
+  TransferEmits,
+  TransferProps,
+} from './types'
 
-const getTranferStyles = () => ({
+defineOptions({
+  name: 'Transfer',
+})
+
+const getTransferStyles = () => ({
   transfer: tw`${apply`flex`}`,
   panel: tw`${apply`w-48`}`,
   buttonWrapper: tw`${apply`self-center text-center mx-4`}`,
   button: tw`${apply`w-12 my-0.5`}`,
-});
-
-interface TransferProps {
-  modelValue: Key[];
-  data: Array<Record<string, string | boolean | number>>;
-  filterable?: boolean;
-  filterPlaceholder?: string;
-  filterMethod?: (word: string, option: DataItem) => boolean;
-  targetOrder?: TargetOrder;
-  titles?: [string, string];
-  propKeys?: Props;
-  leftDefaultChecked?: Key[];
-  rightDefaultChecked?: Key[];
-}
+})
 
 const props = withDefaults(defineProps<TransferProps>(), {
-  filterPlaceholder: "请输入搜索内容",
-  filterMethod: (word: string, option: DataItem) => option.label.indexOf(word) > -1,
-  targetOrder: "original",
-  titles: () => ["列表1", "列表2"],
+  filterPlaceholder: '请输入搜索内容',
+  filterMethod: (word: string, option: DataItem) =>
+    option.label.indexOf(word) > -1,
+  targetOrder: 'original',
+  titles: () => ['列表1', '列表2'],
   propKeys: () => ({
-    value: "value",
-    label: "label",
-    disabled: "disabled",
+    value: 'value',
+    label: 'label',
+    disabled: 'disabled',
   }),
   leftDefaultChecked: () => [],
   rightDefaultChecked: () => [],
-});
+})
 
-const emit = defineEmits(["update:modelValue", "select", "remove"]);
+const emit = defineEmits<TransferEmits>()
 
 const userProps = computed(() => ({
   modelValue: props.modelValue,
@@ -104,7 +139,7 @@ const userProps = computed(() => ({
   propKeys: props.propKeys,
   leftDefaultChecked: props.leftDefaultChecked,
   rightDefaultChecked: props.rightDefaultChecked,
-}));
+}))
 
 const {
   selectedSource,
@@ -117,7 +152,7 @@ const {
   removeAll,
   addSelected,
   removeSelected,
-} = useTransfer(userProps, emit);
+} = useTransfer(userProps, emit)
 
-const styles = getTranferStyles();
+const styles = getTransferStyles()
 </script>

@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "typescript": "^4.9.4",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
   },
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.3.4"
   }
 }

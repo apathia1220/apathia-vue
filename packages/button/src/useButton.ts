@@ -1,12 +1,14 @@
-// @ts-ignore
 import { noop, isFunction } from '@apathia/apathia.shared'
 import type { SetupContext, Ref } from 'vue'
 
-interface UserProps {
+type ButtonUserProps = {
   disabled: Ref<boolean>
 }
 
-export default function useButton(userProps: UserProps, ctx: SetupContext) {
+export default function useButton(
+  userProps: ButtonUserProps,
+  attrs: SetupContext['attrs'],
+) {
   const { disabled } = userProps
   // 没有自定义事件时默认值为空函数
   const {
@@ -14,7 +16,7 @@ export default function useButton(userProps: UserProps, ctx: SetupContext) {
     ondblclick = noop,
     onmousedown = noop,
     onmouseup = noop,
-  } = ctx.attrs
+  } = attrs
 
   const getButtonProps = () => ({
     disabled: !!disabled.value,

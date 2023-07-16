@@ -9,7 +9,7 @@ import {
 } from 'vue'
 import type { Ref, ComputedRef } from 'vue'
 import type {
-  SelectValueType as ValueType,
+  SelectValueType,
   SelectState,
   OptionRegister,
   OptionRemover,
@@ -23,11 +23,11 @@ export function useOption(userProps: {
   updateRegister: OptionRegister
   selectState: SelectState
   changeHandler: (
-    value: ValueType,
+    value: SelectValueType,
     label: string,
     isInnerChange?: boolean,
   ) => void
-  isSameValue: (newVal: ValueType, oldVal: ValueType) => boolean
+  isSameValue: (newVal: SelectValueType, oldVal: SelectValueType) => boolean
   focus: (uid: number, focusedEl?: HTMLElement) => void
   compoId: number
 }): {
@@ -97,7 +97,7 @@ export function useOption(userProps: {
     currentOptionChange.value = true
     changeHandler(value.value, label.value, true)
   }
-  const handleChecked = (newVal: ValueType) => {
+  const handleChecked = (newVal: SelectValueType) => {
     //  处理外部props变化
     if (currentOptionChange.value === true) {
       // option自己触发值变化

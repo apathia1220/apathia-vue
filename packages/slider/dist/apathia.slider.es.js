@@ -2,12 +2,15 @@ import { defineComponent, computed, openBlock, createElementBlock, normalizeClas
 import { Popper } from "@apathia/apathia.popper";
 import { useInjectProp, useToggle, useEventListener } from "@apathia/apathia.hooks";
 import { style, css } from "@apathia/apathia.twind";
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const _sfc_main$1 = defineComponent({
+  ...{
+    name: "Stop"
+  },
   __name: "Stop",
   props: {
-    step: null,
-    min: null,
-    max: null,
+    step: {},
+    min: {},
+    max: {},
     vertical: { type: Boolean },
     marks: { default: () => ({}) }
   },
@@ -29,33 +32,36 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     const styles = getStopStyles();
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("div", {
-        class: normalizeClass([unref(styles).stopWrap, __props.vertical ? unref(styles).stopWrapY : unref(styles).stopWrapX])
+        class: normalizeClass([unref(styles).stopWrap, _ctx.vertical ? unref(styles).stopWrapY : unref(styles).stopWrapX])
       }, [
-        (openBlock(true), createElementBlock(Fragment, null, renderList(unref(stepCount) + 1, (count, index) => {
+        (openBlock(true), createElementBlock(Fragment, null, renderList(stepCount.value + 1, (count, index) => {
           return openBlock(), createElementBlock("div", {
             key: index,
-            class: normalizeClass([unref(styles).stop, __props.vertical ? unref(styles).stopY : unref(styles).stopX]),
+            class: normalizeClass([unref(styles).stop, _ctx.vertical ? unref(styles).stopY : unref(styles).stopX]),
             style: normalizeStyle({
-              [__props.vertical ? "bottom" : "left"]: `${1 / unref(stepCount) * index * 100}%`
+              [_ctx.vertical ? "bottom" : "left"]: `${1 / stepCount.value * index * 100}%`
             })
           }, [
             createElementVNode("span", {
               class: normalizeClass([
                 unref(styles).stopText,
-                __props.vertical ? unref(styles).stopTextY : unref(styles).stopTextX
+                _ctx.vertical ? unref(styles).stopTextY : unref(styles).stopTextX
               ]),
-              style: normalizeStyle((__props.marks[getValueByStep(count - 1)] || {}).style)
-            }, toDisplayString((__props.marks[getValueByStep(count - 1)] || {}).label), 7)
+              style: normalizeStyle((_ctx.marks[getValueByStep(count - 1)] || {}).style)
+            }, toDisplayString((_ctx.marks[getValueByStep(count - 1)] || {}).label), 7)
           ], 6);
         }), 128))
       ], 2);
     };
   }
 });
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Slider"
+  },
   __name: "Slider",
   props: {
-    modelValue: null,
+    modelValue: {},
     disabled: { type: Boolean },
     min: { default: 0 },
     max: { default: 100 },
@@ -64,10 +70,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     showTooltip: { type: Boolean, default: true },
     formatTooltip: { type: Function, default: (cur) => cur },
     range: { type: Boolean },
-    valueRange: null,
+    valueRange: {},
     marks: { default: () => ({}) },
     vertical: { type: Boolean },
-    height: null
+    height: {}
   },
   emits: ["update:modelValue"],
   setup(__props, { emit }) {
@@ -86,31 +92,29 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       stepsY: style`w-1 absolute bottom-0`,
       stepsHover: style`bg-brand-active`,
       button: style`group-hover:border-brand-active border(2 solid brand-primary) h-4 w-4 bg-fill-white rounded-lg cursor-pointer ${css`
-      z-index: 1;
-    `}`,
+    z-index: 1;
+  `}`,
       popperWrap: style`absolute`,
       buttonHover: style`border-brand-active`,
       buttonX: style`-translate-x-1/2${css`
-      top: 2px;
-    `}`,
+    top: 2px;
+  `}`,
       buttonY: style`translate-y-1/2${css`
-      left: 2px;
-    `}`
+    left: 2px;
+  `}`
     });
     const isTouchEvent = (e) => e.type.startsWith("touch");
     const styles = getSliderStyles();
     const trackRef = ref(null);
-    const moveRange = reactive(
-      {
-        clientX: [0, 0],
-        clientY: [0, 0]
-      }
-    );
+    const moveRange = reactive({
+      clientX: [0, 0],
+      clientY: [0, 0]
+    });
     const disableDrag = useInjectProp("Form", false, toRef(props, "disabled"));
     const buttonRef = ref(null);
     const buttonSize = ref(0);
     const popperRef = ref(null);
-    const popperVisble = ref(false);
+    const popperVisible = ref(false);
     onMounted(() => {
       if (trackRef.value) {
         const { x, y, height, width } = trackRef.value.getBoundingClientRect();
@@ -121,7 +125,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         buttonSize.value = buttonRef.value.offsetWidth;
       }
     });
-    const [draging, , setDraging] = useToggle(false);
+    const [dragging, , setDragging] = useToggle(false);
     const btnEndStyle = computed(() => {
       const value = `${((props.modelValue - props.min) / props.max - props.min) * 100}%`;
       return props.vertical ? { bottom: value } : { left: value };
@@ -139,7 +143,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         return;
       }
       e.preventDefault();
-      setDraging(true);
+      setDragging(true);
       stopFns.push(useEventListener(window, "mousemove", handleDragging));
       stopFns.push(useEventListener(window, "touchmove", handleDragging));
       stopFns.push(useEventListener(window, "mouseup", stopDrag));
@@ -147,9 +151,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       stopFns.push(useEventListener(window, "contextmenu", stopDrag));
     };
     const stopDrag = () => {
-      setDraging(false);
+      setDragging(false);
       stopFns.forEach((fn) => fn && fn());
-      popperVisble.value = false;
+      popperVisible.value = false;
     };
     const resolveValueInRange = (targetPos, posRange) => {
       const valueRange = [props.min, props.max];
@@ -188,12 +192,12 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       );
     };
     const handleDragging = (e) => {
-      if (draging.value) {
+      if (dragging.value) {
         handleTrackClick(e);
         if (popperRef.value && popperRef.value.update && typeof popperRef.value.update === "function") {
           popperRef.value && popperRef.value.update();
         }
-        popperVisble.value = true;
+        popperVisible.value = true;
       }
     };
     const handleTrackClick = (e) => {
@@ -231,10 +235,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         createElementVNode("div", {
           class: normalizeClass({
             [unref(styles).slider]: true,
-            [unref(styles).sliderX]: !__props.vertical,
-            [unref(styles).sliderY]: __props.vertical
+            [unref(styles).sliderX]: !_ctx.vertical,
+            [unref(styles).sliderY]: _ctx.vertical
           }),
-          style: normalizeStyle(unref(sliderStyle)),
+          style: normalizeStyle(sliderStyle.value),
           onClick: handleTrackClick
         }, [
           createElementVNode("div", {
@@ -242,48 +246,48 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             ref: trackRef,
             class: normalizeClass({
               [unref(styles).track]: true,
-              [unref(styles).trackX]: !__props.vertical,
-              [unref(styles).trackY]: __props.vertical,
-              [unref(styles).trackHover]: unref(draging)
+              [unref(styles).trackX]: !_ctx.vertical,
+              [unref(styles).trackY]: _ctx.vertical,
+              [unref(styles).trackHover]: unref(dragging)
             })
           }, null, 2),
           createElementVNode("div", {
             class: normalizeClass({
               [unref(styles).steps]: true,
-              [unref(styles).stepsX]: !__props.vertical,
-              [unref(styles).stepsY]: __props.vertical,
-              [unref(styles).stepsHover]: unref(draging)
+              [unref(styles).stepsX]: !_ctx.vertical,
+              [unref(styles).stepsY]: _ctx.vertical,
+              [unref(styles).stepsHover]: unref(dragging)
             }),
-            style: normalizeStyle(unref(stepsStyle))
+            style: normalizeStyle(stepsStyle.value)
           }, null, 6),
-          __props.showSteps ? (openBlock(), createBlock(_sfc_main$1, {
+          _ctx.showSteps ? (openBlock(), createBlock(_sfc_main$1, {
             key: 0,
-            step: __props.step,
-            min: __props.min,
-            max: __props.max,
-            vertical: __props.vertical,
-            marks: __props.marks
+            step: _ctx.step,
+            min: _ctx.min,
+            max: _ctx.max,
+            vertical: _ctx.vertical,
+            marks: _ctx.marks
           }, null, 8, ["step", "min", "max", "vertical", "marks"])) : createCommentVNode("", true),
-          __props.showTooltip ? (openBlock(), createBlock(unref(Popper), {
+          _ctx.showTooltip ? (openBlock(), createBlock(unref(Popper), {
             key: 1,
             ref_key: "popperRef",
             ref: popperRef,
-            modelValue: popperVisble.value,
-            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => popperVisble.value = $event),
+            modelValue: popperVisible.value,
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => popperVisible.value = $event),
             dark: "",
-            placement: __props.vertical ? "right" : "bottom",
+            placement: _ctx.vertical ? "right" : "bottom",
             trigger: "hover",
-            class: normalizeClass([unref(styles).popperWrap, __props.vertical ? unref(styles).buttonY : unref(styles).buttonX]),
-            style: normalizeStyle(unref(btnEndStyle))
+            class: normalizeClass([unref(styles).popperWrap, _ctx.vertical ? unref(styles).buttonY : unref(styles).buttonX]),
+            style: normalizeStyle(btnEndStyle.value)
           }, {
             content: withCtx(() => [
-              createTextVNode(toDisplayString(__props.formatTooltip(__props.modelValue)), 1)
+              createTextVNode(toDisplayString(_ctx.formatTooltip(_ctx.modelValue)), 1)
             ]),
             default: withCtx(() => [
               createElementVNode("div", {
                 ref_key: "buttonRef",
                 ref: buttonRef,
-                class: normalizeClass([unref(styles).button, unref(draging) ? unref(styles).buttonHover : ""]),
+                class: normalizeClass([unref(styles).button, unref(dragging) ? unref(styles).buttonHover : ""]),
                 onMousedown: startDrag
               }, null, 34)
             ]),

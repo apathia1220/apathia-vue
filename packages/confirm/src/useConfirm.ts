@@ -1,4 +1,4 @@
-import { h } from 'vue'
+import { Component, h } from 'vue'
 import { useModal } from '@apathia/apathia.modal'
 import Confirm from './Confirm.vue'
 import { ConfirmProps } from './types'
@@ -50,7 +50,7 @@ export function useConfirm() {
         width: 450,
         ...modalOptions,
         render: () =>
-          h(Confirm, {
+          h(Confirm as Component, {
             ...confirmOptions,
             confirm: doConfirm,
             cancel: doCancel,

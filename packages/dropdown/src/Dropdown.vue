@@ -27,40 +27,32 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, withDefaults, provide } from 'vue'
+import { computed, ref, provide } from 'vue'
 import { BaseButton } from '@apathia/apathia.button'
 import { Popper, TriggerType, Placement } from '@apathia/apathia.popper'
 import { style } from '@apathia/apathia.twind'
+import type { DropdownProps, DropdownEmits } from './types'
 
-// defineOptions({
-//   name: 'Dropdown',
-// })
-
-const getDropdownStyle = () => ({
-    transitionClass: {
-      'enter-from-class': style`transform opacity-0 scale-95`,
-      'enter-active-class': style`transition ease-out duration-100`,
-      'enter-to-class': style`transform opacity-100 scale-100`,
-      'leave-from-class': style`transform opacity-100 scale-100`,
-      'leave-active-class': style`transition ease-in duration-75`,
-      'leave-to-class': style`transform opacity-0 scale-95`,
-    },
-    staticStyle: {
-      popper: style`max-w-7xl rounded shadow-lg bg-fill-white`,
-      divide: style`divide-y divide-fill-light py-0`,
-      iconClass: style`text-xs`,
-      baseButton: style`m-0`,
-    },
+defineOptions({
+  name: 'Dropdown',
 })
 
-interface DropdownProps {
-  delay?: number
-  disabled?: boolean
-  label?: string
-  trigger?: TriggerType
-  placement?: Placement
-  hideOnClick?: boolean
-}
+const getDropdownStyle = () => ({
+  transitionClass: {
+    'enter-from-class': style`transform opacity-0 scale-95`,
+    'enter-active-class': style`transition ease-out duration-100`,
+    'enter-to-class': style`transform opacity-100 scale-100`,
+    'leave-from-class': style`transform opacity-100 scale-100`,
+    'leave-active-class': style`transition ease-in duration-75`,
+    'leave-to-class': style`transform opacity-0 scale-95`,
+  },
+  staticStyle: {
+    popper: style`max-w-7xl rounded shadow-lg bg-fill-white`,
+    divide: style`divide-y divide-fill-light py-0`,
+    iconClass: style`text-xs`,
+    baseButton: style`m-0`,
+  },
+})
 
 const props = withDefaults(defineProps<DropdownProps>(), {
   delay: 300,
@@ -71,7 +63,7 @@ const props = withDefaults(defineProps<DropdownProps>(), {
   hideOnClick: false,
 })
 
-const emit = defineEmits(['show', 'hide'])
+const emit = defineEmits<DropdownEmits>()
 
 const visible = ref<boolean>(false)
 const divide = ref<boolean>(false)

@@ -1,5 +1,5 @@
-import { MaybePromise } from "@apathia/apathia.shared";
-export interface UploadProps {
+import type { MaybePromise } from '@apathia/apathia.shared';
+export declare type UploadProps = {
     modelValue: string[] | string;
     valid: boolean;
     draggable: boolean;
@@ -13,7 +13,7 @@ export interface UploadProps {
     multiple: boolean;
     data: Record<string, string> | ((file: File) => Record<string, string>);
     limit: number;
-    filesize: string | number;
+    fileSize: number;
     accept: string;
     disabled: boolean;
     onBeforeEachUpload: (file: File) => MaybePromise<File>;
@@ -23,4 +23,8 @@ export interface UploadProps {
     resolveUrl: (p: unknown) => MaybePromise<string>;
     checkUrl: (url: string) => MaybePromise<boolean>;
     https: boolean;
-}
+};
+export declare type UploadEmits = {
+    'update:modelValue': [urlRes: string | string[]];
+    'update:valid': [valid: boolean];
+};

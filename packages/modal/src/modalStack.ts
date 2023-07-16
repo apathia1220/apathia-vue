@@ -1,14 +1,8 @@
 /**
  * 保存 modal close 事件栈, 实现 modal 正常关闭
  */
-// @ts-ignore
 import { useEventListener } from '@apathia/apathia.hooks'
-import { ModalProps } from './types'
-
-interface ModalInstance {
-  props: ModalProps
-  close: () => void
-}
+import type { ModalInstance } from './types'
 
 export const modalStack: ModalInstance[] = []
 let stopListener = () => {}

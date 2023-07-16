@@ -2,11 +2,14 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.affix = {}, global.Vue, global.twind));
 })(this, function(exports2, vue, apathia_twind) {
   "use strict";
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
+    ...{
+      name: "Affix"
+    },
     __name: "Affix",
     props: {
       offsetTop: { default: 0 },
-      offsetBottom: null
+      offsetBottom: {}
     },
     emits: ["change"],
     setup(__props, { emit }) {
@@ -124,7 +127,7 @@
           vue.createElementVNode("div", {
             ref_key: "pointRef",
             ref: pointRef,
-            class: vue.normalizeClass(vue.unref(classes)),
+            class: vue.normalizeClass(classes.value),
             style: vue.normalizeStyle(styles.value)
           }, [
             vue.renderSlot(_ctx.$slots, "default")

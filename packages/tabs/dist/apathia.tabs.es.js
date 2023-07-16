@@ -2,11 +2,14 @@ import { defineComponent, openBlock, createElementBlock, normalizeClass, unref, 
 import { useScrollX } from "@apathia/apathia.hooks";
 import { tw, apply } from "@apathia/apathia.twind";
 const _hoisted_1 = ["onClick"];
-const _sfc_main = /* @__PURE__ */ defineComponent({
+const _sfc_main = defineComponent({
+  ...{
+    name: "Tabs"
+  },
   __name: "Tabs",
   props: {
-    modelValue: null,
-    list: null,
+    modelValue: {},
+    list: {},
     underline: { type: Boolean, default: false },
     showLabel: { type: Function, default: (tab) => tab }
   },
@@ -14,7 +17,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
   setup(__props, { emit }) {
     const props = __props;
     const styleFn = (str) => tw`${apply`${str}`}`;
-    function initStyle(undeline) {
+    function initStyle(underline) {
       const Theme = {
         default: {
           tab: "rounded hover:(text-brand-active) list-none",
@@ -25,7 +28,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           tabActive: "border-brand-active text-brand-active"
         }
       };
-      const theme = undeline ? Theme.underline : Theme.default;
+      const theme = underline ? Theme.underline : Theme.default;
       return {
         outContainerClass: styleFn("p-1 overflow-hidden text-lg"),
         containerClass: styleFn("flex"),
@@ -50,15 +53,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           ref: contentRef,
           class: normalizeClass(unref(style).containerClass)
         }, [
-          (openBlock(true), createElementBlock(Fragment, null, renderList(__props.list, (tab, index) => {
+          (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.list, (tab, index) => {
             return openBlock(), createElementBlock("li", {
               key: index,
               class: normalizeClass([
                 unref(style).tabClass,
-                __props.modelValue === tab ? unref(style).tabActiveClass : ""
+                _ctx.modelValue === tab ? unref(style).tabActiveClass : ""
               ]),
               onClick: ($event) => changeNav(tab)
-            }, toDisplayString(__props.showLabel(tab)), 11, _hoisted_1);
+            }, toDisplayString(_ctx.showLabel(tab)), 11, _hoisted_1);
           }), 128))
         ], 2)
       ], 2);

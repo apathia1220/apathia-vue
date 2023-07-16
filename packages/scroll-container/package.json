@@ -29,10 +29,10 @@
   "devDependencies": {
     "@types/element-resize-detector": "^1.1.3",
     "@types/lodash-es": "^4.17.6",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
   },
   "peerDependencies": {
-    "vue": "^3.2.37"
+    "vue": "^3.3.4"
   },
   "dependencies": {
     "@apathia/apathia.shared": "workspace:^1.2.7",

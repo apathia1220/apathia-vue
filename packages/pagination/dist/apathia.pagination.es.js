@@ -1,4 +1,4 @@
-import { shallowReactive, ref, onBeforeUpdate, onUpdated, computed, watch, defineComponent, openBlock, createElementBlock, normalizeClass, createElementVNode, renderSlot, createTextVNode, toDisplayString, createCommentVNode, Fragment, renderList, withDirectives, withKeys, vModelText } from "vue";
+import { shallowReactive, ref, onBeforeUpdate, onUpdated, computed, watch, defineComponent, openBlock, createElementBlock, normalizeClass, unref, createElementVNode, renderSlot, createTextVNode, toDisplayString, createCommentVNode, Fragment, renderList, withDirectives, isRef, withKeys, vModelText } from "vue";
 import { mergeWithDefault } from "@apathia/apathia.shared";
 import { style } from "@apathia/apathia.twind";
 const DEFAULT_OPTIONS = {
@@ -17,7 +17,7 @@ const DEFAULT_OPTIONS = {
   totalCount: true,
   jumpPage: false
 };
-function usePagination(props, ctx) {
+function usePagination(props, emit) {
   const realOptions = shallowReactive(mergeWithDefault(DEFAULT_OPTIONS, props.options.value));
   const jumpTo = ref("1");
   const prevPage = ref(0);
@@ -56,7 +56,7 @@ function usePagination(props, ctx) {
     }
     realOptions.currentPage = pageNumber;
     prevPage.value = pageNumber;
-    ctx.emit("page-change", pageNumber, totalPages.value);
+    emit("page-change", pageNumber, totalPages.value);
     handlePageChange(pageNumber);
   };
   const handlePageChange = (pageNumber) => {
@@ -234,23 +234,18 @@ function updatePagesArray(keepMiddle, totalPages, currentPage, limit) {
   }
   return pages;
 }
-var _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
+const _hoisted_1 = ["onClick"];
 const _sfc_main = defineComponent({
-  name: "Pagination",
+  ...{
+    name: "Pagination"
+  },
+  __name: "Pagination",
   props: {
-    options: {
-      type: Object,
-      required: true
-    }
+    options: {}
   },
   emits: ["page-change"],
-  setup(props, ctx) {
+  setup(__props, { emit }) {
+    const props = __props;
     const options = computed(() => ({ ...props.options }));
     const userProps = {
       options
@@ -263,128 +258,116 @@ const _sfc_main = defineComponent({
       selectPage,
       setPageBtnRef,
       innerOptions
-    } = usePagination(userProps, ctx);
-    const styles = getPagonationStyles();
-    return {
-      jumpTo,
-      pages,
-      selectPage,
-      setPageBtnRef,
-      innerOptions,
-      totalPages,
-      totalItems,
-      styles
+    } = usePagination(userProps, emit);
+    const getPaginationStyles = () => ({
+      wrapper: style`relative bg-fill-white py-3 flex items-center justify-between`,
+      ul: style`relative z-0 inline-flex items-center text-base`,
+      item: style`relative inline-flex flex-shrink-0 mx-1 px-btn-lg-y py-px border border-fill-neutral rounded 
+    bg-fill-white text-content-primary cursor-pointer select-none hover:bg-brand-primary hover:text-content-white`,
+      active: style`text-content-white bg-brand-primary border-brand-primary outline-none`,
+      itemDisabled: style`cursor-not-allowed pointer-events-none text-content-neutral bg-fill-light border-fill-gray`,
+      numberBtn: style`outline-none`,
+      jump: style`relative z-0 inline-flex items-center -space-x-px text-base border border-fill-neutral rounded`,
+      jumpInput: style`outline-none text-center w-8 px-btn-lg-y py-px border-0 rounded`,
+      jumpBtn: style`text-center w-14  px-btn-lg-y py-px border-0 bg-fill-white rounded
+    cursor-pointer hover:bg-brand-primary hover:text-content-white`,
+      count: style`px-4`,
+      pages: style`pr-1`
+    });
+    const styles = getPaginationStyles();
+    return (_ctx, _cache) => {
+      return openBlock(), createElementBlock("nav", {
+        class: normalizeClass(unref(styles).wrapper)
+      }, [
+        createElementVNode("ul", {
+          class: normalizeClass(unref(styles).ul)
+        }, [
+          unref(innerOptions).totalCount ? (openBlock(), createElementBlock("li", {
+            key: 0,
+            class: normalizeClass(unref(styles).count)
+          }, [
+            renderSlot(_ctx.$slots, "total", {
+              totalItems: unref(totalItems),
+              totalPages: unref(totalPages)
+            }, () => [
+              createTextVNode(" \u5171" + toDisplayString(unref(totalItems)) + " \u6761\u6570\u636E ", 1)
+            ])
+          ], 2)) : createCommentVNode("", true),
+          unref(innerOptions).boundaryBtns ? (openBlock(), createElementBlock("li", {
+            key: 1,
+            class: normalizeClass({
+              [unref(styles).item]: true,
+              [unref(styles).itemDisabled]: unref(innerOptions).currentPage === 1
+            }),
+            onClick: _cache[0] || (_cache[0] = ($event) => unref(selectPage)(1))
+          }, toDisplayString(unref(innerOptions).firstText), 3)) : createCommentVNode("", true),
+          unref(innerOptions).directionBtns ? (openBlock(), createElementBlock("li", {
+            key: 2,
+            class: normalizeClass({
+              [unref(styles).item]: true,
+              [unref(styles).itemDisabled]: unref(innerOptions).currentPage === 1
+            }),
+            onClick: _cache[1] || (_cache[1] = ($event) => unref(selectPage)(unref(innerOptions).currentPage - 1))
+          }, toDisplayString(unref(innerOptions).previousText), 3)) : createCommentVNode("", true),
+          (openBlock(true), createElementBlock(Fragment, null, renderList(unref(pages), (page, index) => {
+            return openBlock(), createElementBlock("li", {
+              key: index,
+              ref_for: true,
+              ref: unref(setPageBtnRef),
+              class: normalizeClass({
+                [unref(styles).item]: true,
+                [unref(styles).numberBtn]: true,
+                [unref(styles).active]: page.number === unref(innerOptions).currentPage
+              }),
+              onClick: ($event) => unref(selectPage)(page.number)
+            }, toDisplayString(page.text), 11, _hoisted_1);
+          }), 128)),
+          unref(innerOptions).directionBtns ? (openBlock(), createElementBlock("li", {
+            key: 3,
+            class: normalizeClass({
+              [unref(styles).item]: true,
+              [unref(styles).itemDisabled]: unref(innerOptions).currentPage === unref(totalPages) || unref(innerOptions).totalItems === 0
+            }),
+            onClick: _cache[2] || (_cache[2] = ($event) => unref(selectPage)(unref(innerOptions).currentPage + 1))
+          }, toDisplayString(unref(innerOptions).nextText), 3)) : createCommentVNode("", true),
+          unref(innerOptions).boundaryBtns ? (openBlock(), createElementBlock("li", {
+            key: 4,
+            class: normalizeClass({
+              [unref(styles).item]: true,
+              [unref(styles).itemDisabled]: unref(innerOptions).currentPage === unref(totalPages) || unref(innerOptions).totalItems === 0
+            }),
+            onClick: _cache[3] || (_cache[3] = ($event) => unref(selectPage)(unref(totalPages)))
+          }, toDisplayString(unref(innerOptions).lastText), 3)) : createCommentVNode("", true),
+          unref(innerOptions).jumpPage ? (openBlock(), createElementBlock("li", {
+            key: 5,
+            class: normalizeClass({
+              [unref(styles).jump]: true
+            })
+          }, [
+            withDirectives(createElementVNode("input", {
+              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => isRef(jumpTo) ? jumpTo.value = $event : null),
+              class: normalizeClass({
+                [unref(styles).jumpInput]: true
+              }),
+              onKeyup: _cache[5] || (_cache[5] = withKeys(($event) => unref(selectPage)(unref(jumpTo)), ["enter"]))
+            }, null, 34), [
+              [vModelText, unref(jumpTo)]
+            ]),
+            createElementVNode("span", {
+              class: normalizeClass({
+                [unref(styles).pages]: true
+              })
+            }, "/ " + toDisplayString(unref(totalPages)), 3),
+            createElementVNode("span", {
+              class: normalizeClass({
+                [unref(styles).jumpBtn]: true
+              }),
+              onClick: _cache[6] || (_cache[6] = ($event) => unref(selectPage)(unref(jumpTo)))
+            }, " \u8DF3\u9875 ", 2)
+          ], 2)) : createCommentVNode("", true)
+        ], 2)
+      ], 2);
     };
   }
 });
-const getPagonationStyles = () => ({
-  wrapper: style`relative bg-fill-white py-3 flex items-center justify-between`,
-  ul: style`relative z-0 inline-flex items-center text-base`,
-  item: style`relative inline-flex flex-shrink-0 mx-1 px-btn-lg-y py-px border border-fill-neutral rounded 
-    bg-fill-white text-content-primary cursor-pointer select-none hover:bg-brand-primary hover:text-content-white`,
-  active: style`text-content-white bg-brand-primary border-brand-primary outline-none`,
-  itemDisabled: style`cursor-not-allowed pointer-events-none text-content-neutral bg-fill-light border-fill-gray`,
-  numberBtn: style`outline-none`,
-  jump: style`relative z-0 inline-flex items-center -space-x-px text-base border border-fill-neutral rounded`,
-  jumpInput: style`outline-none text-center w-8 px-btn-lg-y py-px border-0 rounded`,
-  jumpBtn: style`text-center w-14  px-btn-lg-y py-px border-0 bg-fill-white rounded
-    cursor-pointer hover:bg-brand-primary hover:text-content-white`,
-  count: style`px-4`,
-  pages: style`pr-1`
-});
-const _hoisted_1 = ["onClick"];
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("nav", {
-    class: normalizeClass(_ctx.styles.wrapper)
-  }, [
-    createElementVNode("ul", {
-      class: normalizeClass(_ctx.styles.ul)
-    }, [
-      _ctx.innerOptions.totalCount ? (openBlock(), createElementBlock("li", {
-        key: 0,
-        class: normalizeClass(_ctx.styles.count)
-      }, [
-        renderSlot(_ctx.$slots, "total", {
-          totalItems: _ctx.totalItems,
-          totalPages: _ctx.totalPages
-        }, () => [
-          createTextVNode(" \u5171" + toDisplayString(_ctx.totalItems) + " \u6761\u6570\u636E ", 1)
-        ])
-      ], 2)) : createCommentVNode("", true),
-      _ctx.innerOptions.boundaryBtns ? (openBlock(), createElementBlock("li", {
-        key: 1,
-        class: normalizeClass({
-          [_ctx.styles.item]: true,
-          [_ctx.styles.itemDisabled]: _ctx.innerOptions.currentPage === 1
-        }),
-        onClick: _cache[0] || (_cache[0] = ($event) => _ctx.selectPage(1))
-      }, toDisplayString(_ctx.innerOptions.firstText), 3)) : createCommentVNode("", true),
-      _ctx.innerOptions.directionBtns ? (openBlock(), createElementBlock("li", {
-        key: 2,
-        class: normalizeClass({
-          [_ctx.styles.item]: true,
-          [_ctx.styles.itemDisabled]: _ctx.innerOptions.currentPage === 1
-        }),
-        onClick: _cache[1] || (_cache[1] = ($event) => _ctx.selectPage(_ctx.innerOptions.currentPage - 1))
-      }, toDisplayString(_ctx.innerOptions.previousText), 3)) : createCommentVNode("", true),
-      (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.pages, (page, index) => {
-        return openBlock(), createElementBlock("li", {
-          key: index,
-          ref_for: true,
-          ref: _ctx.setPageBtnRef,
-          class: normalizeClass({
-            [_ctx.styles.item]: true,
-            [_ctx.styles.numberBtn]: true,
-            [_ctx.styles.active]: page.number === _ctx.innerOptions.currentPage
-          }),
-          onClick: ($event) => _ctx.selectPage(page.number)
-        }, toDisplayString(page.text), 11, _hoisted_1);
-      }), 128)),
-      _ctx.innerOptions.directionBtns ? (openBlock(), createElementBlock("li", {
-        key: 3,
-        class: normalizeClass({
-          [_ctx.styles.item]: true,
-          [_ctx.styles.itemDisabled]: _ctx.innerOptions.currentPage === _ctx.totalPages || _ctx.innerOptions.totalItems === 0
-        }),
-        onClick: _cache[2] || (_cache[2] = ($event) => _ctx.selectPage(_ctx.innerOptions.currentPage + 1))
-      }, toDisplayString(_ctx.innerOptions.nextText), 3)) : createCommentVNode("", true),
-      _ctx.innerOptions.boundaryBtns ? (openBlock(), createElementBlock("li", {
-        key: 4,
-        class: normalizeClass({
-          [_ctx.styles.item]: true,
-          [_ctx.styles.itemDisabled]: _ctx.innerOptions.currentPage === _ctx.totalPages || _ctx.innerOptions.totalItems === 0
-        }),
-        onClick: _cache[3] || (_cache[3] = ($event) => _ctx.selectPage(_ctx.totalPages))
-      }, toDisplayString(_ctx.innerOptions.lastText), 3)) : createCommentVNode("", true),
-      _ctx.innerOptions.jumpPage ? (openBlock(), createElementBlock("li", {
-        key: 5,
-        class: normalizeClass({
-          [_ctx.styles.jump]: true
-        })
-      }, [
-        withDirectives(createElementVNode("input", {
-          "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => _ctx.jumpTo = $event),
-          class: normalizeClass({
-            [_ctx.styles.jumpInput]: true
-          }),
-          onKeyup: _cache[5] || (_cache[5] = withKeys(($event) => _ctx.selectPage(_ctx.jumpTo), ["enter"]))
-        }, null, 34), [
-          [vModelText, _ctx.jumpTo]
-        ]),
-        createElementVNode("span", {
-          class: normalizeClass({
-            [_ctx.styles.pages]: true
-          })
-        }, "/ " + toDisplayString(_ctx.totalPages), 3),
-        createElementVNode("span", {
-          class: normalizeClass({
-            [_ctx.styles.jumpBtn]: true
-          }),
-          onClick: _cache[6] || (_cache[6] = ($event) => _ctx.selectPage(_ctx.jumpTo))
-        }, " \u8DF3\u9875 ", 2)
-      ], 2)) : createCommentVNode("", true)
-    ], 2)
-  ], 2);
-}
-var Pagination = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-export { Pagination };
+export { _sfc_main as Pagination };

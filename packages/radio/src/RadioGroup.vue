@@ -4,41 +4,33 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { computed, defineComponent, provide, toRefs } from 'vue'
 import { useInjectProp } from '@apathia/apathia.hooks'
+import type { RadioGroupProps, RadioGroupEmits } from './types'
 
-export default defineComponent({
+defineOptions({
   name: 'RadioGroup',
+})
 
-  props: {
-    modelValue: {
-      type: [String, Number, Boolean],
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: undefined,
-    },
-  },
+const props = withDefaults(defineProps<RadioGroupProps>(), {
+  modelValue: false,
+  disabled: undefined,
+})
 
-  emits: ['update:modelValue', 'change'],
+const emit = defineEmits<RadioGroupEmits>()
 
-  setup(props, ctx) {
-    const { modelValue, disabled } = toRefs(props)
+const { modelValue, disabled } = toRefs(props)
 
-    const isDisabled = useInjectProp('FormDisabled', false, disabled)
-    const groupState = computed(() => ({
-      value: modelValue.value,
-      disabled: isDisabled.value,
-    }))
+const isDisabled = useInjectProp('FormDisabled', false, disabled)
+const groupState = computed(() => ({
+  value: modelValue.value,
+  disabled: isDisabled.value,
+}))
 
-    provide('groupState', groupState)
-    provide('changeHandler', (val: string | number | boolean) => {
-      ctx.emit('update:modelValue', val)
-      ctx.emit('change', val)
-    })
-    return {}
-  },
+provide('groupState', groupState)
+provide('changeHandler', (val: string | number | boolean) => {
+  emit('update:modelValue', val)
+  emit('change', val)
 })
 </script>

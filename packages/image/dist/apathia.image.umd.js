@@ -1,6 +1,6 @@
 (function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("@apathia/apathia.icon"), require("@apathia/apathia.alert"), require("@apathia/apathia.shared"), require("@apathia/apathia.icon-svg")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "@apathia/apathia.icon", "@apathia/apathia.alert", "@apathia/apathia.shared", "@apathia/apathia.icon-svg"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.image = {}, global.Vue, global.twind, global.icon, global.alert, global.shared, global["icon-svg"]));
-})(this, function(exports2, vue, apathia_twind, apathia_icon, apathia_alert, apathia_shared, apathia_iconSvg) {
+  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("vue"), require("@apathia/apathia.twind"), require("@apathia/apathia.icon"), require("@apathia/apathia.alert"), require("@apathia/apathia.icon-svg")) : typeof define === "function" && define.amd ? define(["exports", "vue", "@apathia/apathia.twind", "@apathia/apathia.icon", "@apathia/apathia.alert", "@apathia/apathia.icon-svg"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.image = {}, global.Vue, global.twind, global.icon, global.alert, global["icon-svg"]));
+})(this, function(exports2, vue, apathia_twind, apathia_icon, apathia_alert, apathia_iconSvg) {
   "use strict";
   const _hoisted_1 = ["src", "alt"];
   const _hoisted_2 = ["onClick"];
@@ -9,13 +9,13 @@
     _hoisted_3
   ];
   const _hoisted_5 = ["src", "alt", "onMousedown", "onMousemove", "onMouseup"];
-  const _sfc_main = /* @__PURE__ */ vue.defineComponent({
+  const _sfc_main = vue.defineComponent({
     __name: "Image",
     props: {
-      src: null,
+      src: {},
       alt: { default: "img" },
-      width: null,
-      height: null,
+      width: {},
+      height: {},
       preview: { type: Boolean, default: true }
     },
     setup(__props) {
@@ -45,7 +45,7 @@ to {
         iconGap: apathia_twind.style`ml-4`,
         maskIcon: apathia_twind.style`inline-block fill-current text-xs`,
         transitionClass: {
-          "leave-to-class": apathia_twind.tw`opacity-0`
+          leaveToClass: apathia_twind.tw`opacity-0`
         },
         duration: apathia_twind.tw`duration-500`,
         shadeClass: apathia_twind.style`z-50 fixed inset-0 h-full bg-fill-gray bg-opacity-50 overflow-auto ${flashCss}`,
@@ -64,13 +64,6 @@ to {
         hoverEnlarge: apathia_twind.style`hover:text-lg transition-all`
       };
       const mask = vue.ref(false);
-      const previewImage = vue.computed(() => {
-        if (!props.src.includes("hdslb.com/bfs"))
-          return props.src;
-        const suffix = props.width && props.height ? `${props.width}x${props.height}` : props.width ? `${props.width}x0` : props.height ? `0x${props.height}` : "160x100";
-        const path = props.src.replace(/^https?:/, "");
-        return apathia_shared.resizeImage(path, suffix);
-      });
       const toPx = (val) => {
         if (!val)
           return;
@@ -184,13 +177,13 @@ to {
             class: vue.normalizeClass([styles.imgWrap, { [styles.errorHidden]: isError.value }])
           }, [
             vue.createElementVNode("img", {
-              src: vue.unref(previewImage),
-              alt: __props.alt,
+              src: _ctx.src,
+              alt: _ctx.alt,
               class: vue.normalizeClass(styles.img),
-              style: vue.normalizeStyle(vue.unref(imgStyle)),
+              style: vue.normalizeStyle(imgStyle.value),
               onError: handleError
             }, null, 46, _hoisted_1),
-            __props.preview ? (vue.openBlock(), vue.createElementBlock("div", {
+            _ctx.preview ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               class: vue.normalizeClass(styles.mask),
               onClick: handleClickOpenMash
@@ -233,7 +226,7 @@ to {
           isError.value ? vue.renderSlot(_ctx.$slots, "error", { key: 0 }, () => [
             vue.createElementVNode("div", {
               class: vue.normalizeClass(styles.error),
-              style: vue.normalizeStyle(vue.unref(imgErrorStyle))
+              style: vue.normalizeStyle(imgErrorStyle.value)
             }, _hoisted_4, 6)
           ]) : vue.createCommentVNode("", true),
           (vue.openBlock(), vue.createBlock(vue.Teleport, { to: "body" }, [
@@ -313,8 +306,8 @@ to {
                       style: vue.normalizeStyle(`transform: translate3d(${vue.unref(translate).x}px, ${vue.unref(translate).y}px, 0px) scale3d(${scaleTimes.value}, ${scaleTimes.value}, 1) rotate(${rotateAngle.value}deg)`)
                     }, [
                       vue.createElementVNode("img", {
-                        src: __props.src,
-                        alt: __props.alt,
+                        src: _ctx.src,
+                        alt: _ctx.alt,
                         class: vue.normalizeClass(styles.previewImg),
                         onMousedown: vue.withModifiers(handleMouseDown, ["prevent"]),
                         onMousemove: vue.withModifiers(handleMouseMove, ["prevent"]),

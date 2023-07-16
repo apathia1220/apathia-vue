@@ -26,22 +26,11 @@
 
 <script setup lang="ts">
 import flatpickr from 'flatpickr'
-import { ref, withDefaults, toRef, watch } from 'vue'
+import { ref, toRef, watch } from 'vue'
 import { style } from '@apathia/apathia.twind'
 import { useInjectProp } from '@apathia/apathia.hooks'
 import DatePicker from './Datepicker.vue'
-import type { DateFormatType, RangeItem, RangeConfig } from './types'
-
-interface GroupProps {
-  startTime?: string | number
-  endTime?: string | number
-  dateFormat?: DateFormatType
-  timestamp?: boolean
-  disabled?: boolean
-  startDateOptions?: flatpickr.Options.Options
-  endDateOptions?: flatpickr.Options.Options
-  range?: RangeConfig
-}
+import type { RangeItem, GroupProps, GroupEmits } from './types'
 
 const getStyles = () => ({
   layout: style`flex items-center`,
@@ -57,7 +46,7 @@ const props = withDefaults(defineProps<GroupProps>(), {
   range: () => ({}),
 })
 
-const emit = defineEmits(['update:startTime', 'update:endTime'])
+const emit = defineEmits<GroupEmits>()
 
 const disableInput = useInjectProp(
   'FormDisabled',

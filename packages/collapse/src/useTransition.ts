@@ -1,9 +1,6 @@
 import { RendererElement } from 'vue'
 import { raf } from '@apathia/apathia.shared'
-
-type TransitionProps = {
-  duration: number
-}
+import type { TransitionProps } from './types'
 
 export function useTransition(props: TransitionProps) {
   function onEnter(el: RendererElement) {
